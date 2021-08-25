@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/custom_page.dart';
-import 'package:polipass/widgets/custom_checkbox.dart';
-import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_checkbox.dart';
 import 'package:polipass/widgets/custom_text_checkbox_slider.dart';
-import 'package:polipass/widgets/custom_text_slider.dart';
 import 'package:polipass/widgets/custom_text_slider_passwd.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
 import 'package:polipass/widgets/validator.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class VaultDialogModel extends ChangeNotifier {
   VaultDialogModel({this.settingsHeightMax = 400})
@@ -21,6 +16,12 @@ class VaultDialogModel extends ChangeNotifier {
   void toggleVisibility() {
     isSettingsVisible = !isSettingsVisible;
     settingsHeight = (settingsHeight == 0) ? settingsHeightMax : 0;
+    notifyListeners();
+  }
+
+  String currForm = "submit";
+  void setCurrForm(String val) {
+    currForm = val;
     notifyListeners();
   }
 }
@@ -46,13 +47,16 @@ class Vault extends CustomPage {
       );
 
   static Future<void> _dialogBuilder(BuildContext context) async {
-    late final _dialogFormKey = GlobalKey<FormState>();
-    late final TextEditingController _dialogController =
-        TextEditingController();
+    final Map<String, GlobalKey<FormState>> formKeys = {
+      "submit": GlobalKey<FormState>(),
+      "generate": GlobalKey<FormState>(),
+    };
+
+    late final TextEditingController dialogController = TextEditingController();
 
     late final getSettings;
 
-    late final Map<String, dynamic> _dialogOptions = {
+    late final Map<String, dynamic> dialogOptions = {
       "az": CustomTextCheckboxSliderWithProvider(
         text1: "Allow lowercase letters",
         text2: " (a-z)",
@@ -77,37 +81,46 @@ class Vault extends CustomPage {
         text1: "Allow ambiguous letters",
         text2: " (l,1,O,0)",
       ),
-      "length": CustomTextSliderPasswdWithProvider(
-        labelText: "Password",
-        hintText: "Enter password",
-        text: "Length",
-        value: 12,
-        validator: (String? value) {
-          // TODO compare value and settings, reject if inconsistent
-          Validator validator = getSettings();
-          validator.text = value;
+      "length": (BuildContext context) => CustomTextSliderPasswdWithProvider(
+            labelText: "Password",
+            hintText: "Enter password",
+            text: "Length",
+            value: 12,
+            validator: (String? value) {
+              // TODO compare value and settings, reject if inconsistent
 
-          bool valid = validator.validatePasswd();
+              Validator validator = getSettings(value);
 
-          if (!valid) {
-            return validator.messages
-                .map((String str) => "* " + str)
-                .join("\n");
-          }
-          // if (value == null || value.isEmpty) {
-          //   return 'Please enter some text';
-          // }
-          return null;
-        },
-      ),
+              switch (context.read<VaultDialogModel>().currForm) {
+                case "submit":
+                  if (!validator.validatePasswd()) {
+                    return validator.messages
+                        .map((String str) => "* " + str)
+                        .join("\n");
+                  }
+                  return null;
+
+                case "generate":
+                  if (!validator.validateSumSettings()) {
+                    return validator.messages
+                        .map((String str) => "* " + str)
+                        .join("\n");
+                  }
+                  return null;
+
+                default:
+              }
+              return null;
+            },
+          ),
     };
 
-    getSettings = () {
+    getSettings = (String text) {
       Map<String, int> settings = {};
       Map<String, bool> settingsAllowed = {};
 
-      for (String key in _dialogOptions.keys) {
-        dynamic item = _dialogOptions[key];
+      for (String key in dialogOptions.keys) {
+        dynamic item = dialogOptions[key];
 
         if (item is CustomTextCheckboxWithProvider ||
             item is CustomTextCheckboxSliderWithProvider) {
@@ -119,47 +132,63 @@ class Vault extends CustomPage {
         }
       }
 
-      int length = settings["length"]!;
+      int length = dialogOptions["length"]!(context).sliderModel.value.toInt();
       settings.remove("length");
 
       print("settings: $settings");
       print("settingsAllowed: $settingsAllowed");
 
       return Validator(
-          allowedChars: settingsAllowed, numChars: settings, length: length);
+          allowedChars: settingsAllowed,
+          numChars: settings,
+          length: length,
+          text: text);
     };
 
     //dialog widgets
-    TextButton //
-        submitBtn = TextButton(
-          onPressed: () {
-            // Validate returns true if the form is valid, or false otherwise.
-            if (_dialogFormKey.currentState!.validate()) {
-              // TODO call a server or save the information in a database.
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Processing Data")),
-              );
-            }
-          },
-          child: const Text("Submit"),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            overlayColor:
-                MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
+    late final Map<String, dynamic> dialogButtons = {
+      "submit": (BuildContext context) => TextButton(
+            onPressed: () {
+              context.read<VaultDialogModel>().setCurrForm("submit");
+              // Validate returns true if the form is valid, or false otherwise.
+              if (formKeys["submit"]!.currentState!.validate()) {
+                // TODO submit the info to the hive database and quit.
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Submitting")),
+                );
+              }
+            },
+            child: const Text("Submit"),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              overlayColor:
+                  MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
+            ),
           ),
-        ),
-        genBtn = TextButton(
-          onPressed: () {},
-          child: const Text("Generate"),
-        );
-    TextButton settingsBtn(BuildContext context) => TextButton(
-          onPressed: () {
-            context.read<VaultDialogModel>().toggleVisibility();
-          },
-          child: const Text("Settings"),
-        );
+      "generate": (BuildContext context) => TextButton(
+            onPressed: () {
+              // context.read<VaultDialogModel>().setCurrForm("generate");
+              // Validate returns true if the form is valid, or false otherwise.
+              if (formKeys["submit"]!.currentState!.validate()) {
+                // TODO generate the text.
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Generating")),
+                );
+              }
+            },
+            child: const Text("Generate"),
+          ),
+      "settings": (BuildContext context) => TextButton(
+            onPressed: () {
+              context.read<VaultDialogModel>().toggleVisibility();
+            },
+            child: const Text("Settings"),
+          ),
+    };
 
     return await showDialog<void>(
       context: context,
@@ -174,10 +203,12 @@ class Vault extends CustomPage {
               child: Wrap(
                 children: [
                   Form(
-                    key: _dialogFormKey,
+                    key: formKeys[context.select(
+                        (VaultDialogModel vaultDialogModel) =>
+                            vaultDialogModel.currForm)],
                     child: Column(
                       children: <Widget>[
-                        _dialogOptions["length"],
+                        dialogOptions["length"](context),
                         AnimatedSize(
                           alignment: Alignment.topCenter,
                           curve: Curves.easeIn,
@@ -188,20 +219,27 @@ class Vault extends CustomPage {
                                     !vaultDialogModel.isSettingsVisible),
                             child: Column(
                               children: [
-                                _dialogOptions["az"],
-                                _dialogOptions["AZ"],
-                                _dialogOptions["09"],
-                                _dialogOptions["special"],
-                                _dialogOptions["ambiguous"],
+                                dialogOptions["az"],
+                                dialogOptions["AZ"],
+                                dialogOptions["09"],
+                                dialogOptions["special"],
+                                dialogOptions["ambiguous"],
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(width: double.infinity, child: submitBtn),
-                        SizedBox(width: double.infinity, child: genBtn),
                         SizedBox(
-                            width: double.infinity,
-                            child: settingsBtn(context)),
+                          width: double.infinity,
+                          child: dialogButtons["submit"]!(context),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: dialogButtons["generate"]!(context),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: dialogButtons["settings"]!(context),
+                        ),
                       ],
                     ),
                   ),

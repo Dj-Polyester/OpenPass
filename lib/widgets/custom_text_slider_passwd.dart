@@ -20,7 +20,6 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
 
   final String labelText, hintText, text;
   final double min, max, value;
-  late double sliderValue = value;
 
   late CustomSliderModel sliderModel = CustomSliderModel(value: value);
 
@@ -29,7 +28,6 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: sliderModel,
       builder: (context, _) {
-        // sliderValue = context.watch<CustomSliderModel>().value;
         return CustomTextSliderPasswd(
           text: text,
           min: min,
@@ -81,11 +79,13 @@ class CustomTextSliderPasswd extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CustomTextSlider(
-            text: text,
-            min: min,
-            max: max,
-            value: context.watch<CustomSliderModel>().value,
+          child: Consumer<CustomSliderModel>(
+            builder: (_, customSliderModel, __) => CustomTextSlider(
+              text: text,
+              min: min,
+              max: max,
+              value: customSliderModel.value,
+            ),
           ),
         ),
       ],

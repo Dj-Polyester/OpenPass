@@ -48,7 +48,7 @@ class CustomTextSlider extends StatelessWidget {
 
   final String text;
   final double min, max;
-  double value;
+  final double value;
   late TextEditingController controller =
       TextEditingController(text: value.round().toString());
 
@@ -59,6 +59,7 @@ class CustomTextSlider extends StatelessWidget {
         Expanded(
           flex: 3,
           child: TextFormField(
+            keyboardType: TextInputType.number,
             maxLength: max.round().toString().length,
             decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
             controller: controller,
@@ -72,18 +73,16 @@ class CustomTextSlider extends StatelessWidget {
               late double tmpval;
               if (Globals.isNumeric(val)) {
                 tmpval = double.parse(val);
-              } else if (val == "") {
+              } else if (val.isEmpty) {
                 tmpval = 0;
               }
               context.read<CustomSliderModel>().setVal(tmpval);
-              value = tmpval;
             },
           ),
         ),
         Expanded(
           flex: 7,
           child: CustomSlider(
-            controller: controller,
             min: min,
             max: max,
           ),

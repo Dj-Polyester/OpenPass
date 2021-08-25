@@ -11,16 +11,13 @@ class CustomSliderModel extends ChangeNotifier {
 }
 
 class CustomSlider extends StatelessWidget {
-  CustomSlider({
+  const CustomSlider({
     Key? key,
     this.min = 0,
     this.max = 99,
-    this.controller,
   }) : super(key: key);
 
   final double min, max;
-
-  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +29,6 @@ class CustomSlider extends StatelessWidget {
       label: context.watch<CustomSliderModel>().value.round().toString(),
       onChanged: (double val) {
         context.read<CustomSliderModel>().setVal(val);
-        if (controller != null) {
-          controller!.text =
-              context.read<CustomSliderModel>().value.round().toString();
-        }
       },
     );
   }
