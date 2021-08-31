@@ -58,6 +58,13 @@ class Validator {
     return result;
   }
 
+  bool validatePasswdGen() {
+    bool result = true;
+    result = validateInput() && result;
+    result = validateSumSettings() && result;
+    return result;
+  }
+
   bool validateInput() {
     if (text == null || text!.isEmpty) {
       messages.add("Please enter some text");

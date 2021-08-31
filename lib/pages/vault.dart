@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/screens/passwd_screen.dart';
 import 'package:polipass/utils/custom_page.dart';
-import 'package:polipass/widgets/custom_text_checkbox.dart';
-import 'package:polipass/widgets/custom_text_checkbox_slider.dart';
-import 'package:polipass/widgets/custom_text_slider_passwd.dart';
-import 'package:polipass/widgets/validator.dart';
 import 'package:provider/provider.dart';
 
 class VaultDialogModel extends ChangeNotifier {

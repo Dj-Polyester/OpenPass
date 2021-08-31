@@ -23,14 +23,15 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
   final double min, max, value;
 
   late CustomSliderModel sliderModel = CustomSliderModel(value: value);
-  late CustomTextModel textModel = CustomTextModel.fromDouble(value: value);
+  late CustomTextModel textDigitModel =
+      CustomTextModel.fromDouble(value: value);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: sliderModel),
-        ChangeNotifierProvider.value(value: textModel),
+        ChangeNotifierProvider.value(value: textDigitModel),
       ],
       builder: (context, _) {
         return CustomTextSliderPasswd(
