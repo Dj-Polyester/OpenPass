@@ -12,9 +12,11 @@ class CustomCheckboxModel extends ChangeNotifier {
 class CustomCheckbox extends StatelessWidget {
   CustomCheckbox({
     Key? key,
+    this.onChanged,
   }) : super(key: key);
 
   bool value = false;
+  final Function(bool)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class CustomCheckbox extends StatelessWidget {
       value: context.watch<CustomCheckboxModel>().value,
       onChanged: (bool? val) {
         context.read<CustomCheckboxModel>().setVal(val!);
+        onChanged?.call(val);
       },
     );
   }

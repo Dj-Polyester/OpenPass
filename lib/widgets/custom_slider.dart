@@ -15,9 +15,11 @@ class CustomSlider extends StatelessWidget {
     Key? key,
     this.min = 0,
     this.max = 99,
+    this.onChanged,
   }) : super(key: key);
 
   final double min, max;
+  final Function(double)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class CustomSlider extends StatelessWidget {
       label: context.watch<CustomSliderModel>().value.round().toString(),
       onChanged: (double val) {
         context.read<CustomSliderModel>().setValue(val);
+        onChanged?.call(val);
       },
     );
   }
