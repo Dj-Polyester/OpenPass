@@ -9,10 +9,8 @@ import 'package:polipass/widgets/validator.dart';
 class PasswdScreen extends StatelessWidget {
   PasswdScreen({Key? key}) : super(key: key);
 
-  final Map<String, GlobalKey<FormState>> formKeys = {
-    "submit": GlobalKey<FormState>(),
-    "generate": GlobalKey<FormState>(),
-  };
+  late String formKeySwitch;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   late final TextEditingController dialogController = TextEditingController();
 
@@ -51,8 +49,22 @@ class PasswdScreen extends StatelessWidget {
 
         Validator validator = getSettings(value!);
 
-        if (!validator.validatePasswd()) {
-          return validator.messages.map((String str) => "* " + str).join("\n");
+        switch (formKeySwitch) {
+          case "submit":
+            if (!validator.validatePasswd()) {
+              return validator.messages
+                  .map((String str) => "* " + str)
+                  .join("\n");
+            }
+            return null;
+          case "generate":
+            if (!validator.validatePasswdGen()) {
+              return validator.messages
+                  .map((String str) => "* " + str)
+                  .join("\n");
+            }
+            return null;
+          default:
         }
         return null;
       },
@@ -95,9 +107,10 @@ class PasswdScreen extends StatelessWidget {
   late final Map<String, dynamic> dialogButtons = {
     "submit": (BuildContext context) => TextButton(
           onPressed: () {
-            context.read<VaultDialogModel>().setCurrForm("submit");
+            formKeySwitch = "submit";
+
             // Validate returns true if the form is valid, or false otherwise.
-            if (formKeys["submit"]!.currentState!.validate()) {
+            if (formKey.currentState!.validate()) {
               // TODO submit the info to the hive database and quit.
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -115,9 +128,10 @@ class PasswdScreen extends StatelessWidget {
         ),
     "generate": (BuildContext context) => TextButton(
           onPressed: () {
-            // context.read<VaultDialogModel>().setCurrForm("generate");
+            formKeySwitch = "generate";
+
             // Validate returns true if the form is valid, or false otherwise.
-            if (formKeys["submit"]!.currentState!.validate()) {
+            if (formKey.currentState!.validate()) {
               // TODO generate the text.
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -144,9 +158,7 @@ class PasswdScreen extends StatelessWidget {
           child: Wrap(
             children: [
               Form(
-                key: formKeys[context.select(
-                    (VaultDialogModel vaultDialogModel) =>
-                        vaultDialogModel.currForm)],
+                key: formKey,
                 child: Column(
                   children: <Widget>[
                     dialogOptions["length"],
