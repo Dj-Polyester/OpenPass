@@ -25,8 +25,10 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: sliderModel,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: sliderModel),
+      ],
       builder: (context, _) {
         return CustomTextSliderPasswd(
           text: text,

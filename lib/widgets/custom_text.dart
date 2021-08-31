@@ -4,6 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_style.dart';
 
+class CustomTextModel extends ChangeNotifier {
+  CustomTextModel({this.cursorPos = 0, String? text})
+      : controller = TextEditingController(text: text);
+  CustomTextModel.fromDouble({this.cursorPos = 0, double value = 0})
+      : controller = TextEditingController(text: value.round().toString());
+
+  late TextEditingController controller;
+  int cursorPos;
+
+  void setText(String text) {
+    controller.text = text;
+    setCursorPos();
+  }
+
+  void setTextFromDouble(double value) {
+    controller.text = value.round().toString();
+    setCursorPos();
+  }
+
+  void saveCursorPos() {
+    cursorPos = controller.selection.baseOffset;
+  }
+
+  void setCursorPos() {
+    controller.selection =
+        TextSelection.fromPosition(TextPosition(offset: cursorPos));
+  }
+}
+
 class CustomText extends StatelessWidget {
   CustomText({
     Key? key,
