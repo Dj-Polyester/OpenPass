@@ -58,11 +58,10 @@ class CustomTextSliderPasswd extends StatelessWidget {
     this.text = "",
     this.min = 0,
     this.max = 99,
-    this.value = 0,
   }) : super(key: key);
   String? Function(String?)? validator;
   final String labelText, hintText, text;
-  double min, max, value;
+  double min, max;
 
   @override
   Widget build(BuildContext context) {

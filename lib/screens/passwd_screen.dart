@@ -44,8 +44,11 @@ class PasswdScreen extends StatelessWidget {
       hintText: "Enter password",
       text: "Length",
       value: 12,
+      //TODO VALIDATE
       validator: (String? value) {
-        // TODO compare value and settings, reject if inconsistent
+        //TODO compare value and settings, reject if inconsistent
+
+        // dialogOptions["length"]!.textPasswdModel.focusNode.requestFocus();
 
         Validator validator = getSettings(value!);
 
@@ -106,16 +109,21 @@ class PasswdScreen extends StatelessWidget {
   //dialog widgets
 
   late final Map<String, dynamic> dialogButtons = {
+    //TODO SUBMIT
     "submit": (BuildContext context) => TextButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
+            // dialogOptions["length"]!.textPasswdModel.focusNode.unfocus();
             formKeySwitch = "submit";
 
             // Validate returns true if the form is valid, or false otherwise.
             if (formKey.currentState!.validate()) {
-              // TODO submit the info to the hive database and quit.
+              // TODO submit the info to the hive database.
 
+              //TODO quit
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Submitting")),
+                const SnackBar(content: Text("Submitting the password")),
               );
             }
           },
@@ -127,8 +135,11 @@ class PasswdScreen extends StatelessWidget {
                 MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
           ),
         ),
+    //TODO GENERATE
     "generate": (BuildContext context) => TextButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
+            // dialogOptions["length"]!.textPasswdModel.focusNode.unfocus();
             formKeySwitch = "generate";
 
             // Validate returns true if the form is valid, or false otherwise.

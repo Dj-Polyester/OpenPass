@@ -47,6 +47,7 @@ class CustomTextPasswd extends StatelessWidget {
         hintTextStr: hintText,
       ),
       controller: context.read<CustomTextModel>().controller,
+      focusNode: context.read<CustomTextModel>().focusNode,
       validator: validator,
       onChanged: (String value) {
         double tmpval =
