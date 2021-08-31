@@ -8,9 +8,17 @@ class CustomTextModel extends ChangeNotifier {
   CustomTextModel({this.cursorPos = 0, String? text})
       : controller = TextEditingController(text: text);
   CustomTextModel.fromDouble({this.cursorPos = 0, double value = 0})
-      : controller = TextEditingController(text: value.round().toString());
+      : controller = TextEditingController(text: value.round().toString()) {
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus && controller.text.isEmpty) {
+        controller.text = "0";
+      }
+    });
+  }
 
   late TextEditingController controller;
+  late FocusNode focusNode = FocusNode();
+
   int cursorPos;
 
   void setText(String text) {
@@ -33,8 +41,8 @@ class CustomTextModel extends ChangeNotifier {
   }
 }
 
-class CustomText extends StatelessWidget {
-  CustomText({
+class CustomTextDigit extends StatelessWidget {
+  CustomTextDigit({
     Key? key,
     this.max = 99,
     required this.text,
@@ -52,6 +60,7 @@ class CustomText extends StatelessWidget {
       maxLength: max.round().toString().length,
       decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
       controller: context.read<CustomTextModel>().controller,
+      focusNode: context.read<CustomTextModel>().focusNode,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Empty';

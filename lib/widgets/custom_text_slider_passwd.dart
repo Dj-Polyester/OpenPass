@@ -76,9 +76,9 @@ class CustomTextSliderPasswd extends StatelessWidget {
             controller: controller,
             validator: validator,
             onChanged: (String value) {
-              context
-                  .read<CustomSliderModel>()
-                  .setValue(controller.text.length.toDouble());
+              double tmpval = controller.text.length.toDouble();
+              context.read<CustomSliderModel>().setValue(tmpval);
+              context.read<CustomTextModel>().setTextFromDouble(tmpval);
             },
           ),
         ),

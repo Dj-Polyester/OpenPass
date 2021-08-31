@@ -57,7 +57,7 @@ class CustomTextSlider extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: CustomText(
+          child: CustomTextDigit(
             text: text,
             max: max,
             value: value,
