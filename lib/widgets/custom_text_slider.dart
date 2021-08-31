@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/custom_slider.dart';
+import 'package:polipass/widgets/custom_text.dart';
 import 'package:polipass/widgets/custom_text_style.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +50,6 @@ class CustomTextSlider extends StatelessWidget {
   final String text;
   final double min, max;
   final double value;
-  late TextEditingController controller =
-      TextEditingController(text: value.round().toString());
 
   @override
   Widget build(BuildContext context) {
@@ -58,26 +57,10 @@ class CustomTextSlider extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            maxLength: max.round().toString().length,
-            decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
-            controller: controller,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Empty';
-              }
-              return null;
-            },
-            onChanged: (String val) {
-              late double tmpval;
-              if (Globals.isNumeric(val)) {
-                tmpval = double.parse(val);
-              } else if (val.isEmpty) {
-                tmpval = 0;
-              }
-              context.read<CustomSliderModel>().setVal(tmpval);
-            },
+          child: CustomText(
+            text: text,
+            max: max,
+            value: value,
           ),
         ),
         Expanded(
