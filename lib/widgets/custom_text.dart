@@ -1,20 +1,12 @@
-import 'package:polipass/utils/globals.dart';
+import 'package:polipass/widgets/custom_slider.dart';
+import 'package:polipass/widgets/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_style.dart';
 
 class CustomTextModel extends ChangeNotifier {
   CustomTextModel({this.cursorPos = 0, String? text})
       : controller = TextEditingController(text: text);
-  CustomTextModel.fromDouble({this.cursorPos = 0, double value = 0})
-      : controller = TextEditingController(text: value.round().toString()) {
-    focusNode.addListener(() {
-      if (!focusNode.hasFocus && controller.text.isEmpty) {
-        controller.text = "0";
-      }
-    });
-  }
 
   late TextEditingController controller;
   late FocusNode focusNode = FocusNode();
@@ -23,11 +15,6 @@ class CustomTextModel extends ChangeNotifier {
 
   void setText(String text) {
     controller.text = text;
-    setCursorPos();
-  }
-
-  void setTextFromDouble(double value) {
-    controller.text = value.round().toString();
     setCursorPos();
   }
 
@@ -41,40 +28,31 @@ class CustomTextModel extends ChangeNotifier {
   }
 }
 
-class CustomTextDigit extends StatelessWidget {
-  CustomTextDigit({
+class CustomTextPasswd extends StatelessWidget {
+  CustomTextPasswd({
     Key? key,
-    this.max = 99,
-    required this.text,
-    this.value = 0,
+    this.validator,
+    this.labelText = "",
+    this.hintText = "",
   }) : super(key: key);
 
-  final String text;
-  final double max;
-  final double value;
+  String? Function(String?)? validator;
+  final String labelText, hintText;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      keyboardType: TextInputType.number,
-      maxLength: max.round().toString().length,
-      decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
+      decoration: CustomTextStyle.textFieldStyle(
+        labelTextStr: labelText,
+        hintTextStr: hintText,
+      ),
       controller: context.read<CustomTextModel>().controller,
-      focusNode: context.read<CustomTextModel>().focusNode,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Empty';
-        }
-        return null;
-      },
-      onChanged: (String val) {
-        late double tmpval;
-        if (Globals.isNumeric(val)) {
-          tmpval = double.parse(val);
-        } else if (val.isEmpty) {
-          tmpval = 0;
-        }
+      validator: validator,
+      onChanged: (String value) {
+        double tmpval =
+            context.read<CustomTextModel>().controller.text.length.toDouble();
         context.read<CustomSliderModel>().setValue(tmpval);
+        context.read<CustomTextDigitModel>().setTextFromDouble(tmpval);
       },
     );
   }

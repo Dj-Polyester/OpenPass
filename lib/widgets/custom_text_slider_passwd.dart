@@ -1,4 +1,5 @@
 import 'package:polipass/widgets/custom_text.dart';
+import 'package:polipass/widgets/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/widgets/custom_slider.dart';
@@ -23,8 +24,8 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
   final double min, max, value;
 
   late CustomSliderModel sliderModel = CustomSliderModel(value: value);
-  late CustomTextModel textDigitModel =
-      CustomTextModel.fromDouble(value: value);
+  late CustomTextDigitModel textDigitModel = CustomTextDigitModel(value: value);
+  late CustomTextModel textPasswdModel = CustomTextModel();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: sliderModel),
         ChangeNotifierProvider.value(value: textDigitModel),
+        ChangeNotifierProvider.value(value: textPasswdModel),
       ],
       builder: (context, _) {
         return CustomTextSliderPasswd(
@@ -56,12 +58,11 @@ class CustomTextSliderPasswd extends StatelessWidget {
     this.text = "",
     this.min = 0,
     this.max = 99,
+    this.value = 0,
   }) : super(key: key);
   String? Function(String?)? validator;
   final String labelText, hintText, text;
-  double min, max;
-
-  TextEditingController controller = TextEditingController();
+  double min, max, value;
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +70,10 @@ class CustomTextSliderPasswd extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextFormField(
-            decoration: CustomTextStyle.textFieldStyle(
-              labelTextStr: labelText,
-              hintTextStr: hintText,
-            ),
-            controller: controller,
+          child: CustomTextPasswd(
             validator: validator,
-            onChanged: (String value) {
-              double tmpval = controller.text.length.toDouble();
-              context.read<CustomSliderModel>().setValue(tmpval);
-              context.read<CustomTextModel>().setTextFromDouble(tmpval);
-            },
+            labelText: labelText,
+            hintText: hintText,
           ),
         ),
         Padding(

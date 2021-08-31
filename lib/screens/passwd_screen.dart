@@ -91,6 +91,7 @@ class PasswdScreen extends StatelessWidget {
     int length = dialogOptions["length"]!.sliderModel.value.toInt();
     settings.remove("length");
 
+    print("text: $text");
     print("length: $length");
     print("settings: $settings");
     print("settingsAllowed: $settingsAllowed");

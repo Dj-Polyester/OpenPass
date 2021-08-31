@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
 import 'package:polipass/widgets/custom_checkbox.dart';
 import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text.dart';
+import 'package:polipass/widgets/custom_text_digit.dart';
 import 'package:polipass/widgets/custom_text_checkbox.dart';
 import 'package:polipass/widgets/custom_text_slider.dart';
 import 'package:polipass/widgets/custom_text_style.dart';
@@ -26,7 +26,7 @@ class CustomTextCheckboxSliderWithProvider extends StatelessWidget {
 
   late CustomCheckboxModel checkboxModel = CustomCheckboxModel();
   late CustomSliderModel sliderModel = CustomSliderModel();
-  late CustomTextModel textModel = CustomTextModel.fromDouble();
+  late CustomTextDigitModel textModel = CustomTextDigitModel();
 
   @override
   Widget build(BuildContext context) {
