@@ -45,16 +45,13 @@ class CustomText extends StatelessWidget {
   final double max;
   final double value;
 
-  late TextEditingController controller =
-      TextEditingController(text: value.round().toString());
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: TextInputType.number,
       maxLength: max.round().toString().length,
       decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
-      controller: controller,
+      controller: context.read<CustomTextModel>().controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Empty';

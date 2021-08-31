@@ -57,12 +57,10 @@ class CustomTextSlider extends StatelessWidget {
       children: [
         Expanded(
           flex: 3,
-          child: Consumer<CustomSliderModel>(
-            builder: (_, customSliderModel, __) => CustomText(
-              text: text,
-              max: max,
-              value: customSliderModel.value,
-            ),
+          child: CustomText(
+            text: text,
+            max: max,
+            value: value,
           ),
         ),
         Expanded(
@@ -70,6 +68,9 @@ class CustomTextSlider extends StatelessWidget {
           child: CustomSlider(
             min: min,
             max: max,
+            onChanged: (double val) {
+              context.read<CustomTextModel>().setTextFromDouble(val);
+            },
           ),
         ),
       ],
