@@ -39,7 +39,7 @@ class CustomText extends StatelessWidget {
         } else if (val.isEmpty) {
           tmpval = 0;
         }
-        context.read<CustomSliderModel>().setVal(tmpval);
+        context.read<CustomSliderModel>().setValue(tmpval);
       },
     );
   }

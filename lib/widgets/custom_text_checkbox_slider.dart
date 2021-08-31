@@ -80,13 +80,13 @@ class CustomTextCheckboxSlider extends StatelessWidget {
           child: Visibility(
             visible: context.watch<CustomCheckboxModel>().value,
             child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomTextSlider(
-                  text: text3,
-                  min: min,
-                  max: max,
-                  value: context.watch<CustomSliderModel>().value,
-                )),
+              padding: const EdgeInsets.all(8.0),
+              child: CustomTextSlider(
+                text: text3,
+                min: min,
+                max: max,
+              ),
+            ),
           ),
         ),
       ],

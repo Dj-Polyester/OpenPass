@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 class CustomSliderModel extends ChangeNotifier {
   CustomSliderModel({this.value = 0});
   double value;
-  void setVal(double val) {
+  void setValue(double val) {
     value = val;
     notifyListeners();
   }
@@ -28,7 +28,7 @@ class CustomSlider extends StatelessWidget {
       divisions: max.toInt() - min.toInt(),
       label: context.watch<CustomSliderModel>().value.round().toString(),
       onChanged: (double val) {
-        context.read<CustomSliderModel>().setVal(val);
+        context.read<CustomSliderModel>().setValue(val);
       },
     );
   }

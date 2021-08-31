@@ -73,19 +73,16 @@ class CustomTextSliderPasswd extends StatelessWidget {
             onChanged: (String value) {
               context
                   .read<CustomSliderModel>()
-                  .setVal(controller.text.length.toDouble());
+                  .setValue(controller.text.length.toDouble());
             },
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Consumer<CustomSliderModel>(
-            builder: (_, customSliderModel, __) => CustomTextSlider(
-              text: text,
-              min: min,
-              max: max,
-              value: customSliderModel.value,
-            ),
+          child: CustomTextSlider(
+            text: text,
+            min: min,
+            max: max,
           ),
         ),
       ],
