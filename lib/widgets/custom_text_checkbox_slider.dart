@@ -85,7 +85,7 @@ class CustomTextCheckboxSlider extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomTextSlider(
-                text: text3,
+                label: text3,
                 min: min,
                 max: max,
               ),

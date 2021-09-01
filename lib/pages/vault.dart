@@ -31,9 +31,12 @@ class Vault extends CustomPage {
               (CustomPageModel customPageModel) => customPageModel.currTitle!,
             )),
           ),
-          body: (BuildContext context) => const Center(child: Text("1")),
+          body: _bodyBuilder,
           fab: _fabBuilder,
         );
+
+  static Widget _bodyBuilder(BuildContext context) =>
+      const Center(child: Text("1"));
 
   static Widget _fabBuilder(BuildContext context) => FloatingActionButton(
         onPressed: () async {

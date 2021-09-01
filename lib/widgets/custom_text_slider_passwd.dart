@@ -37,7 +37,7 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
       ],
       builder: (context, _) {
         return CustomTextSliderPasswd(
-          text: text,
+          sliderTextLabel: text,
           min: min,
           max: max,
           validator: validator,
@@ -55,12 +55,12 @@ class CustomTextSliderPasswd extends StatelessWidget {
     this.validator,
     this.labelText = "",
     this.hintText = "",
-    this.text = "",
+    this.sliderTextLabel = "",
     this.min = 0,
     this.max = 99,
   }) : super(key: key);
   String? Function(String?)? validator;
-  final String labelText, hintText, text;
+  final String labelText, hintText, sliderTextLabel;
   double min, max;
 
   @override
@@ -69,16 +69,26 @@ class CustomTextSliderPasswd extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CustomTextPasswd(
+          child: CustomText(
             validator: validator,
             labelText: labelText,
             hintText: hintText,
+            onChanged: (String value) {
+              double tmpval = context
+                  .read<CustomTextModel>()
+                  .controller
+                  .text
+                  .length
+                  .toDouble();
+              context.read<CustomSliderModel>().setValue(tmpval);
+              context.read<CustomTextDigitModel>().setTextFromDouble(tmpval);
+            },
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomTextSlider(
-            text: text,
+            label: sliderTextLabel,
             min: min,
             max: max,
           ),

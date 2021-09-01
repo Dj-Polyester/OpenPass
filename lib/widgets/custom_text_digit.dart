@@ -38,11 +38,11 @@ class CustomTextDigit extends StatelessWidget {
   CustomTextDigit({
     Key? key,
     this.max = 99,
-    required this.text,
+    required this.label,
     this.value = 0,
   }) : super(key: key);
 
-  final String text;
+  final String label;
   final double max;
   final double value;
 
@@ -51,7 +51,7 @@ class CustomTextDigit extends StatelessWidget {
     return TextFormField(
       keyboardType: TextInputType.number,
       maxLength: max.round().toString().length,
-      decoration: CustomTextStyle.textFieldStyle(labelTextStr: text),
+      decoration: CustomTextStyle.textFieldStyle(labelTextStr: label),
       controller: context.read<CustomTextDigitModel>().controller,
       focusNode: context.read<CustomTextDigitModel>().focusNode,
       validator: (value) {

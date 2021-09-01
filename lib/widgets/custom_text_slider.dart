@@ -28,7 +28,7 @@ class CustomTextSliderWithProvider extends StatelessWidget {
       builder: (context, _) {
         sliderValue = context.watch<CustomSliderModel>().value;
         return CustomTextSlider(
-          text: text,
+          label: text,
           min: min,
           max: max,
           value: sliderValue,
@@ -43,11 +43,11 @@ class CustomTextSlider extends StatelessWidget {
     Key? key,
     this.min = 0,
     this.max = 99,
-    required this.text,
+    required this.label,
     this.value = 0,
   }) : super(key: key);
 
-  final String text;
+  final String label;
   final double min, max;
   final double value;
 
@@ -58,7 +58,7 @@ class CustomTextSlider extends StatelessWidget {
         Expanded(
           flex: 3,
           child: CustomTextDigit(
-            text: text,
+            label: label,
             max: max,
             value: value,
           ),

@@ -28,16 +28,18 @@ class CustomTextModel extends ChangeNotifier {
   }
 }
 
-class CustomTextPasswd extends StatelessWidget {
-  CustomTextPasswd({
+class CustomText extends StatelessWidget {
+  CustomText({
     Key? key,
     this.validator,
     this.labelText = "",
     this.hintText = "",
+    this.onChanged,
   }) : super(key: key);
 
   String? Function(String?)? validator;
   final String labelText, hintText;
+  Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +51,7 @@ class CustomTextPasswd extends StatelessWidget {
       controller: context.read<CustomTextModel>().controller,
       focusNode: context.read<CustomTextModel>().focusNode,
       validator: validator,
-      onChanged: (String value) {
-        double tmpval =
-            context.read<CustomTextModel>().controller.text.length.toDouble();
-        context.read<CustomSliderModel>().setValue(tmpval);
-        context.read<CustomTextDigitModel>().setTextFromDouble(tmpval);
-      },
+      onChanged: onChanged,
     );
   }
 }

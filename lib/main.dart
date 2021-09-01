@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:polipass/models/key.dart';
+import 'package:polipass/models/passkey.dart';
 
 import 'package:provider/provider.dart';
 
@@ -12,8 +12,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  Hive.registerAdapter(KeyAdapter());
-  await Hive.openBox<Key>('keys');
+  Hive.registerAdapter(PassKeyAdapter());
+  await Hive.openBox<PassKey>('passkeys');
 
   runApp(const MyApp());
 }
