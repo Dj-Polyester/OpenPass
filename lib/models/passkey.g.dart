@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'key.dart';
+part of 'passkey.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class KeyAdapter extends TypeAdapter<PassKey> {
+class PassKeyAdapter extends TypeAdapter<PassKey> {
   @override
-  final int typeId = 1;
+  final int typeId = 0;
 
   @override
   PassKey read(BinaryReader reader) {
@@ -38,7 +38,7 @@ class KeyAdapter extends TypeAdapter<PassKey> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is KeyAdapter &&
+      other is PassKeyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

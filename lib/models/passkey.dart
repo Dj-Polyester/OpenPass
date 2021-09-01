@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
-part 'key.g.dart';
+part 'passkey.g.dart';
 
-@HiveType(typeId: 1)
-class PassKey {
+@HiveType(typeId: 0)
+class PassKey extends HiveObject {
   PassKey({
     required this.desc,
     required this.value,
