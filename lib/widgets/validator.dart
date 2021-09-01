@@ -1,5 +1,5 @@
 class Validator {
-  final Map<String, String> _chars = {
+  final Map<String, String> _chars = const {
     "az": "abcdefghijklmnopqrstuvwxyz",
     "AZ": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "09": "0123456789",
@@ -15,11 +15,11 @@ class Validator {
   }) : messages = [];
 
   //settings
-  Map<String, bool> allowedChars;
-  Map<String, int> numChars;
-  int length;
+  final Map<String, bool> allowedChars;
+  final Map<String, int> numChars;
+  final int length;
   //password text
-  String? text;
+  final String? text;
   //returned messages
   List<String> messages;
 
@@ -33,6 +33,7 @@ class Validator {
   }
 
   bool validateAllSettings() {
+    bool result = true;
     for (int passwdrune in text!.runes) {
       for (String key in _chars.keys) {
         for (int charune in _chars[key]!.runes) {
@@ -40,14 +41,17 @@ class Validator {
             //found char in list of [key]
             if (!allowedChars[key]!) {
               // not allowed: REJECT
-              messages.add("$key is invalid");
-              return false;
+              String message = "$key is invalid";
+              if (!messages.contains(message)) {
+                messages.add(message);
+              }
+              result = false;
             }
           }
         }
       }
     }
-    return true;
+    return result;
   }
 
   bool validatePasswd() {
@@ -55,13 +59,6 @@ class Validator {
     result = validateInput() && result;
     result = validateSumSettings() && result;
     result = validateAllSettings() && result;
-    return result;
-  }
-
-  bool validatePasswdGen() {
-    bool result = true;
-    result = validateInput() && result;
-    result = validateSumSettings() && result;
     return result;
   }
 

@@ -1,3 +1,4 @@
+import 'package:polipass/widgets/generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
@@ -50,7 +51,7 @@ class PasswdScreen extends StatelessWidget {
 
         // dialogOptions["length"]!.textPasswdModel.focusNode.requestFocus();
 
-        Validator validator = getSettings(value!);
+        Validator validator = getValidator(value!);
 
         switch (formKeySwitch) {
           case "submit":
@@ -61,7 +62,7 @@ class PasswdScreen extends StatelessWidget {
             }
             return null;
           case "generate":
-            if (!validator.validatePasswdGen()) {
+            if (!validator.validateSumSettings()) {
               return validator.messages
                   .map((String str) => "* " + str)
                   .join("\n");
@@ -74,36 +75,58 @@ class PasswdScreen extends StatelessWidget {
     ),
   };
 
-  Validator getSettings(String text) {
-    Map<String, int> settings = {};
-    Map<String, bool> settingsAllowed = {};
+  Map<String, dynamic> getSettings({String? text}) {
+    Map<String, int> numChars = {};
+    Map<String, bool> allowedChars = {};
 
     for (String key in dialogOptions.keys) {
       dynamic item = dialogOptions[key];
 
       if (item is CustomTextCheckboxWithProvider ||
           item is CustomTextCheckboxSliderWithProvider) {
-        settingsAllowed[key] = item.checkboxModel.value;
+        allowedChars[key] = item.checkboxModel.value;
       }
       if (item is CustomTextSliderPasswdWithProvider ||
           item is CustomTextCheckboxSliderWithProvider) {
-        settings[key] = item.sliderModel.value.toInt();
+        numChars[key] = item.sliderModel.value.toInt();
       }
     }
 
     int length = dialogOptions["length"]!.sliderModel.value.toInt();
-    settings.remove("length");
+    numChars.remove("length");
 
     print("text: $text");
     print("length: $length");
-    print("settings: $settings");
-    print("settingsAllowed: $settingsAllowed");
+    print("numChars: $numChars");
+    print("allowedChars: $allowedChars");
+
+    return {
+      "text": text,
+      "length": length,
+      "numChars": numChars,
+      "allowedChars": allowedChars,
+    };
+  }
+
+  Validator getValidator(String text) {
+    Map<String, dynamic> settings = getSettings(text: text);
 
     return Validator(
-        allowedChars: settingsAllowed,
-        numChars: settings,
-        length: length,
-        text: text);
+      allowedChars: settings["allowedChars"],
+      numChars: settings["numChars"],
+      length: settings["length"],
+      text: settings["text"],
+    );
+  }
+
+  Generator getGenerator() {
+    Map<String, dynamic> settings = getSettings();
+
+    return Generator(
+      allowedChars: settings["allowedChars"],
+      numChars: settings["numChars"],
+      length: settings["length"],
+    );
   }
 
   //dialog widgets
@@ -145,6 +168,11 @@ class PasswdScreen extends StatelessWidget {
             // Validate returns true if the form is valid, or false otherwise.
             if (formKey.currentState!.validate()) {
               // TODO generate the text.
+
+              Generator generator = getGenerator();
+
+              dialogOptions["length"]!.textPasswdModel.controller.text =
+                  generator.generate();
 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Generating")),
