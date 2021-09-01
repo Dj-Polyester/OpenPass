@@ -1,11 +1,12 @@
-import 'package:polipass/widgets/generator.dart';
+import 'package:polipass/utils/generator.dart';
+import 'package:polipass/widgets/custom_text_creds.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
 import 'package:polipass/widgets/custom_text_checkbox.dart';
 import 'package:polipass/widgets/custom_text_checkbox_slider.dart';
 import 'package:polipass/widgets/custom_text_slider_passwd.dart';
-import 'package:polipass/widgets/validator.dart';
+import 'package:polipass/utils/validator.dart';
 
 class PasswdScreen extends StatelessWidget {
   PasswdScreen({Key? key}) : super(key: key);
@@ -16,6 +17,75 @@ class PasswdScreen extends StatelessWidget {
   late final TextEditingController dialogController = TextEditingController();
 
   late final Map<String, dynamic> dialogOptions = {
+    "description": CustomTextCredsWithProvider(
+      labelText: "Description",
+      hintText: "Enter description",
+      validator: (String? value) {
+        //TODO compare value and settings, reject if inconsistent
+        if (formKeySwitch == "submit") {
+          Validator validator = getValidator(value!);
+
+          if (!validator.validateInput()) {
+            return validator.messages
+                .map((String str) => "* " + str)
+                .join("\n");
+          }
+        }
+        return null;
+      },
+    ),
+    "username": CustomTextCredsWithProvider(
+      labelText: "Username (optional)",
+      hintText: "Enter username",
+    ),
+    "email": CustomTextCredsWithProvider(
+      labelText: "Email (optional)",
+      hintText: "Enter email",
+      validator: (String? value) {
+        //TODO compare value and settings, reject if inconsistent
+        if (formKeySwitch == "submit" && value!.isNotEmpty) {
+          Validator validator = getValidator(value);
+
+          if (!validator.validateEmail()) {
+            return validator.messages
+                .map((String str) => "* " + str)
+                .join("\n");
+          }
+        }
+        return null;
+      },
+    ),
+    "length": CustomTextSliderPasswdWithProvider(
+      labelText: "Password",
+      hintText: "Enter password",
+      text: "Length",
+      value: 12,
+      //TODO VALIDATE
+      validator: (String? value) {
+        //TODO compare value and settings, reject if inconsistent
+
+        Validator validator = getValidator(value!);
+
+        switch (formKeySwitch) {
+          case "submit":
+            if (!validator.validatePasswd()) {
+              return validator.messages
+                  .map((String str) => "* " + str)
+                  .join("\n");
+            }
+            return null;
+          case "generate":
+            if (!validator.validateSumSettings()) {
+              return validator.messages
+                  .map((String str) => "* " + str)
+                  .join("\n");
+            }
+            return null;
+          default:
+        }
+        return null;
+      },
+    ),
     "az": CustomTextCheckboxSliderWithProvider(
       text1: "Allow lowercase letters",
       text2: " (a-z)",
@@ -39,39 +109,6 @@ class PasswdScreen extends StatelessWidget {
     "ambiguous": CustomTextCheckboxWithProvider(
       text1: "Allow ambiguous letters",
       text2: " (l,1,O,0)",
-    ),
-    "length": CustomTextSliderPasswdWithProvider(
-      labelText: "Password",
-      hintText: "Enter password",
-      text: "Length",
-      value: 12,
-      //TODO VALIDATE
-      validator: (String? value) {
-        //TODO compare value and settings, reject if inconsistent
-
-        // dialogOptions["length"]!.textPasswdModel.focusNode.requestFocus();
-
-        Validator validator = getValidator(value!);
-
-        switch (formKeySwitch) {
-          case "submit":
-            if (!validator.validatePasswd()) {
-              return validator.messages
-                  .map((String str) => "* " + str)
-                  .join("\n");
-            }
-            return null;
-          case "generate":
-            if (!validator.validateSumSettings()) {
-              return validator.messages
-                  .map((String str) => "* " + str)
-                  .join("\n");
-            }
-            return null;
-          default:
-        }
-        return null;
-      },
     ),
   };
 
@@ -201,6 +238,9 @@ class PasswdScreen extends StatelessWidget {
                 key: formKey,
                 child: Column(
                   children: <Widget>[
+                    dialogOptions["description"],
+                    dialogOptions["username"],
+                    dialogOptions["email"],
                     dialogOptions["length"],
                     AnimatedSize(
                       alignment: Alignment.topCenter,
