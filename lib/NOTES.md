@@ -288,3 +288,7 @@ https://www.bezkoder.com/dart-convert-list-map/
 
 https://medium.com/flutter/managing-visibility-in-flutter-f558588adefe
 https://stackoverflow.com/a/66268351/10713877
+
+## Wrap Around and Match Parent
+
+https://stackoverflow.com/questions/42257668/the-equivalent-of-wrap-content-and-match-parent-in-flutter

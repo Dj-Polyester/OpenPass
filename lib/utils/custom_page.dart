@@ -18,6 +18,12 @@ class CustomPageModel extends ChangeNotifier {
   late GlobalModel globalModel;
   String? title, _currTitle;
 
+  String? get currTitle => _currTitle;
+  set currTitle(String? value) {
+    _currTitle = value;
+    notifyListeners();
+  }
+
   Map<String, bool> selectedItems = {};
 
   void setSelectedItems(bool value) {
@@ -29,12 +35,6 @@ class CustomPageModel extends ChangeNotifier {
 
   void updateSelectedItems(String key, bool value) {
     selectedItems[key] = value;
-    notifyListeners();
-  }
-
-  String? get currTitle => _currTitle;
-  set currTitle(String? value) {
-    _currTitle = value;
     notifyListeners();
   }
 
@@ -50,22 +50,22 @@ class CustomPageModel extends ChangeNotifier {
     //print(contactModel.currTitle);
     //print(phones);
     //print(selectedItems);
-    currTitle = (contactSelectVisible) ? "Selected $selectedNum" : title!;
+    currTitle = (itemSelectVisible) ? "Selected $selectedNum" : title!;
     notifyListeners();
   }
 
-  bool contactSelectVisible = false;
+  bool itemSelectVisible = false;
   bool toggleVisibility() {
-    contactSelectVisible = !contactSelectVisible;
+    itemSelectVisible = !itemSelectVisible;
 
     setCheckbox(false);
 
     notifyListeners();
-    return contactSelectVisible;
+    return itemSelectVisible;
   }
 
   void turnOffVisibility() {
-    contactSelectVisible = false;
+    itemSelectVisible = false;
     notifyListeners();
   }
 

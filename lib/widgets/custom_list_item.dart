@@ -18,6 +18,13 @@ class CustomListItemModel extends ChangeNotifier {
 
   final PassKey passkey;
 
+  bool expand = false;
+
+  void toggleExpansion() {
+    expand = !expand;
+    notifyListeners();
+  }
+
   void setCheckbox(bool value) {
     customPageModel.updateSelectedItems(passkey.desc, value);
 
@@ -40,13 +47,11 @@ class CustomListItem extends StatelessWidget {
     Key? key,
     required this.selected,
     required this.passkey,
-    // required this.contactListItemView,
-  }) : super(key: key) {
-    //print("contact: $contact");
-  }
+    required this.customListItemView,
+  }) : super(key: key);
   bool selected;
 
-  // final Function contactListItemView;
+  final Function customListItemView;
 
   final PassKey passkey;
   final Color borderColor = const Color(0xFFCCCCCC),
@@ -65,17 +70,17 @@ class CustomListItem extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: borderColor),
           borderRadius:
-              const BorderRadius.all(Radius.circular(Globals.itemsPadding)),
+              const BorderRadius.all(Radius.circular(Globals.itemsPaddingMax)),
         ),
-        margin: const EdgeInsets.only(bottom: Globals.contactSpacing),
+        margin: const EdgeInsets.only(bottom: Globals.itemsSpacing),
         child: ClipRRect(
           borderRadius:
-              const BorderRadius.all(Radius.circular(Globals.itemsPadding)),
+              const BorderRadius.all(Radius.circular(Globals.itemsPaddingMax)),
           child: Material(
             color: backgroundColor,
             child: Selector<CustomPageModel, bool>(
               selector: (_, customPageModel) =>
-                  customPageModel.contactSelectVisible,
+                  customPageModel.itemSelectVisible,
               builder: (context, contactSelectVisible, __) => InkWell(
                 onLongPress: () {
                   //print("long pressed");
@@ -87,9 +92,7 @@ class CustomListItem extends StatelessWidget {
                   }
                 },
                 onTap: () {
-                  // Navigator.pushNamed(context,
-                  //     "/${Provider.of<CustomPageModel>(context, listen: false).title}",
-                  //     arguments: {"command": "update", "contact": contact});
+                  context.read<CustomListItemModel>().toggleExpansion();
                 },
                 splashColor: splashColor,
                 child: Row(
@@ -100,7 +103,6 @@ class CustomListItem extends StatelessWidget {
                       child: Checkbox(
                         value: selected,
                         onChanged: (bool? value) {
-                          // print("change contactitem checkbox with $value");
                           Provider.of<CustomListItemModel>(
                             context,
                             listen: false,
@@ -108,11 +110,7 @@ class CustomListItem extends StatelessWidget {
                         },
                       ),
                     ),
-                    // contactListItemView(context),
-                    Padding(
-                      padding: const EdgeInsets.all(Globals.itemsPadding),
-                      child: Text(passkey.desc),
-                    ),
+                    Expanded(child: customListItemView(context)),
                   ],
                 ),
               ),

@@ -12,7 +12,7 @@ class GlobalModel extends ChangeNotifier {
     }
   }
 
-  double fontSize = 16;
+  double fontSize = 16, fontSizeSmall = 14;
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
   set selectedIndex(int index) {
@@ -22,10 +22,13 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
-  static const double itemsPadding = 10,
-      buttonSpacing = 10,
-      contactSpacing = 10,
-      heightFactor = 15;
+  static EdgeInsets itemsPadding = const EdgeInsets.only(
+    left: 20.0,
+    right: 20.0,
+    top: 2.0,
+    bottom: 2.0,
+  );
+  static const double itemsPaddingMax = 10, itemsSpacing = 10;
 
   static bool isNumeric(String? s) {
     if (s == null) {
