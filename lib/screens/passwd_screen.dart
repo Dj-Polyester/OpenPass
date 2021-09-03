@@ -1,3 +1,6 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:polipass/db/db.dart';
+import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/widgets/custom_text_creds.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +20,16 @@ class PasswdScreen extends StatelessWidget {
   late final TextEditingController dialogController = TextEditingController();
 
   late final Map<String, dynamic> dialogOptions = {
-    "description": CustomTextCredsWithProvider(
+    "desc": CustomTextCredsWithProvider(
       labelText: "Description",
       hintText: "Enter description",
       validator: (String? value) {
-        //TODO compare value and settings, reject if inconsistent
+        //compare value and settings, reject if inconsistent
         if (formKeySwitch == "submit") {
           Validator validator = getValidator(value!);
 
-          if (!validator.validateInput()) {
-            return validator.messages
-                .map((String str) => "* " + str)
-                .join("\n");
+          if (!validator.validateDesc()) {
+            return validator.format();
           }
         }
         return null;
@@ -47,9 +48,7 @@ class PasswdScreen extends StatelessWidget {
           Validator validator = getValidator(value);
 
           if (!validator.validateEmail()) {
-            return validator.messages
-                .map((String str) => "* " + str)
-                .join("\n");
+            return validator.format();
           }
         }
         return null;
@@ -60,7 +59,7 @@ class PasswdScreen extends StatelessWidget {
       hintText: "Enter password",
       text: "Length",
       value: 12,
-      //TODO VALIDATE
+      //VALIDATE
       validator: (String? value) {
         //TODO compare value and settings, reject if inconsistent
 
@@ -69,16 +68,12 @@ class PasswdScreen extends StatelessWidget {
         switch (formKeySwitch) {
           case "submit":
             if (!validator.validatePasswd()) {
-              return validator.messages
-                  .map((String str) => "* " + str)
-                  .join("\n");
+              return validator.format();
             }
             return null;
           case "generate":
             if (!validator.validateSumSettings()) {
-              return validator.messages
-                  .map((String str) => "* " + str)
-                  .join("\n");
+              return validator.format();
             }
             return null;
           default:
@@ -132,10 +127,10 @@ class PasswdScreen extends StatelessWidget {
     int length = dialogOptions["length"]!.sliderModel.value.toInt();
     numChars.remove("length");
 
-    print("text: $text");
-    print("length: $length");
-    print("numChars: $numChars");
-    print("allowedChars: $allowedChars");
+    debugPrint("text: $text");
+    debugPrint("length: $length");
+    debugPrint("numChars: $numChars");
+    debugPrint("allowedChars: $allowedChars");
 
     return {
       "text": text,
@@ -169,7 +164,7 @@ class PasswdScreen extends StatelessWidget {
   //dialog widgets
 
   late final Map<String, dynamic> dialogButtons = {
-    //TODO SUBMIT
+    //SUBMIT
     "submit": (BuildContext context) => TextButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
@@ -180,7 +175,27 @@ class PasswdScreen extends StatelessWidget {
             if (formKey.currentState!.validate()) {
               // TODO submit the info to the hive database.
 
-              //TODO quit
+              String desc = dialogOptions["desc"].textCredModel.controller.text,
+                  username =
+                      dialogOptions["username"].textCredModel.controller.text,
+                  email = dialogOptions["email"].textCredModel.controller.text,
+                  password =
+                      dialogOptions["length"].textPasswdModel.controller.text;
+
+              PassKey passkey = PassKey(
+                desc: desc,
+                username: (username == "") ? null : username,
+                email: (email == "") ? null : email,
+                password: password,
+              );
+
+              debugPrint("passkey: $passkey");
+
+              if (KeyStore.passkeys.get(passkey.desc) == null) {
+                KeyStore.passkeys.put(passkey.desc, passkey);
+              }
+
+              // quit
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Submitting the password")),
@@ -195,7 +210,7 @@ class PasswdScreen extends StatelessWidget {
                 MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
           ),
         ),
-    //TODO GENERATE
+    //GENERATE
     "generate": (BuildContext context) => TextButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
@@ -204,8 +219,6 @@ class PasswdScreen extends StatelessWidget {
 
             // Validate returns true if the form is valid, or false otherwise.
             if (formKey.currentState!.validate()) {
-              // TODO generate the text.
-
               Generator generator = getGenerator();
 
               dialogOptions["length"]!.textPasswdModel.controller.text =
@@ -238,7 +251,7 @@ class PasswdScreen extends StatelessWidget {
                 key: formKey,
                 child: Column(
                   children: <Widget>[
-                    dialogOptions["description"],
+                    dialogOptions["desc"],
                     dialogOptions["username"],
                     dialogOptions["email"],
                     dialogOptions["length"],

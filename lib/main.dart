@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 
 import 'package:provider/provider.dart';
@@ -29,8 +30,19 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    Hive.close();
+
+    if (!Globals.isInDebugMode) {
+      Hive.close();
+    }
   }
+
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   if (Globals.isInDebugMode) {
+  //     KeyStore.passkeys.deleteFromDisk();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

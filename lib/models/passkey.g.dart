@@ -18,18 +18,24 @@ class PassKeyAdapter extends TypeAdapter<PassKey> {
     };
     return PassKey(
       desc: fields[0] as String,
-      value: fields[1] as String,
+      username: fields[1] as String?,
+      email: fields[2] as String?,
+      password: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, PassKey obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.desc)
       ..writeByte(1)
-      ..write(obj.value);
+      ..write(obj.username)
+      ..writeByte(2)
+      ..write(obj.email)
+      ..writeByte(3)
+      ..write(obj.password);
   }
 
   @override

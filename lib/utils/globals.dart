@@ -22,6 +22,11 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
+  static const double itemsPadding = 10,
+      buttonSpacing = 10,
+      contactSpacing = 10,
+      heightFactor = 15;
+
   static bool isNumeric(String? s) {
     if (s == null) {
       return false;
@@ -49,4 +54,10 @@ class Globals {
       body: (BuildContext context) => const Center(child: Text("2")),
     ),
   ];
+
+  static bool get isInDebugMode {
+    bool inDebugMode = false;
+    assert(inDebugMode = true);
+    return inDebugMode;
+  }
 }

@@ -5,10 +5,16 @@ part 'passkey.g.dart';
 class PassKey extends HiveObject {
   PassKey({
     required this.desc,
-    required this.value,
+    this.username,
+    this.email,
+    required this.password,
   });
   @HiveField(0)
   String desc;
   @HiveField(1)
-  String value;
+  String? username;
+  @HiveField(2)
+  String? email;
+  @HiveField(3)
+  String password;
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomCheckboxModel extends ChangeNotifier {
-  bool value = false;
+  bool value = true;
   void setVal(bool val) {
     value = val;
     notifyListeners();

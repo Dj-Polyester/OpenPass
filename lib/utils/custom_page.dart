@@ -8,7 +8,7 @@ class CustomPageModel extends ChangeNotifier {
   CustomPageModel({
     this.title,
   }) {
-    currTitle = title;
+    _currTitle = title;
   }
 
   void provide(Locator read) {
@@ -16,7 +16,69 @@ class CustomPageModel extends ChangeNotifier {
   }
 
   late GlobalModel globalModel;
-  String? title, currTitle;
+  String? title, _currTitle;
+
+  Map<String, bool> selectedItems = {};
+
+  void setSelectedItems(bool value) {
+    for (var key in selectedItems.keys) {
+      selectedItems[key] = value;
+    }
+    notifyListeners();
+  }
+
+  void updateSelectedItems(String key, bool value) {
+    selectedItems[key] = value;
+    notifyListeners();
+  }
+
+  String? get currTitle => _currTitle;
+  set currTitle(String? value) {
+    _currTitle = value;
+    notifyListeners();
+  }
+
+  bool checkboxValue = false;
+  void setCheckbox(bool value) {
+    setSelectedItems(value);
+    checkboxValue = value;
+    if (value) {
+      selectedNum = selectedItems.length;
+    } else {
+      selectedNum = 0;
+    }
+    //print(contactModel.currTitle);
+    //print(phones);
+    //print(selectedItems);
+    currTitle = (contactSelectVisible) ? "Selected $selectedNum" : title!;
+    notifyListeners();
+  }
+
+  bool contactSelectVisible = false;
+  bool toggleVisibility() {
+    contactSelectVisible = !contactSelectVisible;
+
+    setCheckbox(false);
+
+    notifyListeners();
+    return contactSelectVisible;
+  }
+
+  void turnOffVisibility() {
+    contactSelectVisible = false;
+    notifyListeners();
+  }
+
+  int selectedNum = 0;
+  void incSelectedNum() {
+    if (++selectedNum == selectedItems.length) checkboxValue = true;
+    notifyListeners();
+  }
+
+  void decSelectedNum() {
+    if (selectedNum-- == selectedItems.length) checkboxValue = false;
+    notifyListeners();
+  }
 }
 
 class CustomPage {
