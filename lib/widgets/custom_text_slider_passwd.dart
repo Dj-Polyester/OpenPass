@@ -16,8 +16,10 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
     this.min = 0,
     this.max = 99,
     this.value = 0,
+    this.inputText,
   }) : super(key: key);
 
+  String? inputText;
   String? Function(String?)? validator;
 
   final String labelText, hintText, text;
@@ -25,7 +27,7 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
 
   late CustomSliderModel sliderModel = CustomSliderModel(value: value);
   late CustomTextDigitModel textDigitModel = CustomTextDigitModel(value: value);
-  late CustomTextModel textPasswdModel = CustomTextModel();
+  late CustomTextModel textPasswdModel = CustomTextModel(text: inputText);
 
   @override
   Widget build(BuildContext context) {

@@ -1,122 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:polipass/widgets/custom_list.dart';
 
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 import 'globals.dart';
 
 class CustomPageModel extends ChangeNotifier {
-  CustomPageModel({
-    this.title,
-  }) {
-    _currTitle = title;
-  }
+  CustomPageModel({this.title}) : currTitle = title;
 
   void provide(Locator read) {
     globalModel = read<GlobalModel>();
   }
 
   late GlobalModel globalModel;
-  String? title, _currTitle;
-
-  String? get currTitle => _currTitle;
-  set currTitle(String? value) {
-    _currTitle = value;
-    notifyListeners();
-  }
-
-  Map<String, bool> selectedItems = {};
-
-  void setSelectedItems(bool value) {
-    for (var key in selectedItems.keys) {
-      selectedItems[key] = value;
-    }
-    notifyListeners();
-  }
-
-  void updateSelectedItems(String key, bool value) {
-    selectedItems[key] = value;
-    notifyListeners();
-  }
-
-  bool checkboxValue = false;
-  void setCheckbox(bool value) {
-    setSelectedItems(value);
-    checkboxValue = value;
-    if (value) {
-      selectedNum = selectedItems.length;
-    } else {
-      selectedNum = 0;
-    }
-    //print(contactModel.currTitle);
-    //print(phones);
-    //print(selectedItems);
-    currTitle = (itemSelectVisible) ? "Selected $selectedNum" : title!;
-    notifyListeners();
-  }
-
-  bool itemSelectVisible = false;
-  bool toggleVisibility() {
-    itemSelectVisible = !itemSelectVisible;
-
-    setCheckbox(false);
-
-    notifyListeners();
-    return itemSelectVisible;
-  }
-
-  void turnOffVisibility() {
-    itemSelectVisible = false;
-    notifyListeners();
-  }
-
-  int selectedNum = 0;
-  void incSelectedNum() {
-    if (++selectedNum == selectedItems.length) checkboxValue = true;
-    notifyListeners();
-  }
-
-  void decSelectedNum() {
-    if (selectedNum-- == selectedItems.length) checkboxValue = false;
+  String? title, currTitle;
+  void setCurrTitle(String? newTitle) {
+    currTitle = newTitle;
     notifyListeners();
   }
 }
 
 class CustomPage {
-  CustomPage({this.appbar, this.body, this.fab, this.screens});
+  CustomPage({
+    this.appbar,
+    this.body,
+    this.fab,
+    this.screens,
+    this.hasList = false,
+  });
+
+  bool hasList;
 
   void provide(CustomPageModel customPageModel) {
+    List<SingleChildWidget> providers = [
+      ChangeNotifierProvider.value(value: customPageModel),
+    ];
+
+    if (hasList) {
+      //use value with MultiProvider
+      CustomListModel customListModel = CustomListModel();
+      providers.add(ChangeNotifierProvider.value(value: customListModel));
+      // providers.add(ChangeNotifierProvider(create: (_) => CustomListModel()));
+    }
+
     if (appbar != null) {
       Widget Function(BuildContext) tmp = appbar!;
       appbar = PreferredSize(
         preferredSize: const Size.fromHeight(56.0),
-        child: refine(customPageModel, tmp),
+        child: refine(providers, tmp),
       );
     }
     if (body != null) {
       Widget Function(BuildContext) tmp = body!;
-      body = refine(customPageModel, tmp);
+      body = refine(providers, tmp);
     }
     if (fab != null) {
       Widget Function(BuildContext) tmp = fab!;
-      fab = refine(customPageModel, tmp);
+      fab = refine(providers, tmp);
     }
     if (screens != null) {
       Map tmp = screens!.map(
         (key, value) => MapEntry(
           key,
-          (BuildContext context) => refine(customPageModel, value),
+          (BuildContext context) => refine(providers, value),
         ),
       );
       Globals.routes = {...Globals.routes, ...tmp};
     }
   }
 
-  ChangeNotifierProvider<CustomPageModel> refine(
-    CustomPageModel customPageModel,
+  MultiProvider refine(
+    List<SingleChildWidget> providers,
     Widget Function(BuildContext) child,
   ) =>
-      ChangeNotifierProvider<CustomPageModel>.value(
-        value: customPageModel,
+      MultiProvider(
+        providers: providers,
         builder: (context, _) => child(context),
       );
 

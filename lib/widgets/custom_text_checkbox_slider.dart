@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
+import 'package:polipass/widgets/custom_animated_size.dart';
 import 'package:polipass/widgets/custom_checkbox.dart';
 import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_digit.dart';
@@ -76,10 +77,7 @@ class CustomTextCheckboxSlider extends StatelessWidget {
           text1: text1,
           text2: text2,
         ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeIn,
-          alignment: Alignment.topCenter,
+        CustomAnimatedSize(
           child: Visibility(
             visible: context.watch<CustomCheckboxModel>().value,
             child: Padding(

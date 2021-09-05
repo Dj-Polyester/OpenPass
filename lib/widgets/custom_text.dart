@@ -28,6 +28,52 @@ class CustomTextModel extends ChangeNotifier {
   }
 }
 
+class CustomTextWithProvider extends StatelessWidget {
+  CustomTextWithProvider({
+    Key? key,
+    this.validator,
+    this.labelText = "",
+    this.hintText = "",
+    this.inputText,
+    this.onChanged,
+    this.fillColor,
+    this.focusColor,
+    this.hoverColor,
+  }) : super(key: key);
+
+  Color? fillColor, focusColor, hoverColor;
+  String? inputText;
+  String? Function(String?)? validator;
+  Function(String)? onChanged;
+
+  final String labelText, hintText;
+
+  late CustomTextModel textModel = CustomTextModel(text: inputText);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: textModel),
+      ],
+      builder: (context, _) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CustomText(
+            validator: validator,
+            labelText: labelText,
+            hintText: hintText,
+            onChanged: onChanged,
+            fillColor: fillColor,
+            focusColor: focusColor,
+            hoverColor: hoverColor,
+          ),
+        );
+      },
+    );
+  }
+}
+
 class CustomText extends StatelessWidget {
   CustomText({
     Key? key,
@@ -35,7 +81,12 @@ class CustomText extends StatelessWidget {
     this.labelText = "",
     this.hintText = "",
     this.onChanged,
+    this.fillColor,
+    this.focusColor,
+    this.hoverColor,
   }) : super(key: key);
+
+  Color? fillColor, focusColor, hoverColor;
 
   String? Function(String?)? validator;
   final String labelText, hintText;
@@ -47,6 +98,9 @@ class CustomText extends StatelessWidget {
       decoration: CustomTextStyle.textFieldStyle(
         labelTextStr: labelText,
         hintTextStr: hintText,
+        fillColor: fillColor,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
       ),
       controller: context.read<CustomTextModel>().controller,
       focusNode: context.read<CustomTextModel>().focusNode,

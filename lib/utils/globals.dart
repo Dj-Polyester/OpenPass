@@ -19,9 +19,29 @@ class GlobalModel extends ChangeNotifier {
     _selectedIndex = index;
     notifyListeners();
   }
+
+  bool checkboxFlag = true;
+  void notifyCheckbox() {
+    checkboxFlag = !checkboxFlag;
+    notifyListeners();
+  }
+
+  bool hiveFlag = true;
+  void notifyHive() {
+    hiveFlag = !hiveFlag;
+    notifyListeners();
+  }
+
+  String searchStr = "";
+  void notifySearch(String value) {
+    searchStr = value;
+    notifyListeners();
+  }
 }
 
 class Globals {
+  static double passKeyItemViewMinHeight = 50;
+
   static EdgeInsets itemsPadding = const EdgeInsets.only(
     left: 20.0,
     right: 20.0,
@@ -58,7 +78,7 @@ class Globals {
     ),
   ];
 
-  static bool get isInDebugMode {
+  static bool get debugMode {
     bool inDebugMode = false;
     assert(inDebugMode = true);
     return inDebugMode;

@@ -2,7 +2,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/generator.dart';
-import 'package:polipass/widgets/custom_text_creds.dart';
+import 'package:polipass/utils/globals.dart';
+import 'package:polipass/widgets/custom_animated_size.dart';
+import 'package:polipass/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault.dart';
@@ -12,15 +14,15 @@ import 'package:polipass/widgets/custom_text_slider_passwd.dart';
 import 'package:polipass/utils/validator.dart';
 
 class PasswdScreen extends StatelessWidget {
-  PasswdScreen({Key? key}) : super(key: key);
+  PasswdScreen({Key? key, this.globalPasskey}) : super(key: key);
+
+  PassKey? globalPasskey;
 
   late String formKeySwitch;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  late final TextEditingController dialogController = TextEditingController();
-
   late final Map<String, dynamic> dialogOptions = {
-    "desc": CustomTextCredsWithProvider(
+    "desc": CustomTextWithProvider(
       labelText: "Description",
       hintText: "Enter description",
       validator: (String? value) {
@@ -34,12 +36,14 @@ class PasswdScreen extends StatelessWidget {
         }
         return null;
       },
+      inputText: (globalPasskey == null) ? null : globalPasskey!.desc,
     ),
-    "username": CustomTextCredsWithProvider(
+    "username": CustomTextWithProvider(
       labelText: "Username (optional)",
       hintText: "Enter username",
+      inputText: (globalPasskey == null) ? null : globalPasskey!.username,
     ),
-    "email": CustomTextCredsWithProvider(
+    "email": CustomTextWithProvider(
       labelText: "Email (optional)",
       hintText: "Enter email",
       validator: (String? value) {
@@ -53,6 +57,7 @@ class PasswdScreen extends StatelessWidget {
         }
         return null;
       },
+      inputText: (globalPasskey == null) ? null : globalPasskey!.email,
     ),
     "length": CustomTextSliderPasswdWithProvider(
       labelText: "Password",
@@ -80,6 +85,7 @@ class PasswdScreen extends StatelessWidget {
         }
         return null;
       },
+      inputText: (globalPasskey == null) ? null : globalPasskey!.password,
     ),
     "az": CustomTextCheckboxSliderWithProvider(
       text1: "Allow lowercase letters",
@@ -175,10 +181,10 @@ class PasswdScreen extends StatelessWidget {
             if (formKey.currentState!.validate()) {
               // TODO submit the info to the hive database.
 
-              String desc = dialogOptions["desc"].textCredModel.controller.text,
+              String desc = dialogOptions["desc"].textModel.controller.text,
                   username =
-                      dialogOptions["username"].textCredModel.controller.text,
-                  email = dialogOptions["email"].textCredModel.controller.text,
+                      dialogOptions["username"].textModel.controller.text,
+                  email = dialogOptions["email"].textModel.controller.text,
                   password =
                       dialogOptions["length"].textPasswdModel.controller.text;
 
@@ -189,16 +195,29 @@ class PasswdScreen extends StatelessWidget {
                 password: password,
               );
 
-              debugPrint("passkey: $passkey");
+              print("passkey: $passkey");
 
-              if (KeyStore.passkeys.get(passkey.desc) == null) {
+              if (globalPasskey == null) {
+                //INSERT
+                if (KeyStore.passkeys.get(passkey.desc) == null) {
+                  // KeyStore.passkeys.add(passkey);
+                  KeyStore.passkeys.put(passkey.desc, passkey);
+                  // context.read<GlobalModel>().notifyHive();
+                }
+              } else {
+                //UPDATE
+                if (globalPasskey!.desc != passkey.desc) {
+                  KeyStore.passkeys.delete(globalPasskey!.desc);
+                }
                 KeyStore.passkeys.put(passkey.desc, passkey);
               }
 
               // quit
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Submitting the password")),
+                SnackBar(
+                    content:
+                        Text("Added the key with description ${passkey.desc}")),
               );
             }
           },
@@ -255,10 +274,7 @@ class PasswdScreen extends StatelessWidget {
                     dialogOptions["username"],
                     dialogOptions["email"],
                     dialogOptions["length"],
-                    AnimatedSize(
-                      alignment: Alignment.topCenter,
-                      curve: Curves.easeIn,
-                      duration: const Duration(milliseconds: 200),
+                    CustomAnimatedSize(
                       child: Selector<VaultDialogModel, bool>(
                         selector: (_, vaultDialogModel) =>
                             vaultDialogModel.isSettingsVisible,

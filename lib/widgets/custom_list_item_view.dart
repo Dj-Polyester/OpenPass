@@ -1,4 +1,7 @@
+import 'package:polipass/pages/vault.dart';
+import 'package:polipass/widgets/custom_animated_size.dart';
 import 'package:polipass/widgets/custom_icon_btn.dart';
+import 'package:polipass/widgets/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +23,7 @@ class _TextFieldCreds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicWidth(
+    return Expanded(
       child: TextField(
         obscureText: obscureText,
         style: TextStyle(
@@ -136,9 +139,8 @@ class PassKeyItemView extends StatelessWidget {
       builder: (_, fontSize, __) => ChangeNotifierProvider<PassKeyModel>(
         create: (_) => PassKeyModel(),
         builder: (context, _) => ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: 50,
-          ),
+          constraints:
+              BoxConstraints(minHeight: Globals.passKeyItemViewMinHeight),
           child: Selector<CustomListItemModel, bool>(
             selector: (_, customListItemModel) => customListItemModel.expand,
             builder: (context, expand, __) => Column(
@@ -155,18 +157,39 @@ class PassKeyItemView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: expand,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: passkey.items
-                        .where((Map? item) => item != null)
-                        .map(
-                          (Map? item) => _PassKeyItemViewCreds(item: item!),
-                        )
-                        .toList()
-                        .cast<Widget>(),
+                CustomAnimatedSize(
+                  child: Visibility(
+                    visible: expand,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: passkey.items
+                              .where((Map? item) => item != null)
+                              .map(
+                                (Map? item) =>
+                                    _PassKeyItemViewCreds(item: item!),
+                              )
+                              .toList()
+                              .cast<Widget>() +
+                          [
+                            Center(
+                              child: GestureDetector(
+                                onLongPress: () {},
+                                onTap: () {},
+                                child: TextButton(
+                                    onPressed: () async {
+                                      if (!context
+                                          .read<CustomListModel>()
+                                          .itemSelectVisible) {
+                                        await Vault.dialogBuilder(context,
+                                            passkey: passkey);
+                                      }
+                                    },
+                                    child: const Text("Update")),
+                              ),
+                            )
+                          ],
+                    ),
                   ),
                 ),
               ],

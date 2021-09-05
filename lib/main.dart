@@ -15,6 +15,9 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PassKeyAdapter());
   await Hive.openBox<PassKey>('passkeys');
+  // if (Globals.debugMode) {
+  //   KeyStore.passkeys.clear();
+  // }
 
   runApp(const MyApp());
 }
@@ -31,18 +34,8 @@ class _MyAppState extends State<MyApp> {
   void dispose() {
     super.dispose();
 
-    if (!Globals.isInDebugMode) {
-      Hive.close();
-    }
+    Hive.close();
   }
-
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   if (Globals.isInDebugMode) {
-  //     KeyStore.passkeys.deleteFromDisk();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
