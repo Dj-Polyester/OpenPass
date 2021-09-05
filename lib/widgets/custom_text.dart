@@ -84,8 +84,11 @@ class CustomText extends StatelessWidget {
     this.fillColor,
     this.focusColor,
     this.hoverColor,
+    this.prefixIcon,
+    this.suffixIcon,
   }) : super(key: key);
 
+  Widget? prefixIcon, suffixIcon;
   Color? fillColor, focusColor, hoverColor;
 
   String? Function(String?)? validator;
@@ -96,6 +99,8 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: CustomTextStyle.textFieldStyle(
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
         labelTextStr: labelText,
         hintTextStr: hintText,
         fillColor: fillColor,

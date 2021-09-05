@@ -1,4 +1,4 @@
-import 'package:polipass/pages/vault.dart';
+import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/widgets/custom_animated_size.dart';
 import 'package:polipass/widgets/custom_icon_btn.dart';
 import 'package:polipass/widgets/custom_list.dart';

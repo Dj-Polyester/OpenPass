@@ -15,6 +15,11 @@ class Generator {
     required this.length,
   });
 
+  Generator.fromMap(Map<String, dynamic> map)
+      : allowedChars = map["allowedChars"],
+        numChars = map["numChars"],
+        length = map["length"];
+
   //settings
   final Map<String, bool> allowedChars;
   final Map<String, int> numChars;

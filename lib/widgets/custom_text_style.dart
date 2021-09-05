@@ -8,8 +8,12 @@ class CustomTextStyle {
     Color? fillColor,
     Color? focusColor,
     Color? hoverColor,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
   }) {
     return InputDecoration(
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
       fillColor: fillColor,
       focusColor: focusColor,
       hoverColor: hoverColor,

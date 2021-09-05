@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:polipass/pages/vault.dart';
+import 'package:polipass/pages/vault/vault.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
@@ -40,6 +40,8 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
+  static const String fileExtension = "passkey";
+
   static EdgeInsets itemsPadding = const EdgeInsets.only(
     left: 20.0,
     right: 20.0,

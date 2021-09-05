@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:polipass/pages/vault.dart';
+import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/widgets/custom_animated_size.dart';
 import 'package:polipass/widgets/custom_checkbox.dart';
 import 'package:polipass/widgets/custom_slider.dart';

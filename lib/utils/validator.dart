@@ -13,11 +13,19 @@ class Validator {
   };
 
   Validator({
-    required this.allowedChars,
-    required this.numChars,
-    required this.length,
-    this.text,
+    this.allowedChars = const {},
+    this.numChars = const {},
+    this.length = 0,
+    required this.text,
   }) : messages = [];
+
+  Validator.fromMap({
+    required Map<String, dynamic> map,
+    required this.text,
+  })  : allowedChars = map["allowedChars"],
+        numChars = map["numChars"],
+        length = map["length"],
+        messages = [];
 
   //settings
   final Map<String, bool> allowedChars;
@@ -135,6 +143,21 @@ class Validator {
     result = validateSumSettings() && result;
     result = validateAllSettings() && result;
     return result;
+  }
+
+  String? validateAll({
+    List<bool>? conditions,
+    List<bool Function(Validator)> validators = const [],
+    String? value,
+  }) {
+    conditions ??= validators.map((_) => true).toList();
+
+    for (var i = 0; i < validators.length; i++) {
+      if (conditions[i] && !validators[i](this)) {
+        return format();
+      }
+    }
+    return null;
   }
 
   String format() => messages.join("\n");

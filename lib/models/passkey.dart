@@ -18,6 +18,14 @@ class PassKeyModel extends ChangeNotifier {
     obscureSecret = true;
     notifyListeners();
   }
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late String _formKeySwitch;
+  String get formKeySwitch => _formKeySwitch;
+  set formKeySwitch(String value) {
+    _formKeySwitch = value;
+    notifyListeners();
+  }
 }
 
 @HiveType(typeId: 0)
