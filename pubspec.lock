@@ -30,11 +30,11 @@ packages:
     source: hosted
     version: "2.8.2"
   azlistview:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
-      name: azlistview
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../azlistview"
+      relative: true
+    source: path
     version: "2.0.0-nullsafety.0"
   boolean_selector:
     dependency: transitive

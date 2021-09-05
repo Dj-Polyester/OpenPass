@@ -57,8 +57,9 @@ class _PassKeyItemViewCreds extends StatelessWidget {
       child: Selector<GlobalModel, Tuple2>(
         selector: (_, globalModel) =>
             Tuple2(globalModel.fontSize, globalModel.fontSizeSmall),
-        builder: (_, tuple, __) => Consumer<PassKeyModel>(
-          builder: (context, passKeyModel, __) => Row(
+        builder: (_, tuple, __) => Selector<PassKeyModel, bool>(
+          selector: (_, passKeyModel) => passKeyModel.obscureSecret,
+          builder: (context, obscureSecret, __) => Row(
             children: [
               ConstrainedBox(
                 constraints: BoxConstraints(
@@ -72,9 +73,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
               _TextFieldCreds(
                 text: item["value"],
                 fontSize: tuple.item2,
-                obscureText: (item["isSecret"])
-                    ? context.watch<PassKeyModel>().obscureSecret
-                    : false,
+                obscureText: (item["isSecret"]) ? obscureSecret : false,
               ),
               GestureDetector(
                 onLongPress: () {},
@@ -87,7 +86,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: item["isSecret"] ? passKeyModel.obscureSecret : false,
+                visible: item["isSecret"] ? obscureSecret : false,
                 child: GestureDetector(
                   onLongPress: () {},
                   child: IconButton(
@@ -102,7 +101,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: item["isSecret"] ? !passKeyModel.obscureSecret : false,
+                visible: item["isSecret"] ? !obscureSecret : false,
                 child: GestureDetector(
                   onLongPress: () {},
                   child: IconButton(

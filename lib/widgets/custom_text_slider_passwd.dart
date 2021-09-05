@@ -1,3 +1,4 @@
+import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/custom_text.dart';
 import 'package:polipass/widgets/custom_text_digit.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +7,8 @@ import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_slider.dart';
 import 'package:polipass/widgets/custom_text_style.dart';
 
-class CustomTextSliderPasswdWithProvider extends StatelessWidget {
-  CustomTextSliderPasswdWithProvider({
+class CustomTextSecretWithProvider extends StatelessWidget {
+  CustomTextSecretWithProvider({
     Key? key,
     this.validator,
     this.labelText = "",
@@ -38,7 +39,7 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
         ChangeNotifierProvider.value(value: textPasswdModel),
       ],
       builder: (context, _) {
-        return CustomTextSliderPasswd(
+        return CustomTextSecret(
           sliderTextLabel: text,
           min: min,
           max: max,
@@ -51,8 +52,8 @@ class CustomTextSliderPasswdWithProvider extends StatelessWidget {
   }
 }
 
-class CustomTextSliderPasswd extends StatelessWidget {
-  CustomTextSliderPasswd({
+class CustomTextSecret extends StatelessWidget {
+  CustomTextSecret({
     Key? key,
     this.validator,
     this.labelText = "",
@@ -71,20 +72,35 @@ class CustomTextSliderPasswd extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CustomText(
-            validator: validator,
-            labelText: labelText,
-            hintText: hintText,
-            onChanged: (String value) {
-              double tmpval = context
-                  .read<CustomTextModel>()
-                  .controller
-                  .text
-                  .length
-                  .toDouble();
-              context.read<CustomSliderModel>().setValue(tmpval);
-              context.read<CustomTextDigitModel>().setTextFromDouble(tmpval);
-            },
+          child: Row(
+            children: [
+              Expanded(
+                child: CustomText(
+                  validator: validator,
+                  labelText: labelText,
+                  hintText: hintText,
+                  onChanged: (String value) {
+                    double tmpval = context
+                        .read<CustomTextModel>()
+                        .controller
+                        .text
+                        .length
+                        .toDouble();
+                    context.read<CustomSliderModel>().setValue(tmpval);
+                    context
+                        .read<CustomTextDigitModel>()
+                        .setTextFromDouble(tmpval);
+                  },
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.refresh),
+                tooltip: "generate",
+                splashRadius: context
+                    .select((GlobalModel globalmodel) => globalmodel.fontSize),
+              )
+            ],
           ),
         ),
         Padding(

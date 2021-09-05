@@ -10,6 +10,7 @@ import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/screens/passwd_screen.dart';
 import 'package:polipass/utils/custom_page.dart';
+import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/custom_animated_size.dart';
 import 'package:polipass/widgets/custom_appbar_checkbox.dart';
@@ -113,10 +114,16 @@ class _VaultBody extends StatelessWidget {
                 context.read<CustomListModel>().reset();
 
                 SuspensionUtil.setShowSuspensionStatus(azItems);
-
                 return AzListView(
+                  key: UniqueKey(),
                   data: azItems,
-                  // padding: const EdgeInsets.all(Globals.itemsPaddingMax),
+                  separatorBuilder: (_, __) => const Divider(
+                    height: 1,
+                    color: Colors.black54,
+                    indent: Globals.sidePadding,
+                    endIndent: Globals.sidePadding,
+                  ),
+                  padding: const EdgeInsets.only(bottom: 50),
                   itemCount: passkeysRefined.length,
                   itemBuilder: (BuildContext context, int i) {
                     PassKey passkey = passkeysRefined[i];

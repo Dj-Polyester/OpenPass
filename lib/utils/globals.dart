@@ -40,15 +40,16 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
-  static double passKeyItemViewMinHeight = 50;
-
   static EdgeInsets itemsPadding = const EdgeInsets.only(
     left: 20.0,
     right: 20.0,
     top: 2.0,
     bottom: 2.0,
   );
-  static const double itemsPaddingMax = 10, itemsSpacing = 10;
+  static const double itemsPaddingMax = 10,
+      itemsSpacing = 10,
+      passKeyItemViewMinHeight = 50,
+      sidePadding = 30;
 
   static bool isNumeric(String? s) {
     if (s == null) {

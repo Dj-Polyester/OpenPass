@@ -80,14 +80,19 @@ class CustomListModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void turnOffSelectVisibility() {
+    itemSelectVisible = false;
+    setCheckbox(false);
+    notifyListeners();
+  }
+
   void toggleSearchVisibility() {
     itemSearchVisible = !itemSearchVisible;
     notifyListeners();
   }
 
-  void turnOffSelectVisibility() {
-    itemSelectVisible = false;
-    setCheckbox(false);
+  void turnOffSearchVisibility() {
+    itemSearchVisible = false;
     notifyListeners();
   }
 

@@ -174,8 +174,8 @@ class PassKeyListItem extends StatelessWidget {
                 visible: azItem.isShowSuspension,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 10.0,
-                    right: 30.0,
+                    left: Globals.sidePadding,
+                    right: Globals.sidePadding,
                     top: 2.0,
                     bottom: 2.0,
                   ),
@@ -204,6 +204,7 @@ class PassKeyListItem extends StatelessWidget {
                         .selectedItems[passkey.desc]!
                     : false,
                 onLongPress: () {
+                  // context.read<CustomListModel>().turnOffSearchVisibility();
                   context.read<CustomListModel>().toggleSelectVisibility();
                   context.read<CustomListItemModel>().setCheckbox(true);
                 },

@@ -21,6 +21,19 @@ class PasswdScreen extends StatelessWidget {
   late String formKeySwitch;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  String? validator({
+    List<bool> conditions = const [],
+    List<String Function(String? value)> functions = const [],
+    String? value,
+  }) {
+    for (var i = 0; i < conditions.length; i++) {
+      if (conditions[i]) {
+        return functions[i](value);
+      }
+    }
+    return null;
+  }
+
   late final Map<String, dynamic> dialogOptions = {
     "desc": CustomTextWithProvider(
       labelText: "Description",
@@ -47,7 +60,7 @@ class PasswdScreen extends StatelessWidget {
       labelText: "Email (optional)",
       hintText: "Enter email",
       validator: (String? value) {
-        //TODO compare value and settings, reject if inconsistent
+        //compare value and settings, reject if inconsistent
         if (formKeySwitch == "submit" && value!.isNotEmpty) {
           Validator validator = getValidator(value);
 
@@ -59,7 +72,7 @@ class PasswdScreen extends StatelessWidget {
       },
       inputText: (globalPasskey == null) ? null : globalPasskey!.email,
     ),
-    "length": CustomTextSliderPasswdWithProvider(
+    "length": CustomTextSecretWithProvider(
       labelText: "Password",
       hintText: "Enter password",
       text: "Length",
@@ -124,7 +137,7 @@ class PasswdScreen extends StatelessWidget {
           item is CustomTextCheckboxSliderWithProvider) {
         allowedChars[key] = item.checkboxModel.value;
       }
-      if (item is CustomTextSliderPasswdWithProvider ||
+      if (item is CustomTextSecretWithProvider ||
           item is CustomTextCheckboxSliderWithProvider) {
         numChars[key] = item.sliderModel.value.toInt();
       }
