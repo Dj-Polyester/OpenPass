@@ -48,7 +48,7 @@ class _TextFieldCreds extends StatelessWidget {
 class _PassKeyItemViewCreds extends StatelessWidget {
   const _PassKeyItemViewCreds({Key? key, required this.item}) : super(key: key);
 
-  final Map item;
+  final PassKeyItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +66,14 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                   minWidth: tuple.item2 * 5,
                 ),
                 child: Text(
-                  item["name"],
+                  item.name,
                   style: TextStyle(fontSize: tuple.item2),
                 ),
               ),
               _TextFieldCreds(
-                text: item["value"],
+                text: item.value,
                 fontSize: tuple.item2,
-                obscureText: (item["isSecret"]) ? obscureSecret : false,
+                obscureText: (item.isSecret) ? obscureSecret : false,
               ),
               GestureDetector(
                 onLongPress: () {},
@@ -86,7 +86,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: item["isSecret"] ? obscureSecret : false,
+                visible: item.isSecret ? obscureSecret : false,
                 child: GestureDetector(
                   onLongPress: () {},
                   child: IconButton(
@@ -101,7 +101,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: item["isSecret"] ? !obscureSecret : false,
+                visible: item.isSecret ? !obscureSecret : false,
                 child: GestureDetector(
                   onLongPress: () {},
                   child: IconButton(
@@ -163,9 +163,9 @@ class PassKeyItemView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: passkey.items
-                              .where((Map? item) => item != null)
+                              .where((PassKeyItem? item) => item != null)
                               .map(
-                                (Map? item) =>
+                                (PassKeyItem? item) =>
                                     _PassKeyItemViewCreds(item: item!),
                               )
                               .toList()
