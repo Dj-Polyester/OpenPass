@@ -39,7 +39,10 @@ class CustomTextWithProvider extends StatelessWidget {
     this.fillColor,
     this.focusColor,
     this.hoverColor,
+    this.isSecret = false,
   }) : super(key: key);
+
+  bool isSecret;
 
   Color? fillColor, focusColor, hoverColor;
   String? inputText;

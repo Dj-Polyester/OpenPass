@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/widgets/custom_slider.dart';
 import 'package:polipass/widgets/custom_text_slider.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
 
 class CustomTextSecretWithProvider extends StatelessWidget {
   CustomTextSecretWithProvider({

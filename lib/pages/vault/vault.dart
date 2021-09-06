@@ -7,6 +7,7 @@ import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/vault_body.dart';
 import 'package:polipass/pages/vault/vault_dialog.dart';
+import 'package:polipass/pages/vault/edit_custom_password.dart';
 import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
 

@@ -1,10 +1,14 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
+import 'package:polipass/pages/vault/add_custom_password.dart';
+import 'package:polipass/pages/vault/edit_custom_password.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/custom_animated_size.dart';
+import 'package:polipass/widgets/custom_checkbox.dart';
 import 'package:polipass/widgets/custom_text.dart';
+import 'package:polipass/widgets/custom_vault_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault/vault.dart';
@@ -12,10 +16,16 @@ import 'package:polipass/widgets/custom_text_checkbox.dart';
 import 'package:polipass/widgets/custom_text_checkbox_slider.dart';
 import 'package:polipass/widgets/custom_text_secret.dart';
 import 'package:polipass/utils/validator.dart';
+import 'package:tuple/tuple.dart';
 
 class VaultDialogModel extends ChangeNotifier {
-  VaultDialogModel({this.settingsHeightMax = 400, this.globalPasskey})
-      : settingsHeight = settingsHeightMax;
+  VaultDialogModel({
+    this.settingsHeightMax = 400,
+    required this.globalPasskey,
+  }) : settingsHeight = settingsHeightMax;
+
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   final double settingsHeightMax;
   double settingsHeight;
 
@@ -33,19 +43,16 @@ class VaultDialogModel extends ChangeNotifier {
   }
 
   PassKey? globalPasskey;
-  PassKeyModel globalPassKeyModel = PassKeyModel();
+  // PassKeyModel globalPassKeyModel = PassKeyModel();
 
   late final Map<String, dynamic> dialogInputs = {
     "desc": CustomTextWithProvider(
       labelText: "Description",
       hintText: "Enter description",
-      validator: (String? value) => Validator.fromMap(
-        map: getSettings(),
-        text: value,
-      ).validateAll(
+      validator: (String? value) => Validator(text: value).validateAll(
         value: value,
-        conditions: [globalPassKeyModel.formKeySwitch == "submit"],
-        validators: [(v) => v.validateDesc()],
+        conditions: [globalPasskey == null, true],
+        validators: [(v) => v.validateDesc(), (v) => v.validateInput()],
       ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.desc,
     ),
@@ -57,36 +64,56 @@ class VaultDialogModel extends ChangeNotifier {
     "email": CustomTextWithProvider(
       labelText: "Email (optional)",
       hintText: "Enter email",
-      validator: (String? value) => Validator.fromMap(
-        map: getSettings(),
-        text: value,
-      ).validateAll(
+      validator: (String? value) => Validator(text: value).validateAll(
         value: value,
-        conditions: [
-          globalPassKeyModel.formKeySwitch == "submit" && value!.isNotEmpty
-        ],
+        conditions: [value!.isNotEmpty],
         validators: [(v) => v.validateEmail()],
       ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.email,
     ),
-    "password": CustomTextSecretWithProvider(
-      passKeyModel: globalPassKeyModel,
+    "password": CustomVaultTextWithProvider(
+      vaultDialogModel: this,
+      globalPasskey: globalPasskey,
       labelText: "Password",
       hintText: "Enter password",
-      getSettings: getSettings,
       inputText: (globalPasskey == null) ? null : globalPasskey!.password,
+      isSecret: true,
+      hasDelete: false,
     ),
   };
 
-  void addCustomKey(String name) {
-    dialogInputs[name] = CustomTextSecretWithProvider(
-      passKeyModel: globalPassKeyModel,
-      labelText: name,
+  late final Map<String, CustomVaultTextWithProvider> dialogInputsOther =
+      (globalPasskey == null)
+          ? {}
+          : globalPasskey!.other
+              .map((String key, PassKeyItem value) => MapEntry(
+                  key,
+                  CustomVaultTextWithProvider(
+                    vaultDialogModel: this,
+                    globalPasskey: globalPasskey,
+                    labelText: value.name,
+                    hintText: "Enter key",
+                    inputText: value.value,
+                    isSecret: value.isSecret,
+                  )));
+
+  void addCustomInput(PassKeyItem passkeyItem) {
+    dialogInputsOther[passkeyItem.name] = CustomVaultTextWithProvider(
+      vaultDialogModel: this,
+      globalPasskey: globalPasskey,
+      labelText: passkeyItem.name,
       hintText: "Enter key",
-      getSettings: getSettings,
-      inputText: (globalPasskey == null) ? null : globalPasskey!.password,
+      inputText: passkeyItem.value,
+      isSecret: passkeyItem.isSecret,
     );
-    notifyListeners();
+
+    notifyVaultDialog();
+  }
+
+  void deleteCustomInput(String name) {
+    dialogInputsOther.remove(name);
+
+    notifyVaultDialog();
   }
 
   late final Map<String, dynamic> dialogOptions = {
@@ -129,11 +156,11 @@ class VaultDialogModel extends ChangeNotifier {
       }
       if (item is CustomTextSecretWithProvider ||
           item is CustomTextCheckboxSliderWithProvider) {
-        numChars[key] = item.sliderModel.value.toInt();
+        numChars[key] = item.checkboxModel.value.toInt();
       }
     }
 
-    int length = dialogInputs["password"]!.sliderModel.value.toInt();
+    int length = dialogInputs["password"]!.checkboxModel.value.toInt();
 
     return {
       "length": length,
@@ -144,11 +171,28 @@ class VaultDialogModel extends ChangeNotifier {
 
   //dialog widgets
 
+  Future Function()? updateVaultInputsView(BuildContext context) {
+    return () async {
+      PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
+        context: context,
+        builder: (_) => AddCustomDialog(globalPasskey: globalPasskey),
+      );
+      if (passKeyitem != null) {
+        addCustomInput(passKeyitem);
+      }
+    };
+  }
+
   late final Map<String, dynamic> dialogButtons = {
     "addCustom": (BuildContext context) => TextButton(
           onPressed: () async {
-            await Vault.dialogBuilder(context,
-                builder: (context) => _AddCustomDialog(vaultDialogModel: this));
+            PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
+              context: context,
+              builder: (_) => AddCustomDialog(globalPasskey: globalPasskey),
+            );
+            if (passKeyitem != null) {
+              addCustomInput(passKeyitem);
+            }
           },
           child: const Text("+ Add custom keys"),
         ),
@@ -156,23 +200,32 @@ class VaultDialogModel extends ChangeNotifier {
     "submit": (BuildContext context) => TextButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
-            globalPassKeyModel.formKeySwitch = "submit";
 
             // Validate returns true if the form is valid, or false otherwise.
-            if (globalPassKeyModel.formKey.currentState!.validate()) {
+            if (formkey.currentState!.validate()) {
               // submit the info to the hive database.
 
               String desc = dialogInputs["desc"].textModel.controller.text,
                   username = dialogInputs["username"].textModel.controller.text,
                   email = dialogInputs["email"].textModel.controller.text,
-                  password =
-                      dialogInputs["password"].textPasswdModel.controller.text;
+                  password = dialogInputs["password"].textModel.controller.text;
+
+              Map<String, PassKeyItem> other = dialogInputsOther.map(
+                  (String key, CustomVaultTextWithProvider value) => MapEntry(
+                        key,
+                        PassKeyItem(
+                          name: key,
+                          value: value.textModel.controller.text,
+                          isSecret: value.isSecret,
+                        ),
+                      ));
 
               PassKey passkey = PassKey(
                 desc: desc,
                 username: (username == "") ? null : username,
                 email: (email == "") ? null : email,
                 password: password,
+                other: other,
               );
 
               print("passkey: $passkey");
@@ -208,77 +261,8 @@ class VaultDialogModel extends ChangeNotifier {
             overlayColor:
                 MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
           ),
-        ),
-    "settings": (BuildContext context) => TextButton(
-          onPressed: () {
-            context.read<VaultDialogModel>().toggleVisibility();
-          },
-          child: const Text("Settings"),
-        ),
+        )
   };
-}
-
-class _AddCustomDialog extends StatelessWidget {
-  _AddCustomDialog({Key? key, required this.vaultDialogModel})
-      : super(key: key);
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  VaultDialogModel vaultDialogModel;
-
-  @override
-  Widget build(BuildContext context) {
-    CustomTextWithProvider passkeyNameInput = CustomTextWithProvider(
-      labelText: "Name",
-      hintText: "Enter name",
-      validator: (String? value) => Validator(text: value).validateAll(
-        value: value,
-        validators: [(v) => v.validateDesc()],
-      ),
-    );
-
-    return AlertDialog(
-      content: Wrap(children: [
-        Form(
-          key: formKey,
-          child: Column(
-            children: [
-              passkeyNameInput,
-              TextButton(
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-
-                  // Validate returns true if the form is valid, or false otherwise.
-                  if (formKey.currentState!.validate()) {
-                    // TODO submit the info to the hive database.
-
-                    String name = passkeyNameInput.textModel.controller.text;
-
-                    vaultDialogModel.addCustomKey(name);
-
-                    // quit
-                    Navigator.pop(context);
-                    Fluttertoast.showToast(
-                      msg: "Added the key with name $name",
-                      toastLength: Toast.LENGTH_SHORT,
-                    );
-                  }
-                },
-                child: const Text("Submit"),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ]),
-    );
-  }
 }
 
 class VaultDialog extends StatelessWidget {
@@ -288,43 +272,39 @@ class VaultDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    globalPasskey ??= PassKey();
     return ChangeNotifierProvider(
-      create: (_) => VaultDialogModel(globalPasskey: globalPasskey),
+      create: (_) => VaultDialogModel(globalPasskey: globalPasskey!),
       builder: (context, _) => AlertDialog(
         content: SingleChildScrollView(
           child: Wrap(
             children: [
               Form(
-                key:
-                    context.read<VaultDialogModel>().globalPassKeyModel.formKey,
-                child: Selector<VaultDialogModel, Map>(
-                  selector: (_, vaultDialogModel) =>
+                key: context.read<VaultDialogModel>().formkey,
+                child: Selector<VaultDialogModel, Tuple3>(
+                  selector: (_, vaultDialogModel) => Tuple3(
                       vaultDialogModel.dialogInputs,
-                  builder: (_, dialogInputs, __) => Column(
-                    children: dialogInputs.entries
+                      vaultDialogModel.dialogInputsOther,
+                      vaultDialogModel.vaultDialogFlag),
+                  builder: (_, tuple, __) => Column(
+                    children: tuple.item1.entries
                             .map((e) => e.value)
                             .toList()
                             .cast<Widget>() +
-                        [
-                          CustomAnimatedSize(
-                            child: Selector<VaultDialogModel, bool>(
-                              selector: (_, vaultDialogModel) =>
-                                  vaultDialogModel.isSettingsVisible,
-                              builder: (_, isSettingsVisible, __) => Offstage(
-                                offstage: !isSettingsVisible,
-                                child: Column(
-                                  children: context
-                                      .read<VaultDialogModel>()
-                                      .dialogOptions
-                                      .entries
-                                      .map((e) => e.value)
-                                      .toList()
-                                      .cast<Widget>(),
+                        ((tuple.item2.isNotEmpty)
+                            ? [
+                                const Divider(
+                                  height: 1,
+                                  color: Colors.black54,
+                                  indent: Globals.sidePadding,
+                                  endIndent: Globals.sidePadding,
                                 ),
-                              ),
-                            ),
-                          ),
-                        ] +
+                              ]
+                            : [].cast<Widget>()) +
+                        tuple.item2.entries
+                            .map((e) => e.value)
+                            .toList()
+                            .cast<Widget>() +
                         context
                             .read<VaultDialogModel>()
                             .dialogButtons

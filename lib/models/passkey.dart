@@ -28,23 +28,29 @@ class PassKeyModel extends ChangeNotifier {
   }
 }
 
+@HiveType(typeId: 1)
 class PassKeyItem {
   PassKeyItem({
     required this.name,
     required this.value,
     this.isSecret = false,
   });
-  String name, value;
+  @HiveField(0)
+  String name;
+  @HiveField(1)
+  String value;
+  @HiveField(2)
   bool isSecret;
 }
 
 @HiveType(typeId: 0)
 class PassKey extends HiveObject {
   PassKey({
-    required this.desc,
-    this.username,
-    this.email,
-    required this.password,
+    this.desc = "",
+    this.username = "",
+    this.email = "",
+    this.password = "",
+    this.other = const {},
   });
   @HiveField(0)
   String desc;
@@ -54,9 +60,11 @@ class PassKey extends HiveObject {
   String? email;
   @HiveField(3)
   String password;
+  @HiveField(4)
+  Map<String, PassKeyItem> other;
 
-  List<PassKeyItem?>? _items;
-  List<PassKeyItem?> get items => _items ??= [
+  List<PassKeyItem?> get items =>
+      [
         PassKeyItem(
           name: "desc",
           value: desc,
@@ -78,5 +86,6 @@ class PassKey extends HiveObject {
           value: password,
           isSecret: true,
         ),
-      ];
+      ] +
+      other.entries.map((e) => e.value).toList();
 }

@@ -14,6 +14,7 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(PassKeyAdapter());
+  Hive.registerAdapter(PassKeyItemAdapter());
   await Hive.openBox<PassKey>('passkeys');
   // if (Globals.debugMode) {
   //   KeyStore.passkeys.clear();
