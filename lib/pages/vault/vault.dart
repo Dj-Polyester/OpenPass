@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/vault_body.dart';
-import 'package:polipass/pages/vault/vault_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
@@ -48,7 +48,7 @@ class Vault extends CustomPage {
                     .entries
                     .where((element) => element.value)
                     .map((e) => e.key);
-                print(keys);
+                // print(keys);
 
                 KeyStore.passkeys.deleteAll(keys);
                 context.read<CustomListModel>().turnOffSelectVisibility();
@@ -63,7 +63,7 @@ class Vault extends CustomPage {
             onPressed: () async {
               FilePickerResult? result = await FilePicker.platform
                   .pickFiles(allowedExtensions: [Globals.fileExtension]);
-              print("paths: ${result!.paths}");
+              // print("paths: ${result!.paths}");
             },
             icon: const Icon(Icons.arrow_downward),
           ),

@@ -50,7 +50,7 @@ class CustomListItemModel extends ChangeNotifier {
 
     customListModel.setListTitleNotified();
 
-    print("custom_list_item: ${customListModel.selectedItems}");
+    // print("custom_list_item: ${customListModel.selectedItems}");
 
     customListModel.setListTitle();
     globalModel.notifyCheckbox();
@@ -67,7 +67,7 @@ class CustomListItemModel extends ChangeNotifier {
 
     customListModel.setListTitleNotified();
 
-    print("custom_list_item: ${customListModel.selectedItems}");
+    // print("custom_list_item: ${customListModel.selectedItems}");
 
     customListModel.setListTitle();
     globalModel.notifyCheckbox();

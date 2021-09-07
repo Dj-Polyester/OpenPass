@@ -1,8 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/add_custom_password.dart';
-import 'package:polipass/pages/vault/edit_custom_password.dart';
+import 'package:polipass/pages/vault/dialogs/add_custom_key.dart';
+import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
@@ -175,7 +175,7 @@ class VaultDialogModel extends ChangeNotifier {
     return () async {
       PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
         context: context,
-        builder: (_) => AddCustomDialog(globalPasskey: globalPasskey),
+        builder: (_) => AddCustomKey(globalPasskey: globalPasskey),
       );
       if (passKeyitem != null) {
         addCustomInput(passKeyitem);
@@ -188,7 +188,7 @@ class VaultDialogModel extends ChangeNotifier {
           onPressed: () async {
             PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
               context: context,
-              builder: (_) => AddCustomDialog(globalPasskey: globalPasskey),
+              builder: (_) => AddCustomKey(globalPasskey: globalPasskey),
             );
             if (passKeyitem != null) {
               addCustomInput(passKeyitem);
@@ -228,7 +228,7 @@ class VaultDialogModel extends ChangeNotifier {
                 other: other,
               );
 
-              print("passkey: $passkey");
+              // print("passkey: $passkey");
 
               if (globalPasskey == null) {
                 //INSERT

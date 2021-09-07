@@ -1,14 +1,10 @@
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/add_custom_password.dart';
-import 'package:polipass/pages/vault/edit_custom_password.dart';
-import 'package:polipass/pages/vault/vault_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
+import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/validator.dart';
-import 'package:polipass/widgets/api/custom_slider.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
-import 'package:polipass/widgets/api/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/api/custom_text_style.dart';
 
 class CustomVaultTextWithProvider extends StatelessWidget {
   CustomVaultTextWithProvider({
@@ -73,7 +69,7 @@ class CustomVaultTextWithProvider extends StatelessWidget {
 
                     PassKeyItem? tmp = await showDialog<PassKeyItem>(
                       context: context,
-                      builder: (_) => EditCustomPassword(
+                      builder: (_) => EditCustomKey(
                         globalPasskey: globalPasskey,
                         globalPasskeyItem: passKeyitem,
                       ),

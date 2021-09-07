@@ -1,7 +1,7 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/vault_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
@@ -14,8 +14,8 @@ import 'package:polipass/widgets/api/custom_text_checkbox_slider.dart';
 import 'package:polipass/widgets/custom_text_secret.dart';
 import 'package:polipass/utils/validator.dart';
 
-class EditCustomPasswordModel extends ChangeNotifier {
-  EditCustomPasswordModel({
+class EditCustomKeyModel extends ChangeNotifier {
+  EditCustomKeyModel({
     this.settingsHeightMax = 400,
     required this.globalPasskey,
     required this.globalPasskeyItem,
@@ -123,7 +123,7 @@ class EditCustomPasswordModel extends ChangeNotifier {
               // submit new keys.
 
               globalPasskeyItem!.value = context
-                  .read<EditCustomPasswordModel>()
+                  .read<EditCustomKeyModel>()
                   .dialogKeyInput
                   .textPasswdModel
                   .controller
@@ -143,15 +143,15 @@ class EditCustomPasswordModel extends ChangeNotifier {
         ),
     "settings": (BuildContext context) => TextButton(
           onPressed: () {
-            context.read<EditCustomPasswordModel>().toggleVisibility();
+            context.read<EditCustomKeyModel>().toggleVisibility();
           },
           child: const Text("Settings"),
         ),
   };
 }
 
-class EditCustomPassword extends StatelessWidget {
-  EditCustomPassword({
+class EditCustomKey extends StatelessWidget {
+  EditCustomKey({
     Key? key,
     required this.globalPasskey,
     required this.globalPasskeyItem,
@@ -163,7 +163,7 @@ class EditCustomPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => EditCustomPasswordModel(
+      create: (_) => EditCustomKeyModel(
         globalPasskey: globalPasskey,
         globalPasskeyItem: globalPasskeyItem,
       ),
@@ -173,11 +173,11 @@ class EditCustomPassword extends StatelessWidget {
             children: [
               Form(
                 key: context
-                    .read<EditCustomPasswordModel>()
+                    .read<EditCustomKeyModel>()
                     .globalPassKeyModel
                     .formKey,
-                child: Selector<EditCustomPasswordModel,
-                    CustomTextSecretWithProvider>(
+                child:
+                    Selector<EditCustomKeyModel, CustomTextSecretWithProvider>(
                   selector: (_, vaultPasswordModel) =>
                       vaultPasswordModel.dialogKeyInput,
                   builder: (_, dialogKeyInput, __) => Column(
@@ -185,7 +185,7 @@ class EditCustomPassword extends StatelessWidget {
                           dialogKeyInput,
                         ].cast<Widget>() +
                         context
-                            .read<EditCustomPasswordModel>()
+                            .read<EditCustomKeyModel>()
                             .dialogButtons
                             .entries
                             .map((e) => SizedBox(
@@ -196,14 +196,14 @@ class EditCustomPassword extends StatelessWidget {
                             .cast<Widget>() +
                         [
                           CustomAnimatedSize(
-                            child: Selector<EditCustomPasswordModel, bool>(
+                            child: Selector<EditCustomKeyModel, bool>(
                               selector: (_, vaultPasswordModel) =>
                                   vaultPasswordModel.isSettingsVisible,
                               builder: (_, isSettingsVisible, __) => Offstage(
                                 offstage: !isSettingsVisible,
                                 child: Column(
                                   children: context
-                                      .read<EditCustomPasswordModel>()
+                                      .read<EditCustomKeyModel>()
                                       .dialogOptions
                                       .entries
                                       .map((e) => e.value)

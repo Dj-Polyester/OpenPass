@@ -6,7 +6,12 @@ class Generator {
     "AZ": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "09": "0123456789",
     "special": " !\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
-    "ambiguous": "l1O0",
+  };
+  final Map<String, String> _nonambigiuousChars = const {
+    "az": "abcdefghijkmnopqrstuvwxyz",
+    "AZ": "ABCDEFGHIJKLMNPQRSTUVWXYZ",
+    "09": "23456789",
+    "special": " !\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
   };
 
   Generator({
@@ -29,28 +34,45 @@ class Generator {
   Map<String, int> generateNums() {
     Map<String, int> numCharsTmp = {};
     int sum = numChars.values.fold<int>(0, (prev, curr) => prev + curr),
+        allowedCharsLength = allowedChars.entries.where((e) => e.value).length,
         numCharsLength = numChars.length,
         remaining = length,
         remainingMin = sum;
+    print("start:");
+    print("numChars: $numChars");
+    print("numCharsLength: $numCharsLength");
+    print("allowedChars: $allowedChars");
+    print("allowedCharsLength: $allowedCharsLength");
+    print("remaining: $remaining");
+    print("remainingMin: $remainingMin");
+
+    if (allowedChars["ambiguous"]!) {
+      --allowedCharsLength;
+    }
 
     for (String key in numChars.keys) {
-      if (allowedChars[key]!) {
+      if (allowedChars[key]! && key != "ambiguous") {
+        print("key: $key");
         late int newval;
         //last key
-        if (--numCharsLength == 0) {
+        if (--allowedCharsLength == 0) {
           newval = remaining;
         } else {
           int currMin = numChars[key]!;
           remainingMin -= currMin;
+          print("currMin: $currMin");
+          print("remainingMin: $remainingMin");
 
           newval =
               rnd.nextInt((remaining - remainingMin) - currMin + 1) + currMin;
-
+          print("newval: $newval");
           remaining -= newval;
+          print("remaining: $remaining");
         }
         numCharsTmp[key] = newval;
       }
     }
+    print(numCharsTmp);
     return numCharsTmp;
   }
 
@@ -58,7 +80,9 @@ class Generator {
     Map<String, int> numCharsTmp = generateNums();
     String passwordText = "";
     for (String key in numCharsTmp.keys) {
-      String alphabet = _chars[key]!;
+      String alphabet = (allowedChars["ambiguous"]!)
+          ? _chars[key]!
+          : _nonambigiuousChars[key]!;
 
       int newval = numCharsTmp[key]!;
 

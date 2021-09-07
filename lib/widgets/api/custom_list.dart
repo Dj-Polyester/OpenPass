@@ -55,7 +55,7 @@ class CustomListModel extends ChangeNotifier {
       selectedNum = 0;
     }
     setListTitleNotified();
-    print("custom_list: $selectedItems");
+    // print("custom_list: $selectedItems");
 
     globalModel!.notifyCheckbox();
   }

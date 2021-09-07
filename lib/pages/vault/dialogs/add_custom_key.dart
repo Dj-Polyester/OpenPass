@@ -1,8 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/vault_dialog.dart';
-import 'package:polipass/pages/vault/edit_custom_password.dart';
+import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
@@ -16,8 +16,8 @@ import 'package:polipass/widgets/api/custom_text_checkbox_slider.dart';
 import 'package:polipass/widgets/custom_text_secret.dart';
 import 'package:polipass/utils/validator.dart';
 
-class AddCustomDialog extends StatelessWidget {
-  AddCustomDialog({
+class AddCustomKey extends StatelessWidget {
+  AddCustomKey({
     Key? key,
     required this.globalPasskey,
   }) : super(key: key);
@@ -71,7 +71,7 @@ class AddCustomDialog extends StatelessWidget {
                     //CAN BE NULL
                     PassKeyItem? tmp = await showDialog<PassKeyItem>(
                       context: context,
-                      builder: (_) => EditCustomPassword(
+                      builder: (_) => EditCustomKey(
                         globalPasskey: globalPasskey,
                         globalPasskeyItem: passkeyItem,
                       ),
@@ -79,7 +79,7 @@ class AddCustomDialog extends StatelessWidget {
 
                     tmp ??= passkeyItem;
 
-                    print("passkeyItem: $tmp");
+                    // print("passkeyItem: $tmp");
 
                     // quit
                     Navigator.pop(context, tmp);
