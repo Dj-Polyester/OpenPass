@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/pages/vault/vault.dart';
-import 'package:polipass/widgets/custom_checkbox.dart';
+import 'package:polipass/widgets/api/custom_checkbox.dart';
 import 'package:provider/provider.dart';
 
 class CustomTextCheckboxWithProvider extends StatelessWidget {

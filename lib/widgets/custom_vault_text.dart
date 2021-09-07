@@ -3,12 +3,12 @@ import 'package:polipass/pages/vault/add_custom_password.dart';
 import 'package:polipass/pages/vault/edit_custom_password.dart';
 import 'package:polipass/pages/vault/vault_dialog.dart';
 import 'package:polipass/utils/validator.dart';
-import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text.dart';
-import 'package:polipass/widgets/custom_text_digit.dart';
+import 'package:polipass/widgets/api/custom_slider.dart';
+import 'package:polipass/widgets/api/custom_text.dart';
+import 'package:polipass/widgets/api/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
+import 'package:polipass/widgets/api/custom_text_style.dart';
 
 class CustomVaultTextWithProvider extends StatelessWidget {
   CustomVaultTextWithProvider({

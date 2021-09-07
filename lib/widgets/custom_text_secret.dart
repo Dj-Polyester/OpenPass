@@ -3,12 +3,12 @@ import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/validator.dart';
-import 'package:polipass/widgets/custom_text.dart';
-import 'package:polipass/widgets/custom_text_digit.dart';
+import 'package:polipass/widgets/api/custom_text.dart';
+import 'package:polipass/widgets/api/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text_slider.dart';
+import 'package:polipass/widgets/api/custom_slider.dart';
+import 'package:polipass/widgets/api/custom_text_slider.dart';
 
 class CustomTextSecretWithProvider extends StatelessWidget {
   CustomTextSecretWithProvider({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/globals.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:provider/provider.dart';
 

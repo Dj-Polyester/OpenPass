@@ -5,7 +5,7 @@ class IconBtn extends StatelessWidget {
     Key? key,
     required this.icon,
     this.message = "",
-    this.color,
+    this.color = const Color(0xFFBBBBBB),
     this.splashColor = const Color(0xFFAAAAAA),
     this.frameSize = 30,
     this.whFactor = 0.6,
@@ -16,8 +16,7 @@ class IconBtn extends StatelessWidget {
   final EdgeInsets padding;
   final Icon icon;
   final String message;
-  final Color splashColor;
-  final Color? color;
+  final Color color, splashColor;
   final void Function() onTap;
 
   @override

@@ -1,9 +1,9 @@
 // import 'db/model/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/custom_page.dart';
-import 'package:polipass/widgets/custom_animated_size.dart';
-import 'package:polipass/widgets/custom_appbar_checkbox.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_list.dart';
+import 'package:polipass/widgets/api/custom_appbar_checkbox.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppbar extends StatelessWidget {

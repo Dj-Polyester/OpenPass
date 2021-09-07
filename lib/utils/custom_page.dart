@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/widgets/api/custom_list.dart';
 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';

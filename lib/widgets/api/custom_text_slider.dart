@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:polipass/pages/vault/vault.dart';
-import 'package:polipass/utils/globals.dart';
-import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text_digit.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
+import 'package:polipass/widgets/api/custom_slider.dart';
+import 'package:polipass/widgets/api/custom_text_digit.dart';
 import 'package:provider/provider.dart';
 
 class CustomTextSliderWithProvider extends StatelessWidget {

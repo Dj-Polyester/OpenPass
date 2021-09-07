@@ -1,7 +1,6 @@
 import 'package:polipass/pages/vault/vault.dart';
-import 'package:polipass/widgets/custom_animated_size.dart';
-import 'package:polipass/widgets/custom_icon_btn.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -52,70 +51,73 @@ class _PassKeyItemViewCreds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Globals.itemsPadding,
-      child: Selector<GlobalModel, Tuple2>(
-        selector: (_, globalModel) =>
-            Tuple2(globalModel.fontSize, globalModel.fontSizeSmall),
-        builder: (_, tuple, __) => Selector<PassKeyModel, bool>(
-          selector: (_, passKeyModel) => passKeyModel.obscureSecret,
-          builder: (context, obscureSecret, __) => Row(
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: tuple.item2 * 5,
+    return ChangeNotifierProvider(
+      create: (_) => PassKeyItemModel(),
+      child: Padding(
+        padding: Globals.itemsPadding,
+        child: Selector<GlobalModel, Tuple2>(
+          selector: (_, globalModel) =>
+              Tuple2(globalModel.fontSize, globalModel.fontSizeSmall),
+          builder: (_, tuple, __) => Selector<PassKeyItemModel, bool>(
+            selector: (_, passKeyItemModel) => passKeyItemModel.obscureSecret,
+            builder: (context, obscureSecret, __) => Row(
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: tuple.item2 * 5,
+                  ),
+                  child: Text(
+                    item.name,
+                    style: TextStyle(fontSize: tuple.item2),
+                  ),
                 ),
-                child: Text(
-                  item.name,
-                  style: TextStyle(fontSize: tuple.item2),
+                _TextFieldCreds(
+                  text: item.value,
+                  fontSize: tuple.item2,
+                  obscureText: (item.isSecret) ? obscureSecret : false,
                 ),
-              ),
-              _TextFieldCreds(
-                text: item.value,
-                fontSize: tuple.item2,
-                obscureText: (item.isSecret) ? obscureSecret : false,
-              ),
-              GestureDetector(
-                onLongPress: () {},
-                child: IconButton(
-                  splashRadius: tuple.item1,
-                  iconSize: tuple.item1,
-                  tooltip: "copy to clipboard",
-                  onPressed: () {},
-                  icon: const Icon(Icons.copy),
-                ),
-              ),
-              Visibility(
-                visible: item.isSecret ? obscureSecret : false,
-                child: GestureDetector(
+                GestureDetector(
                   onLongPress: () {},
                   child: IconButton(
                     splashRadius: tuple.item1,
                     iconSize: tuple.item1,
-                    tooltip: "show",
-                    onPressed: () {
-                      context.read<PassKeyModel>().showSecret();
-                    },
-                    icon: const Icon(Icons.visibility),
+                    tooltip: "copy to clipboard",
+                    onPressed: () {},
+                    icon: const Icon(Icons.copy),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: item.isSecret ? !obscureSecret : false,
-                child: GestureDetector(
-                  onLongPress: () {},
-                  child: IconButton(
-                    splashRadius: tuple.item1,
-                    iconSize: tuple.item1,
-                    tooltip: "hide",
-                    onPressed: () {
-                      context.read<PassKeyModel>().hideSecret();
-                    },
-                    icon: const Icon(Icons.visibility_off),
+                Visibility(
+                  visible: item.isSecret ? obscureSecret : false,
+                  child: GestureDetector(
+                    onLongPress: () {},
+                    child: IconButton(
+                      splashRadius: tuple.item1,
+                      iconSize: tuple.item1,
+                      tooltip: "show",
+                      onPressed: () {
+                        context.read<PassKeyItemModel>().showSecret();
+                      },
+                      icon: const Icon(Icons.visibility),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Visibility(
+                  visible: item.isSecret ? !obscureSecret : false,
+                  child: GestureDetector(
+                    onLongPress: () {},
+                    child: IconButton(
+                      splashRadius: tuple.item1,
+                      iconSize: tuple.item1,
+                      tooltip: "hide",
+                      onPressed: () {
+                        context.read<PassKeyItemModel>().hideSecret();
+                      },
+                      icon: const Icon(Icons.visibility_off),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

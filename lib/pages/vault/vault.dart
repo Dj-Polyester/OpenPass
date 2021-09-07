@@ -7,14 +7,12 @@ import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/vault_body.dart';
 import 'package:polipass/pages/vault/vault_dialog.dart';
-import 'package:polipass/pages/vault/edit_custom_password.dart';
 import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
-
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/widgets/api/custom_list.dart';
 
 import 'package:provider/provider.dart';
-import 'package:polipass/widgets/custom_appbar.dart';
+import 'package:polipass/widgets/api/custom_appbar.dart';
 
 class AZItem extends ISuspensionBean {
   AZItem({

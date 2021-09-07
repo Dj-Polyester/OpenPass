@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 part 'passkey.g.dart';
 
-class PassKeyModel extends ChangeNotifier {
+class PassKeyItemModel extends ChangeNotifier {
   bool obscureSecret = true;
   void toggleVisibility() {
     obscureSecret = !obscureSecret;
@@ -18,7 +18,9 @@ class PassKeyModel extends ChangeNotifier {
     obscureSecret = true;
     notifyListeners();
   }
+}
 
+class PassKeyModel extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late String _formKeySwitch;
   String get formKeySwitch => _formKeySwitch;

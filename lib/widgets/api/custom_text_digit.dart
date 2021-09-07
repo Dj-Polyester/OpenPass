@@ -1,8 +1,8 @@
 import 'package:polipass/utils/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
+import 'package:polipass/widgets/api/custom_slider.dart';
+import 'package:polipass/widgets/api/custom_text_style.dart';
 
 class CustomTextDigitModel extends ChangeNotifier {
   CustomTextDigitModel({this.cursorPos = 0, double value = 0})

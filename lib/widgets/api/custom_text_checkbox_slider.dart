@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:polipass/pages/vault/vault.dart';
-import 'package:polipass/widgets/custom_animated_size.dart';
-import 'package:polipass/widgets/custom_checkbox.dart';
-import 'package:polipass/widgets/custom_slider.dart';
-import 'package:polipass/widgets/custom_text_digit.dart';
-import 'package:polipass/widgets/custom_text_checkbox.dart';
-import 'package:polipass/widgets/custom_text_slider.dart';
-import 'package:polipass/widgets/custom_text_style.dart';
+import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_checkbox.dart';
+import 'package:polipass/widgets/api/custom_slider.dart';
+import 'package:polipass/widgets/api/custom_text_digit.dart';
+import 'package:polipass/widgets/api/custom_text_checkbox.dart';
+import 'package:polipass/widgets/api/custom_text_slider.dart';
 import 'package:provider/provider.dart';
 
 class CustomTextCheckboxSliderWithProvider extends StatelessWidget {
