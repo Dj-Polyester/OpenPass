@@ -127,7 +127,10 @@ class CustomTextSecret extends StatelessWidget {
                   );
                 }
               },
-              icon: const Icon(Icons.refresh),
+              icon: Icon(
+                Icons.refresh,
+                color: Theme.of(context).iconTheme.color,
+              ),
               tooltip: Lang.tr("Generate"),
               splashRadius: context
                   .select((GlobalModel globalmodel) => globalmodel.fontSize),

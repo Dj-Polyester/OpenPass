@@ -156,7 +156,7 @@ class PassKeyItemView extends StatelessWidget {
         create: (_) => PassKeyModel(),
         builder: (context, _) => ConstrainedBox(
           constraints:
-              BoxConstraints(minHeight: Globals.passKeyItemViewMinHeight),
+              const BoxConstraints(minHeight: Globals.passKeyItemViewMinHeight),
           child: Selector<CustomListItemModel, bool>(
             selector: (_, customListItemModel) => customListItemModel.expand,
             builder: (context, expand, __) => Column(

@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
           title: Globals.appName,
           theme: CustomTheme.themes[context
               .select((GlobalModel globalModel) => globalModel.themeData)],
+          darkTheme: CustomTheme.themes["Dark"],
           initialRoute: "/",
           routes: Globals.routes.cast(),
         );

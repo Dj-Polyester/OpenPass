@@ -62,7 +62,8 @@ class Globals {
   static const double itemsPaddingMax = 10,
       itemsSpacing = 10,
       passKeyItemViewMinHeight = 50,
-      sidePadding = 30;
+      sidePadding = 30,
+      emptyIconSize = 100;
 
   static bool isNumeric(String? s) {
     if (s == null) {

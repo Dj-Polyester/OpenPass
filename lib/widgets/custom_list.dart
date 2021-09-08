@@ -34,7 +34,7 @@ class PasskeyList extends StatelessWidget {
                     padding: EdgeInsets.all(40.0),
                     child: Icon(
                       Icons.vpn_key,
-                      size: 100,
+                      size: Globals.emptyIconSize,
                     ),
                   ),
                   Padding(
