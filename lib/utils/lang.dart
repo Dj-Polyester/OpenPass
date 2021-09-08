@@ -68,6 +68,9 @@ class Lang {
         LangItem(
       tr: "Dosya kaydedilemiyor, çünkü aynı isimli bir dosya mevcut",
     ),
+    "You need to allow access to the storage": LangItem(
+      tr: "Depolamaya erişim izni vermeniz gerekiyor",
+    ),
     //
     "Name": LangItem(
       tr: "İsim",

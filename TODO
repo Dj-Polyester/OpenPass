@@ -1,8 +1,7 @@
 HI-PRIORITY:
-stylize input text to mono
+TODO: implement ios permissions
 add settings variables like font size
-add language support
-adding/deleting custom keys shouldnt change vault size
+adding/deleting custom keys shouldnt change size
 
 LO-PRIORITY:
 import/export
