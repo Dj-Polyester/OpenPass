@@ -38,10 +38,18 @@ class CustomTextWithProvider extends StatelessWidget {
     this.onChanged,
     this.textStyle,
     this.isSecret = false,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.isCollapsed = false,
+    this.onEditingComplete,
   }) : super(key: key);
 
   bool isSecret;
-
+  final void Function()? onEditingComplete;
+  final bool obscureText, readOnly, isCollapsed;
+  final Widget? prefixIcon, suffixIcon;
   TextStyle? textStyle;
   String? inputText;
   String? Function(String?)? validator;
@@ -61,11 +69,16 @@ class CustomTextWithProvider extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomText(
+            onEditingComplete: onEditingComplete,
             validator: validator,
             labelText: labelText,
             hintText: hintText,
             onChanged: onChanged,
             textStyle: textStyle,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            obscureText: obscureText,
+            readOnly: readOnly,
           ),
         );
       },
@@ -74,7 +87,7 @@ class CustomTextWithProvider extends StatelessWidget {
 }
 
 class CustomText extends StatelessWidget {
-  CustomText({
+  const CustomText({
     Key? key,
     this.validator,
     this.labelText = "",
@@ -83,24 +96,34 @@ class CustomText extends StatelessWidget {
     this.textStyle,
     this.prefixIcon,
     this.suffixIcon,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.isCollapsed = false,
+    this.onEditingComplete,
   }) : super(key: key);
 
-  Widget? prefixIcon, suffixIcon;
-  TextStyle? textStyle;
+  final void Function()? onEditingComplete;
+  final bool obscureText, readOnly, isCollapsed;
+  final Widget? prefixIcon, suffixIcon;
+  final TextStyle? textStyle;
 
-  String? Function(String?)? validator;
+  final String? Function(String?)? validator;
   final String labelText, hintText;
-  Function(String)? onChanged;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onEditingComplete: onEditingComplete,
+      readOnly: readOnly,
+      obscureText: obscureText,
       style: textStyle,
       decoration: CustomTextStyle.textFieldStyle(
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         labelTextStr: labelText,
         hintTextStr: hintText,
+        isCollapsed: isCollapsed,
       ),
       controller: context.read<CustomTextModel>().controller,
       focusNode: context.read<CustomTextModel>().focusNode,

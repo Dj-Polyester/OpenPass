@@ -45,7 +45,16 @@ class CustomFile {
     if (filename != null) {
       late String appDocPath;
       if (Platform.isAndroid) {
-        appDocPath = "/storage/emulated/0/Documents";
+        late Directory appDocPathDir1 =
+            Directory("/storage/emulated/0/Documents");
+        late Directory appDocPathDir2 =
+            Directory("/storage/emulated/0/documents");
+
+        if (appDocPathDir1.existsSync()) {
+          appDocPath = appDocPathDir1.path;
+        } else if (appDocPathDir2.existsSync()) {
+          appDocPath = appDocPathDir2.path;
+        }
       } else if (Platform.isIOS) {
         //TODO: implement ios
       } else if (Platform.isLinux) {

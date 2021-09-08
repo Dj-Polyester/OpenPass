@@ -49,7 +49,7 @@ class CustomTextCheckbox extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               text: text1,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: DefaultTextStyle.of(context).style,
               children: (text2 == null)
                   ? null
                   : [

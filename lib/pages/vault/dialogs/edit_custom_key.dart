@@ -6,6 +6,7 @@ import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_button.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -155,17 +156,18 @@ class EditCustomKeyModel extends ChangeNotifier {
           },
           child: Text(Lang.tr("Submit")),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).primaryColor),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             overlayColor:
                 MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
           ),
         ),
-    "settings": (BuildContext context) => TextButton(
+    "options": (BuildContext context) => SecondaryButton(
           onPressed: () {
             context.read<EditCustomKeyModel>().toggleVisibility();
           },
-          child: Text(Lang.tr("Settings")),
+          child: Text(Lang.tr("Options")),
         ),
   };
 }

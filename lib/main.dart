@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
+import 'package:polipass/utils/custom_theme.dart';
 import 'package:polipass/utils/lang.dart';
 
 import 'package:provider/provider.dart';
@@ -46,9 +47,8 @@ class _MyAppState extends State<MyApp> {
       builder: (context, _) {
         return MaterialApp(
           title: Globals.appName,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: CustomTheme.themes[context
+              .select((GlobalModel globalModel) => globalModel.themeData)],
           initialRoute: "/",
           routes: Globals.routes.cast(),
         );
@@ -72,20 +72,11 @@ class MyHomePage extends StatelessWidget {
             floatingActionButton: page.fab,
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
-              showUnselectedLabels: true,
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.black87,
               currentIndex: selectedIndex,
               onTap: (int index) {
                 context.read<GlobalModel>().selectedIndex = index;
               },
-              items: [
-                BottomNavigationBarItem(
-                    icon: const Icon(Icons.security), label: Lang.tr("Vault")),
-                BottomNavigationBarItem(
-                    icon: const Icon(Icons.settings),
-                    label: Lang.tr("Settings")),
-              ],
+              items: Globals.navbarItems,
             ),
           );
         });

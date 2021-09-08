@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:polipass/pages/settings.dart';
 import 'package:polipass/pages/vault/vault.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
@@ -8,11 +10,19 @@ import 'custom_page.dart';
 class GlobalModel extends ChangeNotifier {
   GlobalModel() {
     for (var i = 0; i < Globals.pages.length; i++) {
-      Globals.pages[i].provide(CustomPageModel(title: Globals.titles[i]));
+      Globals.pages[i]
+          .provide(CustomPageModel(title: Globals.navbarItems[i].label));
     }
+  }
+  //SETTINGS
+  String themeData = "Light";
+  void setTheme(String newThemeData) {
+    themeData = newThemeData;
+    notifyListeners();
   }
 
   double fontSize = 16, fontSizeSmall = 14;
+  //
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
   set selectedIndex(int index) {
@@ -61,9 +71,15 @@ class Globals {
     return double.tryParse(s) != null;
   }
 
-  static const titles = [
-    "Vault",
-    "Settings",
+  static final List<BottomNavigationBarItem> navbarItems = [
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.security),
+      label: Lang.tr("Vault"),
+    ),
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.settings),
+      label: Lang.tr("Settings"),
+    ),
   ];
 
   static Map routes = {
@@ -72,14 +88,7 @@ class Globals {
 
   static List pages = [
     Vault(),
-    CustomPage(
-      appbar: (BuildContext context) => AppBar(
-        title: Text(context.select(
-          (CustomPageModel customPageModel) => customPageModel.currTitle!,
-        )),
-      ),
-      body: (BuildContext context) => const Center(child: Text("2")),
-    ),
+    Settings(),
   ];
 
   static bool get debugMode {

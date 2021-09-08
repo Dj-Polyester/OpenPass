@@ -77,7 +77,10 @@ class CustomVaultTextWithProvider extends StatelessWidget {
                       vaultDialogModel.addCustomInput(passKeyitem);
                     }
                   },
-                  icon: const Icon(Icons.edit),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                   tooltip: Lang.tr("Edit"),
                 ),
                 Visibility(
@@ -90,7 +93,10 @@ class CustomVaultTextWithProvider extends StatelessWidget {
                         toastLength: Toast.LENGTH_SHORT,
                       );
                     },
-                    icon: const Icon(Icons.delete),
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     tooltip: Lang.tr("Delete"),
                   ),
                 ),

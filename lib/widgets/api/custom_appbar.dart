@@ -24,12 +24,7 @@ class CustomAppbar extends StatelessWidget {
         selector: (_, customListModel) => customListModel.itemSelectVisible,
         builder: (context, itemSelectVisible, __) => AppBar(
           title: Text(currTitle!),
-          leading: CustomAnimatedSize(
-            child: Visibility(
-              visible: itemSelectVisible,
-              child: const CustomAppbarCheckbox(),
-            ),
-          ),
+          leading: (itemSelectVisible) ? const CustomAppbarCheckbox() : null,
           actions: invisibleActions
                   .map(
                     (child) =>

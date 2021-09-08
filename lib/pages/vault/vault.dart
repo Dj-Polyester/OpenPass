@@ -44,7 +44,6 @@ class Vault extends CustomPage {
                     .entries
                     .where((element) => element.value)
                     .map((e) => e.key);
-                // print(keys);
 
                 KeyStore.passkeys.deleteAll(keys);
                 context.read<CustomListModel>().turnOffSelectVisibility();

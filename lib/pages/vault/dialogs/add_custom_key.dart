@@ -6,6 +6,7 @@ import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_button.dart';
 import 'package:polipass/widgets/api/custom_checkbox.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ class AddCustomKey extends StatelessWidget {
           child: Column(
             children: [
               singleNameInput,
-              TextButton(
+              PrimaryButton(
                 onPressed: () async {
                   // Validate returns true if the form is valid, or false otherwise.
                   if (formKey.currentState!.validate()) {
@@ -77,14 +78,6 @@ class AddCustomKey extends StatelessWidget {
                   }
                 },
                 child: Text(Lang.tr("Submit")),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
-                ),
               ),
             ],
           ),

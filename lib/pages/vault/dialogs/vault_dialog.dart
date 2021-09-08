@@ -7,7 +7,9 @@ import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
+import 'package:polipass/widgets/api/custom_button.dart';
 import 'package:polipass/widgets/api/custom_checkbox.dart';
+import 'package:polipass/widgets/api/custom_divider.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:polipass/widgets/custom_vault_text.dart';
 import 'package:provider/provider.dart';
@@ -156,7 +158,7 @@ class VaultDialogModel extends ChangeNotifier {
   }
 
   late final Map<String, dynamic> dialogButtons = {
-    "addCustom": (BuildContext context) => TextButton(
+    "addCustom": (BuildContext context) => SecondaryButton(
           onPressed: () async {
             PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
               context: context,
@@ -228,7 +230,8 @@ class VaultDialogModel extends ChangeNotifier {
           },
           child: Text(Lang.tr("Submit")),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                Theme.of(context).primaryColor),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             overlayColor:
                 MaterialStateProperty.all<Color>(const Color(0x33FFFFFF)),
@@ -264,12 +267,7 @@ class VaultDialog extends StatelessWidget {
                             .cast<Widget>() +
                         ((tuple.item2.isNotEmpty)
                             ? [
-                                const Divider(
-                                  height: 20,
-                                  color: Colors.black54,
-                                  indent: Globals.sidePadding,
-                                  endIndent: Globals.sidePadding,
-                                ),
+                                const CustomDivider(height: 20),
                               ]
                             : [].cast<Widget>()) +
                         tuple.item2.entries

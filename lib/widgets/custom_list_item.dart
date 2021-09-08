@@ -118,12 +118,10 @@ class PassKeyListItem extends StatelessWidget {
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Colors.black12,
                       ),
                       child: Text(
                         azItem.getSuspensionTag(),
                         style: const TextStyle(
-                          color: Colors.black54,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
@@ -147,7 +145,10 @@ class PassKeyListItem extends StatelessWidget {
                     context.read<CustomListItemModel>().toggleExpansion();
                   }
                 },
-                leading: const Icon(Icons.vpn_key),
+                leading: Icon(
+                  Icons.vpn_key,
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 title: customListItemView(context),
               ),
             ],

@@ -10,6 +10,7 @@ class CustomTextStyle {
     Color? hoverColor,
     Widget? prefixIcon,
     Widget? suffixIcon,
+    bool isCollapsed = false,
   }) {
     return InputDecoration(
       prefixIcon: prefixIcon,
@@ -23,6 +24,7 @@ class CustomTextStyle {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
       ),
+      isCollapsed: isCollapsed,
     );
   }
 }

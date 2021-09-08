@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 class Lang {
   //TRANSLATIONS COME HERE//////////////////////////////
   static final Map<String, LangItem> _entries = {
+    //VAULT
     "Your Vault is Empty. Please click the add button below to add keys.":
         LangItem(
       tr: "Hiç anahtarınız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
@@ -46,6 +47,9 @@ class Lang {
     ),
     "Settings": LangItem(
       tr: "Ayarlar",
+    ),
+    "Options": LangItem(
+      tr: "Seçenekler",
     ),
     //
     "File name": LangItem(
@@ -207,6 +211,10 @@ class Lang {
     ),
     "* The text entered contains non-ASCII characters": LangItem(
       tr: "Giriş yapılan değer sadece ascii olmayan karakter içermektedir",
+    ),
+    //SETTINGS
+    "Set theme": LangItem(
+      tr: "Tema ayarla",
     ),
   };
   //////////////////////////////////////////////////////

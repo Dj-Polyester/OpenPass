@@ -8,6 +8,7 @@ import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/azitem.dart';
+import 'package:polipass/widgets/api/custom_divider.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:polipass/widgets/custom_list_item_view.dart';
@@ -73,12 +74,7 @@ class PasskeyList extends StatelessWidget {
           return AzListView(
             key: UniqueKey(),
             data: azItems,
-            separatorBuilder: (_, __) => const Divider(
-              height: 1,
-              color: Colors.black54,
-              indent: Globals.sidePadding,
-              endIndent: Globals.sidePadding,
-            ),
+            separatorBuilder: (_, __) => const CustomDivider(),
             padding: const EdgeInsets.only(bottom: 50),
             itemCount: passkeysRefined.length,
             itemBuilder: (BuildContext context, int i) {
@@ -97,9 +93,9 @@ class PasskeyList extends StatelessWidget {
             },
             indexHintBuilder: (context, hint) => Container(
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
               ),
               width: 60,
               height: 60,
@@ -112,16 +108,16 @@ class PasskeyList extends StatelessWidget {
                 ),
               ),
             ),
-            indexBarOptions: const IndexBarOptions(
+            indexBarOptions: IndexBarOptions(
               needRebuild: true,
               indexHintAlignment: Alignment.centerRight,
-              selectTextStyle: TextStyle(
+              selectTextStyle: const TextStyle(
                 color: Colors.white,
                 // fontWeight: FontWeight.bold,
               ),
               selectItemDecoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );

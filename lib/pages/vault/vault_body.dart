@@ -17,6 +17,10 @@ class VaultBody extends StatelessWidget {
 
   CustomTextWithProvider searchWidget(BuildContext context) =>
       CustomTextWithProvider(
+        onEditingComplete: () {
+          context.read<CustomListModel>().turnOffSearchVisibility();
+          context.read<GlobalModel>().notifySearch("");
+        },
         labelText: Lang.tr("Search"),
         hintText: Lang.tr("Search"),
         onChanged: (String value) {
@@ -34,7 +38,6 @@ class VaultBody extends StatelessWidget {
             visible: context.select((CustomListModel customListModel) =>
                 customListModel.itemSearchVisible),
             child: Container(
-              // decoration: BoxDecoration(color: Colors.blue),
               padding: const EdgeInsets.all(8.0),
               child: searchWidget(context),
             ),
