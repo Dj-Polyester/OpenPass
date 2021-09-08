@@ -32,7 +32,6 @@ dependencies:
   provider: ^6.0.0
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-  google_fonts: ^2.1.0
   string_validator: ^0.3.0
   fluttertoast: ^8.0.8
   tuple: ^2.0.0
@@ -49,18 +48,21 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.2
   flutter_test:
     sdk: flutter
   hive_generator: ^1.1.0
   build_runner: ^2.1.1
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/openpass.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -105,11 +107,11 @@ flutter:
   fonts:
     - family: RobotoMono
       fonts:
-        - asset: fonts/Roboto_Mono/static/RobotoMono-Regular.ttf
-        - asset: fonts/Roboto_Mono/static/RobotoMono-Bold.ttf
+        - asset: assets/fonts/Roboto_Mono/static/RobotoMono-Regular.ttf
+        - asset: assets/fonts/Roboto_Mono/static/RobotoMono-Bold.ttf
           weight: 700
     - family: JetBrainsMono
       fonts:
-        - asset: fonts/JetBrains_Mono/static/JetBrainsMono-Regular.ttf
-        - asset: fonts/JetBrains_Mono/static/JetBrainsMono-Bold.ttf
+        - asset: assets/fonts/JetBrains_Mono/static/JetBrainsMono-Regular.ttf
+        - asset: assets/fonts/JetBrains_Mono/static/JetBrainsMono-Bold.ttf
           weight: 700
