@@ -1,30 +1,26 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:azlistview/azlistview.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
+import 'package:polipass/pages/vault/dialogs/single_input_dialog.dart';
 import 'package:polipass/pages/vault/vault_body.dart';
 import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
+import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 
 import 'package:provider/provider.dart';
 import 'package:polipass/widgets/api/custom_appbar.dart';
-
-class AZItem extends ISuspensionBean {
-  AZItem({
-    required this.title,
-    required this.tag,
-  });
-
-  final String title, tag;
-
-  @override
-  String getSuspensionTag() => tag;
-}
 
 class Vault extends CustomPage {
   Vault()
@@ -39,7 +35,7 @@ class Vault extends CustomPage {
         invisibleActions: [
           Builder(
             builder: (context) => IconButton(
-              tooltip: "delete from vault",
+              tooltip: Lang.tr("Delete from vault"),
               icon: const Icon(Icons.delete),
               onPressed: () {
                 Iterable<String> keys = context
@@ -53,27 +49,34 @@ class Vault extends CustomPage {
                 KeyStore.passkeys.deleteAll(keys);
                 context.read<CustomListModel>().turnOffSelectVisibility();
                 context.read<GlobalModel>().notifyHive();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      Lang.tr("Deleted the key sets from vault"),
+                    ),
+                  ),
+                );
               },
             ),
           ),
         ],
         visibleActions: [
           IconButton(
-            tooltip: "Import",
+            tooltip: Lang.tr("Import"),
             onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform
-                  .pickFiles(allowedExtensions: [Globals.fileExtension]);
-              // print("paths: ${result!.paths}");
+              await CustomFile.importFile(context);
             },
             icon: const Icon(Icons.arrow_downward),
           ),
           IconButton(
-            tooltip: "Export",
-            onPressed: () {},
+            tooltip: Lang.tr("Export"),
+            onPressed: () async {
+              await CustomFile.exportFile(context);
+            },
             icon: const Icon(Icons.arrow_upward),
           ),
           IconButton(
-            tooltip: "Search",
+            tooltip: Lang.tr("Search"),
             onPressed: () {
               context.read<CustomListModel>().toggleSearchVisibility();
             },
@@ -89,7 +92,7 @@ class Vault extends CustomPage {
           await dialogBuilder(context);
         },
         child: const Icon(Icons.add),
-        tooltip: "Add a password",
+        tooltip: Lang.tr("Add a key set"),
       );
 
   static Future<void> dialogBuilder(BuildContext context,

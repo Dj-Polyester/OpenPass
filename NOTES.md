@@ -292,3 +292,7 @@ https://stackoverflow.com/a/66268351/10713877
 ## Wrap Around and Match Parent
 
 https://stackoverflow.com/questions/42257668/the-equivalent-of-wrap-content-and-match-parent-in-flutter
+
+## ListView.builder not updating after insert
+
+https://stackoverflow.com/a/64417638/10713877

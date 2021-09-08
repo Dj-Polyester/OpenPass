@@ -6,6 +6,8 @@ import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
+import 'package:polipass/widgets/api/azitem.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:polipass/widgets/custom_list_item_view.dart';
@@ -22,6 +24,32 @@ class PasskeyList extends StatelessWidget {
         valueListenable: KeyStore.passkeys.listenable(),
         builder: (context, box, _) {
           List<PassKey> passkeys = box.values.toList();
+          if (passkeys.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(40.0),
+                    child: Icon(
+                      Icons.vpn_key,
+                      size: 100,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(40.0),
+                    child: Text(
+                      Lang.tr(
+                          "Your Vault is Empty. Please click the add button below to add keys."),
+                      style: TextStyle(
+                          fontSize: context.select((GlobalModel globalModel) =>
+                              globalModel.fontSize)),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
           List<PassKey> passkeysRefined = passkeys
               .where((PassKey passkey) => passkey.desc.startsWith(searchStr))
               .toList();

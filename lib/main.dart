@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
+import 'package:polipass/utils/lang.dart';
 
 import 'package:provider/provider.dart';
 
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
       create: (_) => GlobalModel(),
       builder: (context, _) {
         return MaterialApp(
-          title: 'PoliPass',
+          title: Globals.appName,
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
@@ -78,11 +79,12 @@ class MyHomePage extends StatelessWidget {
               onTap: (int index) {
                 context.read<GlobalModel>().selectedIndex = index;
               },
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.security), label: "Vault"),
+                    icon: const Icon(Icons.security), label: Lang.tr("Vault")),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.settings), label: "Settings"),
+                    icon: const Icon(Icons.settings),
+                    label: Lang.tr("Settings")),
               ],
             ),
           );

@@ -1,6 +1,8 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
 import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/utils/validator.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:provider/provider.dart';
@@ -11,28 +13,27 @@ class CustomVaultTextWithProvider extends StatelessWidget {
     Key? key,
     required this.vaultDialogModel,
     required this.globalPasskey,
+    required this.name,
     this.validator,
     this.labelText = "",
     this.hintText = "",
     this.inputText,
     this.onChanged,
-    this.fillColor,
-    this.focusColor,
-    this.hoverColor,
+    this.textStyle,
     this.isSecret = true,
     this.hasDelete = true,
   }) : super(key: key);
 
+  TextStyle? textStyle;
   VaultDialogModel vaultDialogModel;
-  PassKey? globalPasskey;
+  final PassKey? globalPasskey;
   bool isSecret, hasDelete;
 
-  Color? fillColor, focusColor, hoverColor;
   String? inputText;
   String? Function(String?)? validator;
   Function(String)? onChanged;
 
-  final String labelText, hintText;
+  final String labelText, hintText, name;
 
   late CustomTextModel textModel = CustomTextModel(text: inputText);
 
@@ -40,7 +41,7 @@ class CustomVaultTextWithProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     validator ??= (String? value) => Validator(text: value).validateAll(
           value: value,
-          validators: [(v) => v.validateInput()],
+          validators: [(v) => v.validatePassword()],
         );
     return MultiProvider(
       providers: [
@@ -54,16 +55,14 @@ class CustomVaultTextWithProvider extends StatelessWidget {
             labelText: labelText,
             hintText: hintText,
             onChanged: onChanged,
-            fillColor: fillColor,
-            focusColor: focusColor,
-            hoverColor: hoverColor,
+            textStyle: textStyle,
             suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   onPressed: () async {
                     PassKeyItem passKeyitem = PassKeyItem(
-                        name: labelText,
+                        name: name,
                         value: textModel.controller.text,
                         isSecret: isSecret);
 
@@ -79,16 +78,20 @@ class CustomVaultTextWithProvider extends StatelessWidget {
                     }
                   },
                   icon: const Icon(Icons.edit),
-                  tooltip: "Edit",
+                  tooltip: Lang.tr("Edit"),
                 ),
                 Visibility(
                   visible: hasDelete,
                   child: IconButton(
                     onPressed: () async {
                       vaultDialogModel.deleteCustomInput(labelText);
+                      Fluttertoast.showToast(
+                        msg: Lang.tr("Deleted the key"),
+                        toastLength: Toast.LENGTH_SHORT,
+                      );
                     },
                     icon: const Icon(Icons.delete),
-                    tooltip: "Delete",
+                    tooltip: Lang.tr("Delete"),
                   ),
                 ),
               ],

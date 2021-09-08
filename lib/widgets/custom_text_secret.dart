@@ -2,6 +2,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/utils/validator.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:polipass/widgets/api/custom_text_digit.dart';
@@ -18,7 +19,7 @@ class CustomTextSecretWithProvider extends StatelessWidget {
     this.getSettings,
     this.labelText = "",
     this.hintText = "",
-    this.text = "Length",
+    this.text,
     this.min = 0,
     this.max = 99,
     this.value = 12,
@@ -29,7 +30,8 @@ class CustomTextSecretWithProvider extends StatelessWidget {
   late String? Function(String?)? validator;
   final Map<String, dynamic> Function()? getSettings;
 
-  final String labelText, hintText, text;
+  final String labelText, hintText;
+  final String? text;
   final double min, max, value;
 
   late CustomSliderModel sliderModel = CustomSliderModel(value: value);
@@ -48,7 +50,7 @@ class CustomTextSecretWithProvider extends StatelessWidget {
       ],
       builder: (context, _) {
         return CustomTextSecret(
-          sliderTextLabel: text,
+          sliderTextLabel: text ?? Lang.tr("Length"),
           min: min,
           max: max,
           validator: validator,
@@ -100,6 +102,7 @@ class CustomTextSecret extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomText(
+            textStyle: const TextStyle(fontFamily: "JetBrainsMono"),
             suffixIcon: IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
@@ -119,13 +122,13 @@ class CustomTextSecret extends StatelessWidget {
                       generator.generate();
 
                   Fluttertoast.showToast(
-                    msg: "Password generated",
+                    msg: Lang.tr("Key is generated"),
                     toastLength: Toast.LENGTH_SHORT,
                   );
                 }
               },
               icon: const Icon(Icons.refresh),
-              tooltip: "generate",
+              tooltip: Lang.tr("Generate"),
               splashRadius: context
                   .select((GlobalModel globalmodel) => globalmodel.fontSize),
             ),

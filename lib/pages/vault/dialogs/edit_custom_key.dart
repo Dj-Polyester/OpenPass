@@ -4,6 +4,7 @@ import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:provider/provider.dart';
@@ -43,43 +44,50 @@ class EditCustomKeyModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  PassKey? globalPasskey;
+  final PassKey? globalPasskey;
   PassKeyItem? globalPasskeyItem;
   PassKeyModel globalPassKeyModel = PassKeyModel();
 
   late CustomTextSecretWithProvider dialogKeyInput =
       CustomTextSecretWithProvider(
     passKeyModel: globalPassKeyModel,
-    labelText: "Password",
-    hintText: "Enter password",
+    labelText: Lang.tr("Password"),
+    hintText: Lang.tr("Enter a password"),
     getSettings: getSettings,
     inputText: globalPasskeyItem!.value,
   );
 
   late final Map<String, dynamic> dialogOptions = {
     "az": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow lowercase letters",
+      text1: Lang.tr("Allow lowercase letters"),
       text2: " (a-z)",
-      text3: "Minimum",
+      text3: Lang.tr("Minimum"),
     ),
     "AZ": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow uppercase letters",
+      text1: Lang.tr("Allow uppercase letters"),
       text2: " (A-Z)",
-      text3: "Minimum",
+      text3: Lang.tr("Minimum"),
     ),
     "09": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow numeric characters",
+      text1: Lang.tr("Allow numeric characters"),
       text2: " (0-9)",
-      text3: "Minimum",
+      text3: Lang.tr("Minimum"),
     ),
     "special": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow special characters",
+      text1: Lang.tr("Allow special characters"),
       text2: " (!,<,>,|,',£,^,#,+,\$,%,&,/,=,?,*,\\,-,_)",
-      text3: "Minimum",
+      text3: Lang.tr("Minimum"),
     ),
     "ambiguous": CustomTextCheckboxWithProvider(
-      text1: "Allow ambiguous letters",
+      text1: Lang.tr("Allow ambiguous characters"),
       text2: " (l,1,O,0)",
+    ),
+  };
+
+  late final Map<String, CustomTextCheckboxWithProvider>
+      dialogOptionsInvalidatable = {
+    "isSecret": CustomTextCheckboxWithProvider(
+      text1: Lang.tr("Is a secret key?"),
     ),
   };
 
@@ -121,6 +129,9 @@ class EditCustomKeyModel extends ChangeNotifier {
             // Validate returns true if the form is valid, or false otherwise.
             if (globalPassKeyModel.formKey.currentState!.validate()) {
               // submit new keys.
+              String toastMsg = (globalPasskeyItem!.value == "")
+                  ? "Added the key with the name %s"
+                  : "Updated the key with the name %s";
 
               globalPasskeyItem!.value = context
                   .read<EditCustomKeyModel>()
@@ -128,12 +139,21 @@ class EditCustomKeyModel extends ChangeNotifier {
                   .textPasswdModel
                   .controller
                   .text;
+              globalPasskeyItem!.isSecret = context
+                  .read<EditCustomKeyModel>()
+                  .dialogOptionsInvalidatable["isSecret"]!
+                  .checkboxModel
+                  .value;
 
               // quit
               Navigator.pop(context, globalPasskeyItem);
+              Fluttertoast.showToast(
+                msg: Lang.tr(toastMsg, [globalPasskeyItem!.name]),
+                toastLength: Toast.LENGTH_SHORT,
+              );
             }
           },
-          child: const Text("Submit"),
+          child: Text(Lang.tr("Submit")),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -145,7 +165,7 @@ class EditCustomKeyModel extends ChangeNotifier {
           onPressed: () {
             context.read<EditCustomKeyModel>().toggleVisibility();
           },
-          child: const Text("Settings"),
+          child: Text(Lang.tr("Settings")),
         ),
   };
 }
@@ -157,7 +177,7 @@ class EditCustomKey extends StatelessWidget {
     required this.globalPasskeyItem,
   }) : super(key: key);
 
-  PassKey? globalPasskey;
+  final PassKey? globalPasskey;
   PassKeyItem globalPasskeyItem;
 
   @override
@@ -203,12 +223,18 @@ class EditCustomKey extends StatelessWidget {
                                 offstage: !isSettingsVisible,
                                 child: Column(
                                   children: context
-                                      .read<EditCustomKeyModel>()
-                                      .dialogOptions
-                                      .entries
-                                      .map((e) => e.value)
-                                      .toList()
-                                      .cast<Widget>(),
+                                          .read<EditCustomKeyModel>()
+                                          .dialogOptions
+                                          .entries
+                                          .map((e) => e.value)
+                                          .toList()
+                                          .cast<Widget>() +
+                                      context
+                                          .read<EditCustomKeyModel>()
+                                          .dialogOptionsInvalidatable
+                                          .entries
+                                          .map((e) => e.value)
+                                          .toList(),
                                 ),
                               ),
                             ),

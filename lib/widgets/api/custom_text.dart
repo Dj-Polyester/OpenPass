@@ -36,15 +36,13 @@ class CustomTextWithProvider extends StatelessWidget {
     this.hintText = "",
     this.inputText,
     this.onChanged,
-    this.fillColor,
-    this.focusColor,
-    this.hoverColor,
+    this.textStyle,
     this.isSecret = false,
   }) : super(key: key);
 
   bool isSecret;
 
-  Color? fillColor, focusColor, hoverColor;
+  TextStyle? textStyle;
   String? inputText;
   String? Function(String?)? validator;
   Function(String)? onChanged;
@@ -67,9 +65,7 @@ class CustomTextWithProvider extends StatelessWidget {
             labelText: labelText,
             hintText: hintText,
             onChanged: onChanged,
-            fillColor: fillColor,
-            focusColor: focusColor,
-            hoverColor: hoverColor,
+            textStyle: textStyle,
           ),
         );
       },
@@ -84,15 +80,13 @@ class CustomText extends StatelessWidget {
     this.labelText = "",
     this.hintText = "",
     this.onChanged,
-    this.fillColor,
-    this.focusColor,
-    this.hoverColor,
+    this.textStyle,
     this.prefixIcon,
     this.suffixIcon,
   }) : super(key: key);
 
   Widget? prefixIcon, suffixIcon;
-  Color? fillColor, focusColor, hoverColor;
+  TextStyle? textStyle;
 
   String? Function(String?)? validator;
   final String labelText, hintText;
@@ -101,14 +95,12 @@ class CustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: textStyle,
       decoration: CustomTextStyle.textFieldStyle(
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         labelTextStr: labelText,
         hintTextStr: hintText,
-        fillColor: fillColor,
-        focusColor: focusColor,
-        hoverColor: hoverColor,
       ),
       controller: context.read<CustomTextModel>().controller,
       focusNode: context.read<CustomTextModel>().focusNode,

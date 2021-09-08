@@ -7,11 +7,11 @@ class CustomTextCheckboxWithProvider extends StatelessWidget {
   CustomTextCheckboxWithProvider({
     Key? key,
     required this.text1,
-    required this.text2,
+    this.text2,
   }) : super(key: key);
 
-  final String text1, text2;
-  late bool checkboxValue;
+  final String text1;
+  final String? text2;
 
   late CustomCheckboxModel checkboxModel = CustomCheckboxModel();
 
@@ -20,7 +20,6 @@ class CustomTextCheckboxWithProvider extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: checkboxModel,
       builder: (context, _) {
-        checkboxValue = context.watch<CustomCheckboxModel>().value;
         return CustomTextCheckbox(
           text1: text1,
           text2: text2,
@@ -34,10 +33,11 @@ class CustomTextCheckbox extends StatelessWidget {
   CustomTextCheckbox({
     Key? key,
     required this.text1,
-    required this.text2,
+    this.text2,
   }) : super(key: key);
 
-  final String text1, text2;
+  final String text1;
+  final String? text2;
   bool checkboxValue = false;
 
   @override
@@ -50,12 +50,14 @@ class CustomTextCheckbox extends StatelessWidget {
             text: TextSpan(
               text: text1,
               style: const TextStyle(fontSize: 16, color: Colors.black),
-              children: [
-                TextSpan(
-                  text: text2,
-                  style: const TextStyle(fontFamily: "JetBrainsMono"),
-                ),
-              ],
+              children: (text2 == null)
+                  ? null
+                  : [
+                      TextSpan(
+                        text: text2!,
+                        style: const TextStyle(fontFamily: "JetBrainsMono"),
+                      ),
+                    ],
             ),
           ),
         ),

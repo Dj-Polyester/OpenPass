@@ -37,6 +37,16 @@ class PassKeyItem {
     required this.value,
     this.isSecret = false,
   });
+  PassKeyItem.fromMap(Map map)
+      : name = map["name"],
+        value = map["value"],
+        isSecret = map["isSecret"];
+  Map<String, dynamic> toMap() => {
+        "name": name,
+        "value": value,
+        "isSecret": isSecret,
+      };
+
   @HiveField(0)
   String name;
   @HiveField(1)
@@ -54,37 +64,53 @@ class PassKey extends HiveObject {
     this.password = "",
     this.other = const {},
   });
+
+  PassKey.fromMap(Map map)
+      : desc = map["desc"],
+        username = map["username"],
+        email = map["email"],
+        password = map["password"],
+        other = map["other"]
+            .map((key, value) => MapEntry(key, PassKeyItem.fromMap(value)))
+            .cast<String, PassKeyItem>();
+
+  Map<String, dynamic> toMap() {
+    return {
+      "desc": desc,
+      "username": username,
+      "email": email,
+      "password": password,
+      "other": other.map((key, value) => MapEntry(key, value.toMap())),
+    };
+  }
+
   @HiveField(0)
   String desc;
   @HiveField(1)
-  String? username;
+  String username;
   @HiveField(2)
-  String? email;
+  String email;
   @HiveField(3)
   String password;
   @HiveField(4)
   Map<String, PassKeyItem> other;
 
-  List<PassKeyItem?> get items =>
+  List<PassKeyItem> get items =>
       [
         PassKeyItem(
-          name: "desc",
+          name: "Description",
           value: desc,
         ),
-        (username == null)
-            ? null
-            : PassKeyItem(
-                name: "username",
-                value: username!,
-              ),
-        (email == null)
-            ? null
-            : PassKeyItem(
-                name: "email",
-                value: email!,
-              ),
         PassKeyItem(
-          name: "password",
+          name: "Username",
+          value: username,
+        ),
+        PassKeyItem(
+          name: "Email",
+          value: email,
+        ),
+        PassKeyItem(
+          name: "Password",
           value: password,
           isSecret: true,
         ),

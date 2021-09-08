@@ -1,4 +1,5 @@
 import 'package:polipass/pages/vault/vault.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
@@ -23,21 +24,24 @@ class _TextFieldCreds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: TextField(
-        obscureText: obscureText,
-        style: TextStyle(
-          fontSize: fontSize,
-        ),
-        readOnly: true,
-        controller: TextEditingController(text: text),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.all(8.0),
-          isCollapsed: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5),
+        child: TextField(
+          obscureText: obscureText,
+          style: TextStyle(
+            fontSize: fontSize,
           ),
-          fillColor: Colors.white,
-          filled: true,
+          readOnly: true,
+          controller: TextEditingController(text: text),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(8.0),
+            isCollapsed: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+          ),
         ),
       ),
     );
@@ -48,6 +52,18 @@ class _PassKeyItemViewCreds extends StatelessWidget {
   const _PassKeyItemViewCreds({Key? key, required this.item}) : super(key: key);
 
   final PassKeyItem item;
+
+  String getTranslatedName(String text) {
+    switch (text) {
+      case "Description":
+      case "Username":
+      case "Email":
+      case "Password":
+        return Lang.tr(text);
+      default:
+    }
+    return text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +83,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                     minWidth: tuple.item2 * 5,
                   ),
                   child: Text(
-                    item.name,
+                    getTranslatedName(item.name),
                     style: TextStyle(fontSize: tuple.item2),
                   ),
                 ),
@@ -81,7 +97,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                   child: IconButton(
                     splashRadius: tuple.item1,
                     iconSize: tuple.item1,
-                    tooltip: "copy to clipboard",
+                    tooltip: Lang.tr("Copy to clipboard"),
                     onPressed: () {},
                     icon: const Icon(Icons.copy),
                   ),
@@ -93,7 +109,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                     child: IconButton(
                       splashRadius: tuple.item1,
                       iconSize: tuple.item1,
-                      tooltip: "show",
+                      tooltip: Lang.tr("Show"),
                       onPressed: () {
                         context.read<PassKeyItemModel>().showSecret();
                       },
@@ -108,7 +124,7 @@ class _PassKeyItemViewCreds extends StatelessWidget {
                     child: IconButton(
                       splashRadius: tuple.item1,
                       iconSize: tuple.item1,
-                      tooltip: "hide",
+                      tooltip: Lang.tr("Hide"),
                       onPressed: () {
                         context.read<PassKeyItemModel>().hideSecret();
                       },
@@ -165,10 +181,10 @@ class PassKeyItemView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: passkey.items
-                              .where((PassKeyItem? item) => item != null)
+                              .where((PassKeyItem item) => item.value != "")
                               .map(
-                                (PassKeyItem? item) =>
-                                    _PassKeyItemViewCreds(item: item!),
+                                (PassKeyItem item) =>
+                                    _PassKeyItemViewCreds(item: item),
                               )
                               .toList()
                               .cast<Widget>() +
@@ -186,7 +202,7 @@ class PassKeyItemView extends StatelessWidget {
                                             passkey: passkey);
                                       }
                                     },
-                                    child: const Text("Update")),
+                                    child: Text(Lang.tr("Update"))),
                               ),
                             )
                           ],

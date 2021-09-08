@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:provider/provider.dart';
 
 class CustomListModel extends ChangeNotifier {
@@ -62,13 +63,16 @@ class CustomListModel extends ChangeNotifier {
 
   void setListTitleNotified() {
     customPageModel!.setCurrTitle(
-      (itemSelectVisible) ? "Selected $selectedNum" : customPageModel!.title!,
+      (itemSelectVisible)
+          ? Lang.tr("Selected %s", [selectedNum])
+          : customPageModel!.title!,
     );
   }
 
   void setListTitle() {
-    customPageModel!.currTitle =
-        (itemSelectVisible) ? "Selected $selectedNum" : customPageModel!.title!;
+    customPageModel!.currTitle = (itemSelectVisible)
+        ? Lang.tr("Selected %s", [selectedNum])
+        : customPageModel!.title!;
   }
 
   void toggleSelectVisibility() {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/widgets/api/custom_slider.dart';
 import 'package:polipass/widgets/api/custom_text_style.dart';
+import 'package:string_validator/string_validator.dart';
 
 class CustomTextDigitModel extends ChangeNotifier {
   CustomTextDigitModel({this.cursorPos = 0, double value = 0})
@@ -62,7 +63,7 @@ class CustomTextDigit extends StatelessWidget {
       },
       onChanged: (String val) {
         late double tmpval;
-        if (Globals.isNumeric(val)) {
+        if (isNumeric(val)) {
           tmpval = double.parse(val);
         } else if (val.isEmpty) {
           tmpval = 0;

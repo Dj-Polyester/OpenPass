@@ -5,6 +5,7 @@ import 'package:polipass/pages/vault/dialogs/add_custom_key.dart';
 import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_checkbox.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
@@ -42,13 +43,13 @@ class VaultDialogModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  PassKey? globalPasskey;
+  final PassKey? globalPasskey;
   // PassKeyModel globalPassKeyModel = PassKeyModel();
 
   late final Map<String, dynamic> dialogInputs = {
     "desc": CustomTextWithProvider(
-      labelText: "Description",
-      hintText: "Enter description",
+      labelText: Lang.tr("Description"),
+      hintText: Lang.tr("Enter a description"),
       validator: (String? value) => Validator(text: value).validateAll(
         value: value,
         conditions: [globalPasskey == null, true],
@@ -57,30 +58,44 @@ class VaultDialogModel extends ChangeNotifier {
       inputText: (globalPasskey == null) ? null : globalPasskey!.desc,
     ),
     "username": CustomTextWithProvider(
-      labelText: "Username (optional)",
-      hintText: "Enter username",
+      labelText: Lang.tr("Username (optional)"),
+      hintText: Lang.tr("Enter a username"),
+      validator: (String? value) => Validator(text: value).validateAll(
+        value: value,
+        conditions: [true],
+        validators: [(v) => v.validateUsername()],
+      ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.username,
     ),
     "email": CustomTextWithProvider(
-      labelText: "Email (optional)",
-      hintText: "Enter email",
+      labelText: Lang.tr("Email (optional)"),
+      hintText: Lang.tr("Enter an email"),
       validator: (String? value) => Validator(text: value).validateAll(
         value: value,
         conditions: [value!.isNotEmpty],
-        validators: [(v) => v.validateEmail()],
+        validators: [(v) => v.validateEmailAll()],
       ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.email,
     ),
-    "password": CustomVaultTextWithProvider(
-      vaultDialogModel: this,
-      globalPasskey: globalPasskey,
-      labelText: "Password",
-      hintText: "Enter password",
-      inputText: (globalPasskey == null) ? null : globalPasskey!.password,
-      isSecret: true,
-      hasDelete: false,
+    "password": passwordInputs(
+      this,
+      globalPasskey,
+      (globalPasskey == null) ? null : globalPasskey!.password,
     ),
   };
+
+  CustomVaultTextWithProvider passwordInputs(VaultDialogModel vaultDialogModel,
+          PassKey? globalPasskey, String? inputText) =>
+      CustomVaultTextWithProvider(
+        name: "password",
+        vaultDialogModel: vaultDialogModel,
+        globalPasskey: globalPasskey,
+        labelText: Lang.tr("Password"),
+        hintText: Lang.tr("Enter a password"),
+        inputText: inputText,
+        isSecret: true,
+        hasDelete: false,
+      );
 
   late final Map<String, CustomVaultTextWithProvider> dialogInputsOther =
       (globalPasskey == null)
@@ -89,23 +104,33 @@ class VaultDialogModel extends ChangeNotifier {
               .map((String key, PassKeyItem value) => MapEntry(
                   key,
                   CustomVaultTextWithProvider(
+                    name: value.name,
                     vaultDialogModel: this,
                     globalPasskey: globalPasskey,
                     labelText: value.name,
-                    hintText: "Enter key",
+                    hintText: Lang.tr("Enter a key"),
                     inputText: value.value,
                     isSecret: value.isSecret,
                   )));
 
   void addCustomInput(PassKeyItem passkeyItem) {
-    dialogInputsOther[passkeyItem.name] = CustomVaultTextWithProvider(
-      vaultDialogModel: this,
-      globalPasskey: globalPasskey,
-      labelText: passkeyItem.name,
-      hintText: "Enter key",
-      inputText: passkeyItem.value,
-      isSecret: passkeyItem.isSecret,
-    );
+    if (passkeyItem.name == "password") {
+      dialogInputs["password"] = passwordInputs(
+        this,
+        globalPasskey,
+        passkeyItem.value,
+      );
+    } else {
+      dialogInputsOther[passkeyItem.name] = CustomVaultTextWithProvider(
+        name: passkeyItem.name,
+        vaultDialogModel: this,
+        globalPasskey: globalPasskey,
+        labelText: passkeyItem.name,
+        hintText: Lang.tr("Enter a key"),
+        inputText: passkeyItem.value,
+        isSecret: passkeyItem.isSecret,
+      );
+    }
 
     notifyVaultDialog();
   }
@@ -114,59 +139,6 @@ class VaultDialogModel extends ChangeNotifier {
     dialogInputsOther.remove(name);
 
     notifyVaultDialog();
-  }
-
-  late final Map<String, dynamic> dialogOptions = {
-    "az": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow lowercase letters",
-      text2: " (a-z)",
-      text3: "Minimum",
-    ),
-    "AZ": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow uppercase letters",
-      text2: " (A-Z)",
-      text3: "Minimum",
-    ),
-    "09": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow numeric characters",
-      text2: " (0-9)",
-      text3: "Minimum",
-    ),
-    "special": CustomTextCheckboxSliderWithProvider(
-      text1: "Allow special characters",
-      text2: " (!,<,>,|,',£,^,#,+,\$,%,&,/,=,?,*,\\,-,_)",
-      text3: "Minimum",
-    ),
-    "ambiguous": CustomTextCheckboxWithProvider(
-      text1: "Allow ambiguous letters",
-      text2: " (l,1,O,0)",
-    ),
-  };
-
-  Map<String, dynamic> getSettings() {
-    Map<String, int> numChars = {};
-    Map<String, bool> allowedChars = {};
-
-    for (String key in dialogOptions.keys) {
-      dynamic item = dialogOptions[key];
-
-      if (item is CustomTextCheckboxWithProvider ||
-          item is CustomTextCheckboxSliderWithProvider) {
-        allowedChars[key] = item.checkboxModel.value;
-      }
-      if (item is CustomTextSecretWithProvider ||
-          item is CustomTextCheckboxSliderWithProvider) {
-        numChars[key] = item.checkboxModel.value.toInt();
-      }
-    }
-
-    int length = dialogInputs["password"]!.checkboxModel.value.toInt();
-
-    return {
-      "length": length,
-      "numChars": numChars,
-      "allowedChars": allowedChars,
-    };
   }
 
   //dialog widgets
@@ -194,7 +166,7 @@ class VaultDialogModel extends ChangeNotifier {
               addCustomInput(passKeyitem);
             }
           },
-          child: const Text("+ Add custom keys"),
+          child: Text(Lang.tr("+ Add a custom key")),
         ),
     //SUBMIT
     "submit": (BuildContext context) => TextButton(
@@ -222,39 +194,39 @@ class VaultDialogModel extends ChangeNotifier {
 
               PassKey passkey = PassKey(
                 desc: desc,
-                username: (username == "") ? null : username,
-                email: (email == "") ? null : email,
+                username: username,
+                email: email,
                 password: password,
                 other: other,
               );
 
               // print("passkey: $passkey");
+              late String snackbarMsg;
 
               if (globalPasskey == null) {
                 //INSERT
+                snackbarMsg = "Added the key set with the description %s";
                 if (KeyStore.passkeys.get(passkey.desc) == null) {
-                  // KeyStore.passkeys.add(passkey);
                   KeyStore.passkeys.put(passkey.desc, passkey);
-                  // context.read<GlobalModel>().notifyHive();
                 }
               } else {
                 //UPDATE
-                if (globalPasskey!.desc != passkey.desc) {
-                  KeyStore.passkeys.delete(globalPasskey!.desc);
-                }
+                snackbarMsg = "Updated the key set with the description %s";
+                // if (globalPasskey!.desc != passkey.desc) {
+                //   KeyStore.passkeys.delete(globalPasskey!.desc);
+                // }
                 KeyStore.passkeys.put(passkey.desc, passkey);
               }
 
               // quit
               Navigator.pop(context);
+
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content:
-                        Text("Added the key with description ${passkey.desc}")),
+                SnackBar(content: Text(Lang.tr(snackbarMsg, [passkey.desc]))),
               );
             }
           },
-          child: const Text("Submit"),
+          child: Text(Lang.tr("Submit")),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -272,9 +244,8 @@ class VaultDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    globalPasskey ??= PassKey();
     return ChangeNotifierProvider(
-      create: (_) => VaultDialogModel(globalPasskey: globalPasskey!),
+      create: (_) => VaultDialogModel(globalPasskey: globalPasskey),
       builder: (context, _) => AlertDialog(
         content: SingleChildScrollView(
           child: Wrap(
@@ -294,7 +265,7 @@ class VaultDialog extends StatelessWidget {
                         ((tuple.item2.isNotEmpty)
                             ? [
                                 const Divider(
-                                  height: 1,
+                                  height: 20,
                                   color: Colors.black54,
                                   indent: Globals.sidePadding,
                                   endIndent: Globals.sidePadding,

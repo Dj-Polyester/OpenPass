@@ -40,7 +40,8 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
-  static const String fileExtension = "passkey";
+  static const String appName = "openPass";
+  static const String fileExtension = "key";
 
   static EdgeInsets itemsPadding = const EdgeInsets.only(
     left: 20.0,

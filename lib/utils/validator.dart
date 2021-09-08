@@ -1,7 +1,7 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:polipass/db/db.dart';
-import 'package:polipass/models/passkey.dart';
+import 'package:polipass/utils/lang.dart';
+import 'package:string_validator/string_validator.dart';
 
 class Validator {
   final Map<String, String> _chars = const {
@@ -36,23 +36,28 @@ class Validator {
   //returned messages
   List<String> messages;
   Map messageEntries = {
-    "containsMessage": "The password entered contains",
-    "az": "* small letters",
-    "AZ": "* capitalized letters",
-    "09": "* numbers",
-    "special": "* special characters",
-    "ambiguous": (char) => "* the character $char",
-    "invalidMessage": "Therefore is not a valid password",
-    "validateExistingDesc": "* An entry with the description already exists",
-    "validateInput": "* Please enter some text",
-    "validateEmail": "* The email entered is not valid",
+    "containsMessage": Lang.tr("The password entered contains"),
+    "az": Lang.tr("* small letters"),
+    "AZ": Lang.tr("* capitalized letters"),
+    "09": Lang.tr("* numbers"),
+    "special": Lang.tr("* special characters"),
+    "ambiguous": (String char) => Lang.tr("* the character %s", [char]),
+    "invalidMessage": Lang.tr("Therefore is not a valid password"),
+    "validateExistingDesc":
+        Lang.tr("* An entry with the description already exists"),
+    "validateEmpty": Lang.tr("* Please enter some text"),
+    "validateEmail": Lang.tr("* The email entered is not valid"),
+    "validateASCII":
+        Lang.tr("* The text entered contains non-ASCII characters"),
+    "invalidSum":
+        Lang.tr("* Sum of minimum allowed characters exceeds the length"),
   };
 
   bool validateSumSettings() {
     debugPrint("numChars: $numChars");
     int sum = numChars.values.fold<int>(0, (prev, curr) => prev + curr);
     if (sum > length) {
-      messages.add("sum is invalid");
+      messages.add(messageEntries["invalidSum"]);
       return false;
     }
     return true;
@@ -88,9 +93,11 @@ class Validator {
             if (!messages.contains(messageEntries["containsMessage"]))
               // ignore: curly_braces_in_flow_control_structures
               messages.add(messageEntries["containsMessage"]);
-            if (!messages.contains(messageEntries["ambiguous"](char)))
+
+            String ambiguousTxt = messageEntries["ambiguous"](char);
+            if (!messages.contains(ambiguousTxt))
               // ignore: curly_braces_in_flow_control_structures
-              messages.add(messageEntries["ambiguous"](char));
+              messages.add(ambiguousTxt);
             result = false;
             break;
         }
@@ -113,12 +120,10 @@ class Validator {
   }
 
   bool validateInput() {
-    if (text == null || text!.isEmpty) {
-      messages.add(messageEntries["validateInput"]);
-
-      return false;
-    }
-    return true;
+    bool result = true;
+    result = validateASCII() && result;
+    result = validateEmpty() && result;
+    return result;
   }
 
   bool validateDesc() {
@@ -128,8 +133,15 @@ class Validator {
     return result;
   }
 
+  bool validateEmailAll() {
+    bool result = true;
+    result = validateASCII() && result;
+    result = validateEmail() && result;
+    return result;
+  }
+
   bool validateEmail() {
-    if (!EmailValidator.validate(text!)) {
+    if (!isEmail(text!)) {
       messages.add(messageEntries["validateEmail"]);
 
       return false;
@@ -143,6 +155,32 @@ class Validator {
     result = validateSumSettings() && result;
     result = validateAllSettings() && result;
     return result;
+  }
+
+  bool validateUsername() {
+    bool result = true;
+    result = validateASCII() && result;
+    return result;
+  }
+
+  bool validatePassword() => validateInput();
+
+  bool validateASCII() {
+    if (text!.isNotEmpty && !isAscii(text!)) {
+      messages.add(messageEntries["validateASCII"]);
+
+      return false;
+    }
+    return true;
+  }
+
+  bool validateEmpty() {
+    if (text == null || text!.isEmpty) {
+      messages.add(messageEntries["validateEmpty"]);
+
+      return false;
+    }
+    return true;
   }
 
   String? validateAll({

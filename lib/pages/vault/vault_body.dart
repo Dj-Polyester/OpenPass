@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:polipass/utils/globals.dart';
+import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 
@@ -16,8 +17,8 @@ class VaultBody extends StatelessWidget {
 
   CustomTextWithProvider searchWidget(BuildContext context) =>
       CustomTextWithProvider(
-        labelText: "Search",
-        hintText: "Search",
+        labelText: Lang.tr("Search"),
+        hintText: Lang.tr("Search"),
         onChanged: (String value) {
           context.read<GlobalModel>().notifySearch(value);
         },

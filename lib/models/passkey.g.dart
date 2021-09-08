@@ -58,8 +58,8 @@ class PassKeyAdapter extends TypeAdapter<PassKey> {
     };
     return PassKey(
       desc: fields[0] as String,
-      username: fields[1] as String?,
-      email: fields[2] as String?,
+      username: fields[1] as String,
+      email: fields[2] as String,
       password: fields[3] as String,
       other: (fields[4] as Map).cast<String, PassKeyItem>(),
     );

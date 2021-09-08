@@ -1,2 +1,8 @@
-custom keys
+HI-PRIORITY:
+stylize input text to mono
+add settings variables like font size
+add language support
+adding/deleting custom keys shouldnt change vault size
+
+LO-PRIORITY:
 import/export
