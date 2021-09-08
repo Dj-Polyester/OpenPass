@@ -32,6 +32,9 @@ class Lang {
     "Copy to clipboard": LangItem(
       tr: "Kopyala",
     ),
+    "Copied": LangItem(
+      tr: "Kopyalandı",
+    ),
     "Show": LangItem(
       tr: "Göster",
     ),

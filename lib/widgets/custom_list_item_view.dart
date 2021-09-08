@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
@@ -46,6 +47,10 @@ class _TextFieldCreds extends StatelessWidget {
                   tooltip: Lang.tr("Copy to clipboard"),
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: text));
+                    Fluttertoast.showToast(
+                      msg: Lang.tr("Copied"),
+                      toastLength: Toast.LENGTH_SHORT,
+                    );
                   },
                   icon: Icon(
                     Icons.copy,
