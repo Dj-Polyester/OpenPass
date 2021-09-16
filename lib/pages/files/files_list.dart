@@ -14,7 +14,7 @@ import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/azitem.dart';
 import 'package:polipass/widgets/api/custom_divider.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
-import 'package:polipass/widgets/custom_list_item.dart';
+import 'package:polipass/widgets/api/custom_list_item.dart';
 import 'package:polipass/widgets/custom_list_item_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';

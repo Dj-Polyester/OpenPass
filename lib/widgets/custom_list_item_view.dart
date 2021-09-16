@@ -6,7 +6,7 @@ import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_button.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
-import 'package:polipass/widgets/custom_list_item.dart';
+import 'package:polipass/widgets/api/custom_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/models/passkey.dart';

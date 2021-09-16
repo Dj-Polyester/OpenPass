@@ -5,7 +5,7 @@ import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/pages/vault/vault_list.dart';
-import 'package:polipass/widgets/custom_list_item.dart';
+import 'package:polipass/widgets/api/custom_list_item.dart';
 import 'package:polipass/old/custom_list_item_checkbox.dart';
 import 'package:provider/provider.dart';
 
