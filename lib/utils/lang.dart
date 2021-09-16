@@ -17,11 +17,17 @@ class Lang {
       tr: "%s seçili",
     ),
     //
+    "Show all": LangItem(
+      tr: "Hepsini göster",
+    ),
     "Search": LangItem(
       tr: "Ara",
     ),
     "Delete from vault": LangItem(
       tr: "Şifrelerimden sil",
+    ),
+    "Cancel": LangItem(
+      tr: "İptal",
     ),
     "Import": LangItem(
       tr: "İçe aktar",
@@ -205,28 +211,28 @@ class Lang {
       tr: "* sayı",
     ),
     "* special characters": LangItem(
-      tr: "özel karakterler",
+      tr: "* özel karakterler",
     ),
     "* the character %s": LangItem(
-      tr: "%s karakteri",
+      tr: "* %s karakteri",
     ),
     "Therefore is not a valid password": LangItem(
-      tr: "içerdiği için kabul edilememektedir",
+      tr: "* içerdiği için kabul edilememektedir",
     ),
     "* An entry with the description already exists": LangItem(
-      tr: "Bu açıklamada bir giriş mevcuttur",
+      tr: "* Bu açıklamada bir giriş mevcuttur",
     ),
     "* Please enter some text": LangItem(
-      tr: "Bu alan zorunludur",
+      tr: "* Bu alan zorunludur",
     ),
     "* The email entered is not valid": LangItem(
-      tr: "Girilen eposta geçersizdir",
+      tr: "* Girilen eposta geçersizdir",
     ),
     "* Sum of minimum allowed characters exceeds the length": LangItem(
-      tr: "Minimum izin verilen karakter sayısı uzunluğu aşmaktadır",
+      tr: "* Minimum izin verilen karakter sayısı uzunluğu aşmaktadır",
     ),
     "* The text entered contains non-ASCII characters": LangItem(
-      tr: "Giriş yapılan değer sadece ascii olmayan karakter içermektedir",
+      tr: "* Giriş yapılan değer sadece ascii olmayan karakter içermektedir",
     ),
     //SETTINGS
     "Set theme": LangItem(
@@ -239,8 +245,14 @@ class Lang {
       WidgetsBinding.instance!.window.locale.countryCode!.toLowerCase();
 
   static String tr(String text, [List args = const []]) {
-    String translated =
-        (_countryCode == "us") ? text : _entries[text]!.toMap()[_countryCode];
+    late String translated;
+    switch (_countryCode) {
+      case "tr":
+        translated = _entries[text]!.toMap()[_countryCode];
+        break;
+      default:
+        translated = text;
+    }
     return sprintf(translated, args);
   }
 }
@@ -256,6 +268,5 @@ class LangItem {
 
   Map toMap() => {
         "tr": str(tr),
-        "jp": str(jp),
       };
 }

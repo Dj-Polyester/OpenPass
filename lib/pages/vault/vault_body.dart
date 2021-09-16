@@ -17,10 +17,6 @@ class VaultBody extends StatelessWidget {
 
   CustomTextWithProvider searchWidget(BuildContext context) =>
       CustomTextWithProvider(
-        onEditingComplete: () {
-          context.read<CustomListModel>().turnOffSearchVisibility();
-          context.read<GlobalModel>().notifySearch("");
-        },
         labelText: Lang.tr("Search"),
         hintText: Lang.tr("Search"),
         onChanged: (String value) {

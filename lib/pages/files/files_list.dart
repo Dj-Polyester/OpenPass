@@ -103,14 +103,18 @@ class FilesList extends StatelessWidget {
                 return CustomListItem(
                   azItem: azItem,
                   string: name,
-                  customListItemView: (BuildContext context) => GestureDetector(
-                    onTap: () async {
-                      await CustomFile.importFile(context, name);
-                      context.read<GlobalModel>().selectedIndex =
-                          Globals.vaultIndex;
-                    },
-                    child: Text(name),
-                  ),
+                  customListItemView: (BuildContext context) => Text(name),
+                  trailing: IconButton(
+                      tooltip: Lang.tr("Import"),
+                      onPressed: () async {
+                        await CustomFile.importFile(context, name);
+                        context
+                            .read<CustomListModel>()
+                            .turnOffSelectVisibility();
+                        context.read<GlobalModel>().selectedIndex =
+                            Globals.vaultIndex;
+                      },
+                      icon: const Icon(Icons.import_export)),
                 );
               },
               indexHintBuilder: (context, hint) => Container(

@@ -82,8 +82,10 @@ class CustomListItem extends StatelessWidget {
     required this.azItem,
     required this.string,
     required this.customListItemView,
+    this.trailing,
   }) : super(key: key);
 
+  final Widget? trailing;
   final AZItem azItem;
   final String string;
   final Function customListItemView;
@@ -147,6 +149,7 @@ class CustomListItem extends StatelessWidget {
                   Icons.vpn_key,
                   color: Theme.of(context).iconTheme.color,
                 ),
+                trailing: trailing,
                 title: customListItemView(context),
               ),
             ],

@@ -35,6 +35,15 @@ class Vault extends CustomPage {
         invisibleActions: [
           Builder(
             builder: (context) => IconButton(
+              tooltip: Lang.tr("Cancel"),
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                context.read<CustomListModel>().turnOffSelectVisibility();
+              },
+            ),
+          ),
+          Builder(
+            builder: (context) => IconButton(
               tooltip: Lang.tr("Delete from vault"),
               icon: const Icon(Icons.delete),
               onPressed: () {
@@ -60,6 +69,14 @@ class Vault extends CustomPage {
           ),
         ],
         visibleActions: [
+          IconButton(
+            tooltip: Lang.tr("Show all"),
+            onPressed: () {
+              context.read<CustomListModel>().turnOffSearchVisibility();
+              context.read<GlobalModel>().notifySearch("");
+            },
+            icon: const Icon(Icons.sort),
+          ),
           IconButton(
             tooltip: Lang.tr("Search"),
             onPressed: () {
