@@ -18,6 +18,7 @@ import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:polipass/widgets/custom_list_item_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class FilesList extends StatelessWidget {
   const FilesList({Key? key}) : super(key: key);
@@ -142,7 +143,8 @@ class FilesList extends StatelessWidget {
               ),
             );
           }
-          return const Center(child: Text("Loading"));
+          return Center(
+              child: SpinKitRing(color: Theme.of(context).primaryColor));
         },
       ),
     );
