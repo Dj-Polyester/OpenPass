@@ -3,7 +3,7 @@ import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/widgets/api/azitem.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/pages/vault/vault_list.dart';
 import 'package:provider/provider.dart';
 
 import 'package:polipass/utils/custom_page.dart';
@@ -12,7 +12,7 @@ import 'package:polipass/utils/globals.dart';
 class CustomListItemModel extends ChangeNotifier {
   CustomListItemModel(
     Locator read, {
-    required this.passkey,
+    required this.string,
   }) {
     globalModel = read<GlobalModel>();
     customListModel = read<CustomListModel>();
@@ -22,7 +22,7 @@ class CustomListItemModel extends ChangeNotifier {
   late CustomListModel customListModel;
   late CustomPageModel customPageModel;
 
-  final PassKey passkey;
+  final String string;
 
   bool expand = false;
 
@@ -42,7 +42,7 @@ class CustomListItemModel extends ChangeNotifier {
   }
 
   void setCheckbox(bool value) {
-    customListModel.updateSelectedItems(passkey.desc, value);
+    customListModel.updateSelectedItems(string, value);
 
     if (value) {
       customListModel.incSelectedNum();
@@ -59,7 +59,7 @@ class CustomListItemModel extends ChangeNotifier {
   }
 
   void toggleCheckbox() {
-    bool value = customListModel.toggleSelectedItems(passkey.desc);
+    bool value = customListModel.toggleSelectedItems(string);
 
     if (value) {
       customListModel.incSelectedNum();
@@ -76,16 +76,16 @@ class CustomListItemModel extends ChangeNotifier {
   }
 }
 
-class PassKeyListItem extends StatelessWidget {
-  const PassKeyListItem({
+class CustomListItem extends StatelessWidget {
+  const CustomListItem({
     Key? key,
     required this.azItem,
-    required this.passkey,
+    required this.string,
     required this.customListItemView,
   }) : super(key: key);
 
   final AZItem azItem;
-  final PassKey passkey;
+  final String string;
   final Function customListItemView;
 
   @override
@@ -94,7 +94,7 @@ class PassKeyListItem extends StatelessWidget {
       lazy: true,
       create: (context) => CustomListItemModel(
         context.read,
-        passkey: passkey,
+        string: string,
       ),
       child: Selector<CustomListModel, bool>(
         selector: (_, customListModel) => customListModel.itemSelectVisible,
@@ -130,9 +130,7 @@ class PassKeyListItem extends StatelessWidget {
               ),
               ListTile(
                 selected: (itemSelectVisible)
-                    ? context
-                        .read<CustomListModel>()
-                        .selectedItems[passkey.desc]!
+                    ? context.read<CustomListModel>().selectedItems[string]!
                     : false,
                 onLongPress: () {
                   // context.read<CustomListModel>().turnOffSearchVisibility();

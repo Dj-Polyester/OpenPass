@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:polipass/pages/files/files.dart';
 import 'package:polipass/pages/settings.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/lang.dart';
@@ -23,7 +24,7 @@ class GlobalModel extends ChangeNotifier {
 
   double fontSize = 16, fontSizeSmall = 14;
   //
-  int _selectedIndex = 0;
+  int _selectedIndex = Globals.vaultIndex;
   int get selectedIndex => _selectedIndex;
   set selectedIndex(int index) {
     _selectedIndex = index;
@@ -42,6 +43,12 @@ class GlobalModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool listFlag = true;
+  void notifyList() {
+    listFlag = !listFlag;
+    notifyListeners();
+  }
+
   String searchStr = "";
   void notifySearch(String value) {
     searchStr = value;
@@ -50,6 +57,7 @@ class GlobalModel extends ChangeNotifier {
 }
 
 class Globals {
+  static const int vaultIndex = 0;
   static const String appName = "OpenPass";
   static const String fileExtension = "key";
 
@@ -78,8 +86,8 @@ class Globals {
       label: Lang.tr("Vault"),
     ),
     BottomNavigationBarItem(
-      icon: const Icon(Icons.settings),
-      label: Lang.tr("Settings"),
+      icon: const Icon(Icons.file_copy),
+      label: Lang.tr("Files"),
     ),
   ];
 
@@ -89,7 +97,7 @@ class Globals {
 
   static List pages = [
     Vault(),
-    Settings(),
+    Files(),
   ];
 
   static bool get debugMode {

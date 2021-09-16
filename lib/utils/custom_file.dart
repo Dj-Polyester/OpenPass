@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:path/path.dart' as path;
 import 'dart:convert';
 import 'dart:io';
@@ -12,40 +14,47 @@ import 'package:polipass/utils/lang.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CustomFile {
-  static Future<void> importFile(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: [Globals.fileExtension],
-    );
-    if (result != null) {
-      var status = await Permission.storage.status;
+  //https://stackoverflow.com/a/17081903/10713877
+  static Future<List<FileSystemEntity>>? listFiles() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    var files = <FileSystemEntity>[];
+    var completer = Completer<List<FileSystemEntity>>();
+    var lister = dir.list(recursive: false);
+    lister.listen((file) => files.add(file),
+        // should also register onError
+        onDone: () => completer.complete(files));
+    return completer.future;
+  }
 
-      if (status.isGranted) {
-        String filePath = result.files.first.path;
+  static Future<void> importFile(BuildContext context, String name) async {
+    var status = await Permission.storage.status;
 
-        File file = File(filePath);
+    if (status.isGranted) {
+      String filePath = path.join(
+          (await getApplicationDocumentsDirectory()).path,
+          "$name.${Globals.fileExtension}");
 
-        List jsonObject = json.decode(file.readAsStringSync());
+      File file = File(filePath);
 
-        print(jsonObject);
+      List jsonObject = json.decode(file.readAsStringSync());
 
-        await KeyStore.fromJson(jsonObject);
+      await KeyStore.passkeys.clear();
+      await KeyStore.fromJson(jsonObject);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(Lang.tr(
-              "Imported the file with the name %s",
-              [path.basename(filePath)],
-            )),
-          ),
-        );
-      } else if (status.isDenied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(Lang.tr("You need to allow access to the storage")),
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(Lang.tr(
+            "Imported the file with the name %s",
+            [path.basename(filePath)],
+          )),
+        ),
+      );
+    } else if (status.isDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(Lang.tr("You need to allow access to the storage")),
+        ),
+      );
     }
   }
 
@@ -57,7 +66,7 @@ class CustomFile {
     if (filename != null) {
       var status = await Permission.storage.request();
       if (status.isGranted) {
-        String? appDoc = await FilePicker.platform.getDirectoryPath();
+        String? appDoc = (await getApplicationDocumentsDirectory()).path;
 
         if (appDoc != null) {
           String fullFilename = "$filename.${Globals.fileExtension}";
@@ -96,6 +105,16 @@ class CustomFile {
           ),
         );
       }
+    }
+  }
+
+  static Future<void> deleteFiles(List<String> names) async {
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    for (var name in names) {
+      String filePath = path.join(dir.path, "$name.${Globals.fileExtension}");
+      File file = File(filePath);
+      file.deleteSync();
     }
   }
 }

@@ -9,6 +9,10 @@ class Lang {
         LangItem(
       tr: "Hiç anahtarınız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
     ),
+    "You do not have any key files. Please click the add button below to add files.":
+        LangItem(
+      tr: "Hiç dosyanız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
+    ),
     "Selected %s": LangItem(
       tr: "%s seçili",
     ),
@@ -47,6 +51,9 @@ class Lang {
     //
     "Vault": LangItem(
       tr: "Şifrelerim",
+    ),
+    "Files": LangItem(
+      tr: "Dosyalarım",
     ),
     "Settings": LangItem(
       tr: "Ayarlar",
@@ -158,6 +165,9 @@ class Lang {
     ),
     "Deleted the key sets from vault": LangItem(
       tr: "Anahtarlar silindi",
+    ),
+    "Deleted the files": LangItem(
+      tr: "Dosyalar silindi",
     ),
     "Deleted the key": LangItem(
       tr: "Şifre silindi",

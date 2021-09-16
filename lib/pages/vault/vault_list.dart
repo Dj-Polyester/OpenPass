@@ -14,8 +14,8 @@ import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:polipass/widgets/custom_list_item_view.dart';
 import 'package:provider/provider.dart';
 
-class PasskeyList extends StatelessWidget {
-  const PasskeyList({Key? key}) : super(key: key);
+class VaultList extends StatelessWidget {
+  const VaultList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +81,11 @@ class PasskeyList extends StatelessWidget {
               PassKey passkey = passkeysRefined[i];
               AZItem azItem = azItems[i];
 
-              return PassKeyListItem(
+              return CustomListItem(
                 azItem: azItem,
-                passkey: passkey,
+                string: passkey.desc,
                 customListItemView: (BuildContext context) => PassKeyItemView(
-                  passkey: context.select(
-                      (CustomListItemModel customListItemModel) =>
-                          customListItemModel.passkey),
+                  passkey: passkey,
                 ),
               );
             },

@@ -4,7 +4,7 @@ import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
-import 'package:polipass/widgets/custom_list.dart';
+import 'package:polipass/pages/vault/vault_list.dart';
 import 'package:polipass/widgets/custom_list_item.dart';
 import 'package:polipass/old/custom_list_item_checkbox.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +12,13 @@ import 'package:provider/provider.dart';
 class CustomListItem extends StatelessWidget {
   const CustomListItem({
     Key? key,
-    required this.passkey,
+    required this.string,
     required this.customListItemView,
   }) : super(key: key);
 
   final Function customListItemView;
 
-  final PassKey passkey;
+  final String string;
   final Color borderColor = const Color(0xFFCCCCCC),
       backgroundColor = const Color(0xFFEEEEEE),
       splashColor = const Color(0xFFDDDDDD);
@@ -29,7 +29,7 @@ class CustomListItem extends StatelessWidget {
       lazy: true,
       create: (context) => CustomListItemModel(
         context.read,
-        passkey: passkey,
+        string: string,
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -61,7 +61,7 @@ class CustomListItem extends StatelessWidget {
                     CustomAnimatedSize(
                       child: Visibility(
                         visible: itemSelectVisible,
-                        child: CustomListItemCheckbox(mapKey: passkey.desc),
+                        child: CustomListItemCheckbox(mapKey: string),
                       ),
                     ),
                     Expanded(child: customListItemView(context)),

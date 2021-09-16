@@ -23,21 +23,10 @@ import 'package:tuple/tuple.dart';
 
 class VaultDialogModel extends ChangeNotifier {
   VaultDialogModel({
-    this.settingsHeightMax = 400,
     required this.globalPasskey,
-  }) : settingsHeight = settingsHeightMax;
+  });
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-  final double settingsHeightMax;
-  double settingsHeight;
-
-  bool isSettingsVisible = false;
-  void toggleVisibility() {
-    isSettingsVisible = !isSettingsVisible;
-    settingsHeight = (settingsHeight == 0) ? settingsHeightMax : 0;
-    notifyListeners();
-  }
 
   bool vaultDialogFlag = true;
   void notifyVaultDialog() {

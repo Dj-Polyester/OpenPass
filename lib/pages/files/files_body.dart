@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:polipass/pages/files/files_list.dart';
 
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
@@ -12,8 +13,8 @@ import 'package:polipass/widgets/api/custom_text.dart';
 
 import 'package:provider/provider.dart';
 
-class VaultBody extends StatelessWidget {
-  VaultBody({Key? key}) : super(key: key);
+class FilesBody extends StatelessWidget {
+  FilesBody({Key? key}) : super(key: key);
 
   CustomTextWithProvider searchWidget(BuildContext context) =>
       CustomTextWithProvider(
@@ -43,7 +44,7 @@ class VaultBody extends StatelessWidget {
             ),
           ),
         ),
-        const Expanded(child: VaultList())
+        const Expanded(child: FilesList())
       ],
     );
   }
