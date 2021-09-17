@@ -54,6 +54,10 @@ class GlobalModel extends ChangeNotifier {
     searchStr = value;
     notifyListeners();
   }
+
+  bool saved = true;
+  void unSave() => saved = false;
+  void save() => saved = true;
 }
 
 class Globals {

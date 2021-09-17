@@ -10,6 +10,7 @@ import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_button.dart';
 import 'package:polipass/widgets/api/custom_checkbox.dart';
 import 'package:polipass/widgets/api/custom_divider.dart';
+import 'package:polipass/widgets/api/custom_snackbar.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:polipass/widgets/custom_vault_text.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +44,8 @@ class VaultDialogModel extends ChangeNotifier {
       hintText: Lang.tr("Enter a description"),
       validator: (String? value) => Validator(text: value).validateAll(
         value: value,
-        conditions: [globalPasskey == null, true],
-        validators: [(v) => v.validateDesc(), (v) => v.validateInput()],
+        conditions: [true],
+        validators: [(v) => v.validateDesc()],
       ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.desc,
     ),
@@ -161,7 +162,7 @@ class VaultDialogModel extends ChangeNotifier {
         ),
     //SUBMIT
     "submit": (BuildContext context) => TextButton(
-          onPressed: () {
+          onPressed: () async {
             FocusScope.of(context).unfocus();
 
             // Validate returns true if the form is valid, or false otherwise.
@@ -197,23 +198,20 @@ class VaultDialogModel extends ChangeNotifier {
               if (globalPasskey == null) {
                 //INSERT
                 snackbarMsg = "Added the key set with the description %s";
-                if (KeyStore.passkeys.get(passkey.desc) == null) {
-                  KeyStore.passkeys.put(passkey.desc, passkey);
-                }
+                await KeyStore.insert(context, passkey, passkey.desc);
               } else {
                 //UPDATE
                 snackbarMsg = "Updated the key set with the description %s";
-                // if (globalPasskey!.desc != passkey.desc) {
-                //   KeyStore.passkeys.delete(globalPasskey!.desc);
-                // }
-                KeyStore.passkeys.put(passkey.desc, passkey);
+                await KeyStore.update(
+                    context, passkey, passkey.desc, globalPasskey!.desc);
               }
 
               // quit
               Navigator.pop(context);
 
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(Lang.tr(snackbarMsg, [passkey.desc]))),
+                CustomSnackbar(
+                    content: Text(Lang.tr(snackbarMsg, [passkey.desc]))),
               );
             }
           },

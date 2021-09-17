@@ -18,6 +18,7 @@ import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
+import 'package:polipass/widgets/api/custom_snackbar.dart';
 
 import 'package:provider/provider.dart';
 import 'package:polipass/widgets/api/custom_appbar.dart';
@@ -46,7 +47,7 @@ class Vault extends CustomPage {
             builder: (context) => IconButton(
               tooltip: Lang.tr("Delete from vault"),
               icon: const Icon(Icons.delete),
-              onPressed: () {
+              onPressed: () async {
                 Iterable<String> keys = context
                     .read<CustomListModel>()
                     .selectedItems
@@ -54,11 +55,12 @@ class Vault extends CustomPage {
                     .where((element) => element.value)
                     .map((e) => e.key);
 
-                KeyStore.passkeys.deleteAll(keys);
+                await KeyStore.delete(context, keys);
+
                 context.read<CustomListModel>().turnOffSelectVisibility();
                 context.read<GlobalModel>().notifyHive();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  CustomSnackbar(
                     content: Text(
                       Lang.tr("Deleted the key sets from vault"),
                     ),

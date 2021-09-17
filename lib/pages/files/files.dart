@@ -19,6 +19,7 @@ import 'package:polipass/utils/custom_page.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
+import 'package:polipass/widgets/api/custom_snackbar.dart';
 
 import 'package:provider/provider.dart';
 import 'package:polipass/widgets/api/custom_appbar.dart';
@@ -59,7 +60,7 @@ class Files extends CustomPage {
                 context.read<CustomListModel>().turnOffSelectVisibility();
                 context.read<GlobalModel>().notifyList();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  CustomSnackbar(
                     content: Text(
                       Lang.tr("Deleted the files"),
                     ),

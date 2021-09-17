@@ -4,15 +4,51 @@ import 'package:flutter/cupertino.dart';
 class Lang {
   //TRANSLATIONS COME HERE//////////////////////////////
   static final Map<String, LangItem> _entries = {
+    //FILES
+    "You do not have any key files. Please click the add button below to add files.":
+        LangItem(
+      tr: "Hiç dosyanız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
+    ),
+    "File name": LangItem(
+      tr: "Dosya ismi",
+    ),
+    "Enter a file name": LangItem(
+      tr: "Bir dosya ismi giriniz",
+    ),
+    "Saved the file with the name %s": LangItem(
+      tr: "Dosya %s adıyla kaydedildi",
+    ),
+    "Imported the file with the name %s": LangItem(
+      tr: "%s isimli dosya içe aktarıldı",
+    ),
+    "Cannot save the file to documents because a file with the same name exists":
+        LangItem(
+      tr: "Dosya kaydedilemiyor, çünkü aynı isimli bir dosya mevcut",
+    ),
+    "You need to allow access to the storage": LangItem(
+      tr: "Depolamaya erişim izni vermeniz gerekiyor",
+    ),
+    "Deleted the files": LangItem(
+      tr: "Dosyalar silindi",
+    ),
+
+    "Your current configuration is not saved as a file yet. Overwrite?":
+        LangItem(
+      tr: "Mevcut konfigürasyonunuz henüz kaydedilmemiş. Üzerine yazılsın mı?",
+    ),
+    "Yes, overwrite": LangItem(
+      tr: "Evet, yaz",
+    ),
+    "No, I will save my configuration": LangItem(
+      tr: "Hayır, mevcut konfigürasyonumu kaydetmek istiyorum",
+    ),
+
     //VAULT
     "Your Vault is Empty. Please click the add button below to add keys.":
         LangItem(
       tr: "Hiç anahtarınız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
     ),
-    "You do not have any key files. Please click the add button below to add files.":
-        LangItem(
-      tr: "Hiç dosyanız yok. Eklemek için aşağıdaki ekleme tuşuna basınız.",
-    ),
+
     "Selected %s": LangItem(
       tr: "%s seçili",
     ),
@@ -66,26 +102,6 @@ class Lang {
     ),
     "Options": LangItem(
       tr: "Seçenekler",
-    ),
-    //
-    "File name": LangItem(
-      tr: "Dosya ismi",
-    ),
-    "Enter a file name": LangItem(
-      tr: "Bir dosya ismi giriniz",
-    ),
-    "Saved the file with the name %s to documents": LangItem(
-      tr: "Dosya %s adıyla dokümanlarınıza eklendi",
-    ),
-    "Imported the file with the name %s": LangItem(
-      tr: "%s isimli dosya içe aktarıldı",
-    ),
-    "Cannot save the file to documents because a file with the same name exists":
-        LangItem(
-      tr: "Dosya kaydedilemiyor, çünkü aynı isimli bir dosya mevcut",
-    ),
-    "You need to allow access to the storage": LangItem(
-      tr: "Depolamaya erişim izni vermeniz gerekiyor",
     ),
     //
     "Name": LangItem(
@@ -171,9 +187,6 @@ class Lang {
     ),
     "Deleted the key sets from vault": LangItem(
       tr: "Anahtarlar silindi",
-    ),
-    "Deleted the files": LangItem(
-      tr: "Dosyalar silindi",
     ),
     "Deleted the key": LangItem(
       tr: "Şifre silindi",
