@@ -35,7 +35,8 @@ class KeyStore {
   static Future<void> delete(
       m.BuildContext context, Iterable<dynamic> keys) async {
     passkeys.deleteAll(keys);
-    context.read<PersistentGlobalsModel>().saved = false;
+
+    context.read<PersistentGlobalsModel>().saved = passkeys.values.isEmpty;
   }
 
   /// Uses AES. Note the IV size should be block size (128)

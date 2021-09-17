@@ -27,9 +27,12 @@ void main() async {
   await Hive.initFlutter();
   await KeyStore.openBox();
   await Globals.openBox();
-  if (Globals.persistentGlobalsModel.requirePasswd) {
-    while (!(await CustomLocalAuth.authenticate()));
-  }
+  // if (Globals.persistentGlobalsModel.requirePasswd) {
+  //   bool authed = false;
+  //   while (!authed) {
+  //     authed = await CustomLocalAuth.authenticate();
+  //   }
+  // }
   runApp(const MyApp());
 }
 
@@ -43,7 +46,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
   }
@@ -57,13 +59,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
-        if (Globals.persistentGlobalsModel.requirePasswd) {
-          while (!(await CustomLocalAuth.authenticate()));
-        }
+        // if (Globals.persistentGlobalsModel.requirePasswd) {
+        //   bool authed = false;
+        //   while (!authed) {
+        //     authed = await CustomLocalAuth.authenticate();
+        //   }
+        // }
 
         await Globals.openBox();
         break;
@@ -76,7 +80,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Future<bool> didPopRoute() async {
-    // TODO: implement didPopRoute
     await Globals.close();
     return super.didPopRoute();
   }
