@@ -7,9 +7,12 @@ import 'package:crypto/crypto.dart';
 
 class KeyStore {
   //passkeys
-  static const String passkeysStr = "passkeys";
+  static const String passkeysStr = "passkeys",
+      encryptionKeyStr = "encryptionKey",
+      slaveKeyStr = "slaveKey";
   static Box<PassKey>? _passkeys;
-  static Box<PassKey> passkeys = Hive.box<PassKey>(passkeysStr);
+  static Box<PassKey> get passkeys =>
+      _passkeys ?? (_passkeys = Hive.box<PassKey>(passkeysStr));
 
   static List toJson() => passkeys.values.map((e) => e.toMap()).toList();
   static Future<void> fromJson(List entries) async => await passkeys.putAll(
@@ -18,7 +21,7 @@ class KeyStore {
 
   static Future<void> openBox() async {
     var encryptionKey =
-        base64Url.decode((await _secureStorage.read(key: 'encryptionKey'))!);
+        base64Url.decode((await _secureStorage.read(key: encryptionKeyStr))!);
 
     if (Hive.isBoxOpen(passkeysStr)) {
       Hive.close();
@@ -26,11 +29,10 @@ class KeyStore {
 
     Hive.registerAdapter(PassKeyAdapter());
     Hive.registerAdapter(PassKeyItemAdapter());
-    var encryptedBox = await Hive.openBox<PassKey>(
+    await Hive.openBox<PassKey>(
       passkeysStr,
       encryptionCipher: HiveAesCipher(encryptionKey),
     );
-    // KeyStore.passkeys.clear();
   }
 
   //secureStorage
@@ -40,15 +42,15 @@ class KeyStore {
   static Future<void> storeStorageKey(List<int> masterKey) async {
     //https://developerb2.medium.com/store-data-securely-with-hive-flutter-cbad35981880
     var containsEncryptionKey =
-        await _secureStorage.containsKey(key: 'encryptionKey');
+        await _secureStorage.containsKey(key: encryptionKeyStr);
     if (!containsEncryptionKey) {
       List<int> slaveKey = Hive.generateSecureKey();
       List<int> encryptionKey = sha256.convert(masterKey + slaveKey).bytes;
 
       await _secureStorage.write(
-          key: 'slaveKey', value: base64UrlEncode(slaveKey));
+          key: slaveKeyStr, value: base64UrlEncode(slaveKey));
       await _secureStorage.write(
-          key: 'encryptionKey', value: base64UrlEncode(encryptionKey));
+          key: encryptionKeyStr, value: base64UrlEncode(encryptionKey));
     }
   }
 

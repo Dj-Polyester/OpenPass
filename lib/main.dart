@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
+import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/custom_theme.dart';
 
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await KeyStore.deleteStorageKeys();
+  // await KeyStore.deleteStorageKeys();
   await KeyStore.storeStorageKey([1, 2, 3, 4]);
 
   await Hive.initFlutter();
