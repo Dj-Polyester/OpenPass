@@ -44,8 +44,8 @@ class VaultDialogModel extends ChangeNotifier {
       hintText: Lang.tr("Enter a description"),
       validator: (String? value) => Validator(text: value).validateAll(
         value: value,
-        conditions: [true],
-        validators: [(v) => v.validateDesc()],
+        conditions: [globalPasskey == null, true],
+        validators: [(v) => v.validateDesc(), (v) => v.validateInput()],
       ),
       inputText: (globalPasskey == null) ? null : globalPasskey!.desc,
     ),
