@@ -1,26 +1,26 @@
+import 'dart:convert';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/custom_theme.dart';
-import 'package:polipass/utils/lang.dart';
 
 import 'package:provider/provider.dart';
 
 import 'utils/custom_page.dart';
 import 'utils/globals.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await KeyStore.deleteStorageKeys();
+  await KeyStore.storeStorageKey([1, 2, 3, 4]);
+
   await Hive.initFlutter();
-  Hive.registerAdapter(PassKeyAdapter());
-  Hive.registerAdapter(PassKeyItemAdapter());
-  await Hive.openBox<PassKey>('passkeys');
-  // if (Globals.debugMode) {
-  //   KeyStore.passkeys.clear();
-  // }
+  await KeyStore.openBox();
 
   runApp(const MyApp());
 }

@@ -1,13 +1,9 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
 
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:azlistview/azlistview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/db/db.dart';
-import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
@@ -15,7 +11,6 @@ import 'package:polipass/widgets/api/azitem.dart';
 import 'package:polipass/widgets/api/custom_divider.dart';
 import 'package:polipass/widgets/api/custom_list.dart';
 import 'package:polipass/widgets/api/custom_list_item.dart';
-import 'package:polipass/widgets/custom_list_item_view.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
