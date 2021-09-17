@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
+import 'package:polipass/models/globals.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/custom_theme.dart';
@@ -14,6 +16,8 @@ import 'utils/custom_page.dart';
 import 'utils/globals.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+void init() async {}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -22,6 +26,7 @@ void main() async {
 
   await Hive.initFlutter();
   await KeyStore.openBox();
+  await Globals.openBox();
 
   runApp(const MyApp());
 }
@@ -33,24 +38,59 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
 
-    Hive.close();
+  @override
+  void dispose() async {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+    await Globals.close();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        await Globals.openBox();
+        break;
+      case AppLifecycleState.paused:
+        Globals.close();
+        break;
+      default:
+    }
+  }
+
+  @override
+  Future<bool> didPopRoute() async {
+    // TODO: implement didPopRoute
+    await Globals.close();
+    return super.didPopRoute();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => GlobalModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: Globals.persistentGlobalsModel),
+        ChangeNotifierProvider.value(value: Globals.globalModel),
+      ],
       builder: (context, _) {
         return MaterialApp(
           title: Globals.appName,
-          theme: CustomTheme.themes[context
-              .select((GlobalModel globalModel) => globalModel.themeData)],
-          darkTheme: CustomTheme.themes["Dark"],
+          theme: CustomTheme.themes[context.select(
+              (PersistentGlobalsModel persistentGlobalsModel) =>
+                  persistentGlobalsModel.themeData)],
+          darkTheme: CustomTheme.themes[context.select(
+              (PersistentGlobalsModel persistentGlobalsModel) =>
+                  persistentGlobalsModel.darkThemeData)],
           initialRoute: "/",
           routes: Globals.routes.cast(),
         );
@@ -61,7 +101,6 @@ class _MyAppState extends State<MyApp> {
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Selector<GlobalModel, int>(

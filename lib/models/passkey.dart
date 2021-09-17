@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'passkey.g.dart';
 
@@ -31,7 +31,7 @@ class PassKeyModel extends ChangeNotifier {
 }
 
 @HiveType(typeId: 1)
-class PassKeyItem {
+class PassKeyItem extends HiveObject {
   PassKeyItem({
     required this.name,
     required this.value,

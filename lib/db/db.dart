@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart' as m;
+import 'package:polipass/models/globals.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -17,7 +18,7 @@ class KeyStore {
   static Future<void> insert(
       m.BuildContext context, PassKey passkey, String desc) async {
     KeyStore.passkeys.put(desc, passkey);
-    context.read<GlobalModel>().unSave();
+    context.read<PersistentGlobalsModel>().saved = false;
   }
 
   static Future<void> update(m.BuildContext context, PassKey passkey,
@@ -26,13 +27,13 @@ class KeyStore {
       KeyStore.passkeys.delete(oldDesc);
     }
     KeyStore.passkeys.put(desc, passkey);
-    context.read<GlobalModel>().unSave();
+    context.read<PersistentGlobalsModel>().saved = false;
   }
 
   static Future<void> delete(
       m.BuildContext context, Iterable<dynamic> keys) async {
     KeyStore.passkeys.deleteAll(keys);
-    context.read<GlobalModel>().unSave();
+    context.read<PersistentGlobalsModel>().saved = false;
   }
 
   /// Uses AES. Note the IV size should be block size (128)
@@ -81,10 +82,6 @@ class KeyStore {
   static Future<void> openBox() async {
     List<int> encryptionKey =
         base64Url.decode((await secureStorage.read(key: encryptionKeyStr))!);
-
-    if (Hive.isBoxOpen(passkeysStr)) {
-      Hive.close();
-    }
 
     Hive.registerAdapter(PassKeyAdapter());
     Hive.registerAdapter(PassKeyItemAdapter());

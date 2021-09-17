@@ -251,6 +251,12 @@ class Lang {
     "Set theme": LangItem(
       tr: "Tema ayarla",
     ),
+    "Set dark theme": LangItem(
+      tr: "Koyu tema ayarla",
+    ),
+    "Require password": LangItem(
+      tr: "Şifre iste",
+    ),
   };
   //////////////////////////////////////////////////////
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:polipass/models/globals.dart';
 import 'package:polipass/pages/files/dialogs/confirmation_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:encrypt/encrypt.dart';
@@ -61,13 +62,13 @@ class CustomFile {
       List jsonObject =
           json.decode(await KeyStore.decrypt(file.readAsStringSync()));
 
-      bool saved = context.read<GlobalModel>().saved;
+      bool saved = context.read<PersistentGlobalsModel>().saved;
 
       if (saved ||
           (!saved && ((await _confirmation(context)) == Confirmation.yes))) {
         await KeyStore.passkeys.clear();
         await KeyStore.fromJson(jsonObject);
-        context.read<GlobalModel>().save();
+        context.read<PersistentGlobalsModel>().saved = true;
 
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(
@@ -109,7 +110,8 @@ class CustomFile {
           String jsonStr =
               await KeyStore.encrypt(json.encode(KeyStore.toJson()));
           file.writeAsString(jsonStr);
-          context.read<GlobalModel>().save();
+          //SAVE
+          context.read<PersistentGlobalsModel>().saved = true;
           snackbarMsg = "Saved the file with the name %s";
         }
 

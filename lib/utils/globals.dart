@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:polipass/models/globals.dart';
 import 'package:polipass/pages/files/files.dart';
 import 'package:polipass/pages/settings.dart';
 import 'package:polipass/pages/vault/vault.dart';
@@ -15,13 +17,6 @@ class GlobalModel extends ChangeNotifier {
           .provide(CustomPageModel(title: Globals.navbarItems[i].label));
     }
   }
-  //SETTINGS
-  String themeData = "Light";
-  void setTheme(String newThemeData) {
-    themeData = newThemeData;
-    notifyListeners();
-  }
-
   double fontSize = 16, fontSizeSmall = 14;
   //
   int _selectedIndex = Globals.vaultIndex;
@@ -54,10 +49,6 @@ class GlobalModel extends ChangeNotifier {
     searchStr = value;
     notifyListeners();
   }
-
-  bool saved = true;
-  void unSave() => saved = false;
-  void save() => saved = true;
 }
 
 class Globals {
@@ -93,6 +84,10 @@ class Globals {
       icon: const Icon(Icons.file_copy),
       label: Lang.tr("Files"),
     ),
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.settings),
+      label: Lang.tr("Settings"),
+    ),
   ];
 
   static Map routes = {
@@ -102,11 +97,36 @@ class Globals {
   static List pages = [
     Vault(),
     Files(),
+    Settings(),
   ];
 
   static bool get debugMode {
     bool inDebugMode = false;
     assert(inDebugMode = true);
     return inDebugMode;
+  }
+
+  static String globalsStr = "globals";
+
+  static GlobalModel globalModel = GlobalModel();
+  static late PersistentGlobalsModel persistentGlobalsModel;
+
+  static Future<void> openBox() async {
+    PersistentGlobalsModelAdapter persistentGlobalsModelAdapter =
+        PersistentGlobalsModelAdapter();
+
+    if (!Hive.isAdapterRegistered(persistentGlobalsModelAdapter.typeId)) {
+      Hive.registerAdapter(PersistentGlobalsModelAdapter());
+    }
+
+    Box<PersistentGlobalsModel> globalsBox =
+        await Hive.openBox<PersistentGlobalsModel>(globalsStr);
+    persistentGlobalsModel =
+        globalsBox.get(globalsStr) ?? PersistentGlobalsModel();
+  }
+
+  static Future<void> close() async {
+    Hive.box<PersistentGlobalsModel>(globalsStr)
+        .put(globalsStr, persistentGlobalsModel);
   }
 }
