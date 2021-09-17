@@ -9,25 +9,27 @@ import 'package:polipass/models/globals.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/custom_theme.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:polipass/utils/local_auth.dart';
+import 'package:polipass/utils/master_key.dart';
 
 import 'package:provider/provider.dart';
 
 import 'utils/custom_page.dart';
 import 'utils/globals.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-void init() async {}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // await KeyStore.deleteStorageKeys();
-  await KeyStore.storeStorageKey([1, 2, 3, 4]);
+  await KeyStore.changePasswd(MASTERKEY);
 
   await Hive.initFlutter();
   await KeyStore.openBox();
   await Globals.openBox();
-
+  if (Globals.persistentGlobalsModel.requirePasswd) {
+    while (!(await CustomLocalAuth.authenticate()));
+  }
   runApp(const MyApp());
 }
 
@@ -59,6 +61,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
+        if (Globals.persistentGlobalsModel.requirePasswd) {
+          while (!(await CustomLocalAuth.authenticate()));
+        }
+
         await Globals.openBox();
         break;
       case AppLifecycleState.paused:

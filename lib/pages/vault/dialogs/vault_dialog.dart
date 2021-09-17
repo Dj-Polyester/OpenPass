@@ -1,8 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/dialogs/add_custom_key.dart';
-import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
+import 'package:polipass/pages/vault/dialogs/passwd_prompt.dart';
+import 'package:polipass/pages/vault/dialogs/single_input_prompt.dart';
 import 'package:polipass/utils/generator.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
@@ -135,27 +135,34 @@ class VaultDialogModel extends ChangeNotifier {
 
   //dialog widgets
 
-  Future Function()? updateVaultInputsView(BuildContext context) {
-    return () async {
-      PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
-        context: context,
-        builder: (_) => AddCustomKey(globalPasskey: globalPasskey),
-      );
-      if (passKeyitem != null) {
-        addCustomInput(passKeyitem);
-      }
-    };
-  }
-
   late final Map<String, dynamic> dialogButtons = {
     "addCustom": (BuildContext context) => SecondaryButton(
           onPressed: () async {
-            PassKeyItem? passKeyitem = await showDialog<PassKeyItem>(
+            String? keyname = await showDialog<String>(
               context: context,
-              builder: (_) => AddCustomKey(globalPasskey: globalPasskey),
+              builder: (_) => AlertDialog(
+                  content: SingleInputPrompt(
+                labelText: Lang.tr("Enter a name"),
+                hintText: Lang.tr("Name"),
+              )),
             );
-            if (passKeyitem != null) {
-              addCustomInput(passKeyitem);
+
+            if (keyname != null) {
+              PassKeyItem passkeyItem = PassKeyItem(name: keyname, value: "");
+
+              PassKeyItem? tmp = await showDialog<PassKeyItem>(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: EditCustomKey(
+                    globalPasskey: globalPasskey,
+                    globalPasskeyItem: passkeyItem,
+                  ),
+                ),
+              );
+
+              if (tmp != null) {
+                addCustomInput(tmp);
+              }
             }
           },
           child: Text(Lang.tr("+ Add a custom key")),

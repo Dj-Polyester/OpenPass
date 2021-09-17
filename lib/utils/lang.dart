@@ -251,11 +251,22 @@ class Lang {
     "Set theme": LangItem(
       tr: "Tema ayarla",
     ),
+    "Sets the theme used in the application.": LangItem(
+      tr: "Uygulama içinde kullanılan temayı değiştirir.",
+    ),
     "Set dark theme": LangItem(
       tr: "Koyu tema ayarla",
     ),
+    "Sets the theme used in the application when the dark theme in system settings is turned on. Not supported in devices without the dark theme support.":
+        LangItem(
+      tr: "Sistem ayarlarında koyu tema ayarlandığında uygulama içinde kullanılan temayı değiştirir. Koyu temanın ayarlanamadığı cihazlarda desteklenmemektedir.",
+    ),
     "Require password": LangItem(
       tr: "Şifre iste",
+    ),
+    "Prompts for password whenever the app is opened. Uses biometrics authentication in supported devices.":
+        LangItem(
+      tr: "Uygulama her açıldığında şifre sorar. Destekli cihazlarda biyometrik giriş kullanılabilmektedir.",
     ),
   };
   //////////////////////////////////////////////////////

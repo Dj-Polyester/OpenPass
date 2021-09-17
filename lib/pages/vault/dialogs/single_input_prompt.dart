@@ -8,13 +8,20 @@ import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/validator.dart';
 
-class SingleInputDialog extends StatelessWidget {
-  SingleInputDialog({Key? key}) : super(key: key);
+class SingleInputPrompt extends StatelessWidget {
+  SingleInputPrompt({
+    Key? key,
+    required this.labelText,
+    required this.hintText,
+    this.obscureText = false,
+  }) : super(key: key);
 
   void Function(BuildContext, String)? callback;
+  bool obscureText;
 
   PassKey? globalPasskey;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final String labelText, hintText;
 
   CustomCheckboxWithProvider customCheckboxWithProvider =
       CustomCheckboxWithProvider();
@@ -23,16 +30,17 @@ class SingleInputDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     callback ??= (context, name) => Navigator.pop(context, name);
     CustomTextWithProvider singleNameInput = CustomTextWithProvider(
-      labelText: Lang.tr("File name"),
-      hintText: Lang.tr("Enter a file name"),
+      labelText: labelText,
+      hintText: hintText,
       validator: (String? value) => Validator(text: value).validateAll(
         value: value,
         validators: [(v) => v.validateInput()],
       ),
+      obscureText: obscureText,
     );
 
-    return AlertDialog(
-      content: Wrap(children: [
+    return Wrap(
+      children: [
         Form(
           key: formKey,
           child: Column(
@@ -52,7 +60,7 @@ class SingleInputDialog extends StatelessWidget {
             ],
           ),
         ),
-      ]),
+      ],
     );
   }
 }

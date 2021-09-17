@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/dialogs/single_input_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/single_input_prompt.dart';
 import 'package:polipass/pages/vault/vault_body.dart';
 import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/custom_file.dart';

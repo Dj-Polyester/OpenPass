@@ -1,6 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/models/passkey.dart';
-import 'package:polipass/pages/vault/dialogs/edit_custom_key.dart';
+import 'package:polipass/pages/vault/dialogs/passwd_prompt.dart';
 import 'package:polipass/pages/vault/dialogs/vault_dialog.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/utils/validator.dart';
@@ -68,9 +68,11 @@ class CustomVaultTextWithProvider extends StatelessWidget {
 
                     PassKeyItem? tmp = await showDialog<PassKeyItem>(
                       context: context,
-                      builder: (_) => EditCustomKey(
-                        globalPasskey: globalPasskey,
-                        globalPasskeyItem: passKeyitem,
+                      builder: (_) => AlertDialog(
+                        content: EditCustomKey(
+                          globalPasskey: globalPasskey,
+                          globalPasskeyItem: passKeyitem,
+                        ),
                       ),
                     );
                     if (tmp != null) {

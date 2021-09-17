@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/models/globals.dart';
@@ -6,6 +9,7 @@ import 'package:polipass/pages/settings.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:provider/provider.dart';
+import 'package:hive/src/util/extensions.dart';
 
 import '../main.dart';
 import 'custom_page.dart';
@@ -129,4 +133,6 @@ class Globals {
     Hive.box<PersistentGlobalsModel>(globalsStr)
         .put(globalsStr, persistentGlobalsModel);
   }
+
+  static final String masterKey = base64Encode(Random.secure().nextBytes(32));
 }

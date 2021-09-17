@@ -38,4 +38,8 @@ class PersistentGlobalsModel extends HiveObject with ChangeNotifier {
     _darkThemeData = newval;
     notifyListeners();
   }
+
+  @HiveField(4)
+  bool firstTime = true;
+  void setFirstTime() => firstTime = false;
 }

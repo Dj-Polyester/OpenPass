@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:crypto/crypto.dart';
+import 'package:hive/hive.dart';
 import 'package:polipass/models/globals.dart';
 import 'package:polipass/pages/files/dialogs/confirmation_dialog.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +15,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:polipass/db/db.dart';
-import 'package:polipass/pages/vault/dialogs/single_input_dialog.dart';
+import 'package:polipass/pages/vault/dialogs/single_input_prompt.dart';
 import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:polipass/widgets/api/custom_snackbar.dart';
+import 'package:hive/src/util/extensions.dart';
 
 class CustomFile {
   static Directory? _filesDir;
@@ -59,8 +63,10 @@ class CustomFile {
 
       File file = File(filePath);
 
-      List jsonObject =
-          json.decode(await KeyStore.decrypt(file.readAsStringSync()));
+      String encryptionKey =
+          (await KeyStore.secureStorage.read(key: KeyStore.encryptionKeyStr))!;
+      List jsonObject = json.decode(
+          await KeyStore.decrypt(file.readAsStringSync(), encryptionKey));
 
       bool saved = context.read<PersistentGlobalsModel>().saved;
 
@@ -91,7 +97,11 @@ class CustomFile {
   static Future<void> exportFile(BuildContext context) async {
     String? filename = await showDialog<String>(
       context: context,
-      builder: (_) => SingleInputDialog(),
+      builder: (_) => AlertDialog(
+          content: SingleInputPrompt(
+        labelText: Lang.tr("Enter a name"),
+        hintText: Lang.tr("Name"),
+      )),
     );
     if (filename != null) {
       var status = await Permission.storage.request();
@@ -107,8 +117,10 @@ class CustomFile {
           snackbarMsg =
               "Cannot save the file to documents because a file with the same name exists";
         } else {
-          String jsonStr =
-              await KeyStore.encrypt(json.encode(KeyStore.toJson()));
+          String encryptionKey = (await KeyStore.secureStorage
+              .read(key: KeyStore.encryptionKeyStr))!;
+          String jsonStr = await KeyStore.encrypt(
+              json.encode(KeyStore.toJson()), encryptionKey);
           file.writeAsString(jsonStr);
           //SAVE
           context.read<PersistentGlobalsModel>().saved = true;

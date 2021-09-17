@@ -28,14 +28,18 @@ class Settings extends CustomPage {
             color: Theme.of(context).iconTheme.color,
           ),
           title: Text(Lang.tr("Set theme")),
+          subtitle: Text(Lang.tr("Sets the theme used in the application.")),
           trailing: ThemeDropdownBox(),
         ),
+        const CustomDivider(),
         ListTile(
           leading: Icon(
             Icons.image,
             color: Theme.of(context).iconTheme.color,
           ),
           title: Text(Lang.tr("Set dark theme")),
+          subtitle: Text(Lang.tr(
+              "Sets the theme used in the application when the dark theme in system settings is turned on. Not supported in devices without the dark theme support.")),
           trailing: DarkThemeDropdownBox(),
         ),
         const CustomDivider(),
@@ -45,6 +49,8 @@ class Settings extends CustomPage {
             color: Theme.of(context).iconTheme.color,
           ),
           title: Text(Lang.tr("Require password")),
+          subtitle: Text(Lang.tr(
+              "Prompts for password whenever the app is opened. Uses biometrics authentication in supported devices.")),
           trailing: Switch.adaptive(
             value: context.select(
                 (PersistentGlobalsModel persistentGlobalsModel) =>

@@ -16,10 +16,9 @@ import 'package:polipass/widgets/api/custom_text_checkbox_slider.dart';
 import 'package:polipass/widgets/custom_text_secret.dart';
 import 'package:polipass/utils/validator.dart';
 
-class EditCustomKeyModel extends ChangeNotifier {
-  EditCustomKeyModel({
+class PasswdPrompt extends ChangeNotifier {
+  PasswdPrompt({
     this.settingsHeightMax = 400,
-    required this.globalPasskey,
     required this.globalPasskeyItem,
   }) : settingsHeight = settingsHeightMax;
   final double settingsHeightMax;
@@ -45,7 +44,6 @@ class EditCustomKeyModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final PassKey? globalPasskey;
   PassKeyItem? globalPasskeyItem;
   PassKeyModel globalPassKeyModel = PassKeyModel();
 
@@ -135,13 +133,13 @@ class EditCustomKeyModel extends ChangeNotifier {
                   : "Updated the key with the name %s";
 
               globalPasskeyItem!.value = context
-                  .read<EditCustomKeyModel>()
+                  .read<PasswdPrompt>()
                   .dialogKeyInput
                   .textPasswdModel
                   .controller
                   .text;
               globalPasskeyItem!.isSecret = context
-                  .read<EditCustomKeyModel>()
+                  .read<PasswdPrompt>()
                   .dialogOptionsInvalidatable["isSecret"]!
                   .checkboxModel
                   .value;
@@ -165,7 +163,7 @@ class EditCustomKeyModel extends ChangeNotifier {
         ),
     "options": (BuildContext context) => SecondaryButton(
           onPressed: () {
-            context.read<EditCustomKeyModel>().toggleVisibility();
+            context.read<PasswdPrompt>().toggleVisibility();
           },
           child: Text(Lang.tr("Options")),
         ),
@@ -185,68 +183,61 @@ class EditCustomKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => EditCustomKeyModel(
-        globalPasskey: globalPasskey,
+      create: (_) => PasswdPrompt(
         globalPasskeyItem: globalPasskeyItem,
       ),
-      builder: (context, _) => AlertDialog(
-        content: SingleChildScrollView(
-          child: Wrap(
-            children: [
-              Form(
-                key: context
-                    .read<EditCustomKeyModel>()
-                    .globalPassKeyModel
-                    .formKey,
-                child:
-                    Selector<EditCustomKeyModel, CustomTextSecretWithProvider>(
-                  selector: (_, vaultPasswordModel) =>
-                      vaultPasswordModel.dialogKeyInput,
-                  builder: (_, dialogKeyInput, __) => Column(
-                    children: [
-                          dialogKeyInput,
-                        ].cast<Widget>() +
-                        context
-                            .read<EditCustomKeyModel>()
-                            .dialogButtons
-                            .entries
-                            .map((e) => SizedBox(
-                                  width: double.infinity,
-                                  child: e.value!(context),
-                                ))
-                            .toList()
-                            .cast<Widget>() +
-                        [
-                          CustomAnimatedSize(
-                            child: Selector<EditCustomKeyModel, bool>(
-                              selector: (_, vaultPasswordModel) =>
-                                  vaultPasswordModel.isSettingsVisible,
-                              builder: (_, isSettingsVisible, __) => Offstage(
-                                offstage: !isSettingsVisible,
-                                child: Column(
-                                  children: context
-                                          .read<EditCustomKeyModel>()
-                                          .dialogOptions
-                                          .entries
-                                          .map((e) => e.value)
-                                          .toList()
-                                          .cast<Widget>() +
-                                      context
-                                          .read<EditCustomKeyModel>()
-                                          .dialogOptionsInvalidatable
-                                          .entries
-                                          .map((e) => e.value)
-                                          .toList(),
-                                ),
+      builder: (context, _) => SingleChildScrollView(
+        child: Wrap(
+          children: [
+            Form(
+              key: context.read<PasswdPrompt>().globalPassKeyModel.formKey,
+              child: Selector<PasswdPrompt, CustomTextSecretWithProvider>(
+                selector: (_, vaultPasswordModel) =>
+                    vaultPasswordModel.dialogKeyInput,
+                builder: (_, dialogKeyInput, __) => Column(
+                  children: [
+                        dialogKeyInput,
+                      ].cast<Widget>() +
+                      context
+                          .read<PasswdPrompt>()
+                          .dialogButtons
+                          .entries
+                          .map((e) => SizedBox(
+                                width: double.infinity,
+                                child: e.value!(context),
+                              ))
+                          .toList()
+                          .cast<Widget>() +
+                      [
+                        CustomAnimatedSize(
+                          child: Selector<PasswdPrompt, bool>(
+                            selector: (_, vaultPasswordModel) =>
+                                vaultPasswordModel.isSettingsVisible,
+                            builder: (_, isSettingsVisible, __) => Offstage(
+                              offstage: !isSettingsVisible,
+                              child: Column(
+                                children: context
+                                        .read<PasswdPrompt>()
+                                        .dialogOptions
+                                        .entries
+                                        .map((e) => e.value)
+                                        .toList()
+                                        .cast<Widget>() +
+                                    context
+                                        .read<PasswdPrompt>()
+                                        .dialogOptionsInvalidatable
+                                        .entries
+                                        .map((e) => e.value)
+                                        .toList(),
                               ),
                             ),
                           ),
-                        ],
-                  ),
+                        ),
+                      ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
