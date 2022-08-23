@@ -49,7 +49,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: fb576cde7c0ea875981ab79bb3cf812b44af06df
-      url: "git://github.com/Dj-Polyester/azlistview"
+      url: "git@github.com:Dj-Polyester/azlistview.git"
     source: git
     version: "2.0.0-nullsafety.0"
   boolean_selector:
