@@ -1,16 +1,13 @@
-# polipass
+# OpenPass
 
-A new Flutter project.
+A password manager applications that does not use cloud, thus more secure then counterparts using cloud.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Vault](/readme_imgs/vault.png)
+Users can save their passwords in the vault
+![Passwd](/readme_imgs/passwd.png)
+New passwords are easily generated with the help of our password generator that supports a variety of options.
+![Settings](/readme_imgs/settings.png)
+![Dark](/readme_imgs/dark.png)
+![Night](/readme_imgs/night.png)
+There are currently three themes available, light (default), dark and night theme.
+The biometrics support, and offline save is currently in development. Note that this app will not support any online operations as this was the initial goal.
