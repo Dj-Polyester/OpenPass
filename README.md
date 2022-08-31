@@ -2,7 +2,7 @@
 
 A password manager applications that does not use cloud, thus more secure then counterparts using cloud.
 
-![Vault](/readme_imgs/vault.png)
+<img src="/readme_imgs/vault.png" width="200" />
 
 Users can save their passwords in the vault
 
