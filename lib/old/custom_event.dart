@@ -1,16 +1,14 @@
 import 'dart:async';
 
-/**
- * KEYPOINTS:
- * * Only can use await in async function
- * * Function used with await should return `Future`
- * * Both stream and its controller are static variables, which have local scope with global lifetime. \
- * However the map is not, because each instance has their own events. If you want every instance to operate \
- * on same events, just inherit the CustomEvent (`with CustomEvent`) in your class, then use the specific \
- * operations you want. 
- * * CustomEvent is a `mixin` type instead of `class`, since dart weirdly doesn't allow for inheritance of \
- * multiple classes (as Java does). Java uses abstract classes for that. Dart uses an additional type, called `mixin`.
- */
+/// KEYPOINTS:
+/// * Only can use await in async function
+/// * Function used with await should return `Future`
+/// * Both stream and its controller are static variables, which have local scope with global lifetime. \
+/// However the map is not, because each instance has their own events. If you want every instance to operate \
+/// on same events, just inherit the CustomEvent (`with CustomEvent`) in your class, then use the specific \
+/// operations you want.
+/// * CustomEvent is a `mixin` type instead of `class`, since dart weirdly doesn't allow for inheritance of \
+/// multiple classes (as Java does). Java uses abstract classes for that. Dart uses an additional type, called `mixin`.
 
 mixin CustomEvent {
   ///stream controller

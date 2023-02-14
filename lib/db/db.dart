@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart' as m;
@@ -13,7 +12,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:crypto/crypto.dart';
-import 'package:hive/src/util/extensions.dart';
 
 class KeyStore {
   /// db operations

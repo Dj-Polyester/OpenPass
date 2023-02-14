@@ -1,16 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/globals.dart';
-import 'package:polipass/models/passkey.dart';
-import 'package:polipass/utils/custom_file.dart';
 import 'package:polipass/utils/custom_theme.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:polipass/utils/local_auth.dart';
 import 'package:polipass/utils/master_key.dart';
 
 import 'package:provider/provider.dart';

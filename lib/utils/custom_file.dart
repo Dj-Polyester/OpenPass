@@ -1,17 +1,12 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:crypto/crypto.dart';
-import 'package:hive/hive.dart';
 import 'package:polipass/models/globals.dart';
 import 'package:polipass/pages/files/dialogs/confirmation_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:path/path.dart' as path;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:polipass/db/db.dart';
@@ -20,7 +15,6 @@ import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:polipass/widgets/api/custom_snackbar.dart';
-import 'package:hive/src/util/extensions.dart';
 
 class CustomFile {
   static Directory? _filesDir;

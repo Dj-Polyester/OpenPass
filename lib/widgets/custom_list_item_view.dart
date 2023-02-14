@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/globals.dart';
-import 'package:tuple/tuple.dart';
 
 class _TextFieldCreds extends StatelessWidget {
   _TextFieldCreds({

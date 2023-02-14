@@ -8,8 +8,6 @@ import 'package:polipass/pages/files/files.dart';
 import 'package:polipass/pages/settings.dart';
 import 'package:polipass/pages/vault/vault.dart';
 import 'package:polipass/utils/lang.dart';
-import 'package:provider/provider.dart';
-import 'package:hive/src/util/extensions.dart';
 
 import '../main.dart';
 import 'custom_page.dart';

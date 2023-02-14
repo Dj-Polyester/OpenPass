@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/globals.dart';
-import 'package:polipass/pages/vault/vault_list.dart';
-import 'package:provider/provider.dart';
 
 enum CustomListBuilderType {
   valueListenable,

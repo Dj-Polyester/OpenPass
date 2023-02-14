@@ -1,24 +1,15 @@
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/pages/vault/dialogs/passwd_prompt.dart';
 import 'package:polipass/pages/vault/dialogs/single_input_prompt.dart';
-import 'package:polipass/utils/generator.dart';
-import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
-import 'package:polipass/widgets/api/custom_animated_size.dart';
 import 'package:polipass/widgets/api/custom_button.dart';
-import 'package:polipass/widgets/api/custom_checkbox.dart';
 import 'package:polipass/widgets/api/custom_divider.dart';
 import 'package:polipass/widgets/api/custom_snackbar.dart';
 import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:polipass/widgets/custom_vault_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:polipass/pages/vault/vault.dart';
-import 'package:polipass/widgets/api/custom_text_checkbox.dart';
-import 'package:polipass/widgets/api/custom_text_checkbox_slider.dart';
-import 'package:polipass/widgets/custom_text_secret.dart';
 import 'package:polipass/utils/validator.dart';
 import 'package:tuple/tuple.dart';
 
