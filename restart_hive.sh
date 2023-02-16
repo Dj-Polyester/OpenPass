@@ -20,4 +20,4 @@ flutter packages pub get;
 flutter packages pub run build_runner build;
 set +x
 
-echo "Run the emulator."
+echo "Done."
