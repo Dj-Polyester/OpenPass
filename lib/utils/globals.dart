@@ -53,6 +53,12 @@ class GlobalModel extends ChangeNotifier {
   }
 }
 
+extension NextRandom on Random {
+  List<int> nextBytes(length) {
+    return List<int>.generate(length, (i) => nextInt(256));
+  }
+}
+
 class Globals {
   static const int vaultIndex = 0;
   static const String appName = "OpenPass";
