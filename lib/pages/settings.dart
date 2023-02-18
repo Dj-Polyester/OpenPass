@@ -1,9 +1,7 @@
 import 'package:polipass/models/globals.dart';
 import 'package:polipass/utils/custom_theme.dart';
-import 'package:polipass/utils/globals.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_divider.dart';
-import 'package:polipass/widgets/api/custom_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/utils/custom_page.dart';
@@ -29,7 +27,7 @@ class Settings extends CustomPage {
           ),
           title: Text(Lang.tr("Set theme")),
           subtitle: Text(Lang.tr("Sets the theme used in the application.")),
-          trailing: ThemeDropdownBox(),
+          trailing: const ThemeDropdownBox(),
         ),
         const CustomDivider(),
         ListTile(
@@ -40,7 +38,7 @@ class Settings extends CustomPage {
           title: Text(Lang.tr("Set dark theme")),
           subtitle: Text(Lang.tr(
               "Sets the theme used in the application when the dark theme in system settings is turned on. Not supported in devices without the dark theme support.")),
-          trailing: DarkThemeDropdownBox(),
+          trailing: const DarkThemeDropdownBox(),
         ),
         const CustomDivider(),
         ListTile(
@@ -64,7 +62,7 @@ class Settings extends CustomPage {
 }
 
 class ThemeDropdownBox extends StatelessWidget {
-  ThemeDropdownBox({Key? key}) : super(key: key);
+  const ThemeDropdownBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +89,7 @@ class ThemeDropdownBox extends StatelessWidget {
 }
 
 class DarkThemeDropdownBox extends StatelessWidget {
-  DarkThemeDropdownBox({Key? key}) : super(key: key);
+  const DarkThemeDropdownBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

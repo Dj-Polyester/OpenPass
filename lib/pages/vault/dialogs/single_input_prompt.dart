@@ -1,5 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:polipass/db/db.dart';
 import 'package:polipass/models/passkey.dart';
 import 'package:polipass/utils/lang.dart';
 import 'package:polipass/widgets/api/custom_button.dart';

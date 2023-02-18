@@ -18,7 +18,7 @@ class CustomTextStyle {
       fillColor: fillColor,
       focusColor: focusColor,
       hoverColor: hoverColor,
-      contentPadding: EdgeInsets.all(12),
+      contentPadding: const EdgeInsets.all(12),
       labelText: labelTextStr,
       hintText: hintTextStr,
       border: OutlineInputBorder(

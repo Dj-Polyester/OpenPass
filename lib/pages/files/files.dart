@@ -77,7 +77,7 @@ class Files extends CustomPage {
         ],
       );
 
-  static Widget _bodyBuilder(BuildContext context) => FilesBody();
+  static Widget _bodyBuilder(BuildContext context) => const FilesBody();
 
   static Widget _fabBuilder(BuildContext context) => FloatingActionButton(
         onPressed: () async {

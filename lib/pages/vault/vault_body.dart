@@ -13,7 +13,7 @@ import 'package:polipass/widgets/api/custom_text.dart';
 import 'package:provider/provider.dart';
 
 class VaultBody extends StatelessWidget {
-  VaultBody({Key? key}) : super(key: key);
+  const VaultBody({Key? key}) : super(key: key);
 
   CustomTextWithProvider searchWidget(BuildContext context) =>
       CustomTextWithProvider(

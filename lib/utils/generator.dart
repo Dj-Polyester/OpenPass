@@ -35,16 +35,16 @@ class Generator {
     Map<String, int> numCharsTmp = {};
     int sum = numChars.values.fold<int>(0, (prev, curr) => prev + curr),
         allowedCharsLength = allowedChars.entries.where((e) => e.value).length,
-        numCharsLength = numChars.length,
+        //numCharsLength = numChars.length,
         remaining = length,
         remainingMin = sum;
-    print("start:");
-    print("numChars: $numChars");
-    print("numCharsLength: $numCharsLength");
-    print("allowedChars: $allowedChars");
-    print("allowedCharsLength: $allowedCharsLength");
-    print("remaining: $remaining");
-    print("remainingMin: $remainingMin");
+    //print("start:");
+    //print("numChars: $numChars");
+    //print("numCharsLength: $numCharsLength");
+    //print("allowedChars: $allowedChars");
+    //print("allowedCharsLength: $allowedCharsLength");
+    //print("remaining: $remaining");
+    //print("remainingMin: $remainingMin");
 
     if (allowedChars["ambiguous"]!) {
       --allowedCharsLength;
@@ -52,7 +52,7 @@ class Generator {
 
     for (String key in numChars.keys) {
       if (allowedChars[key]! && key != "ambiguous") {
-        print("key: $key");
+        //print("key: $key");
         late int newval;
         //last key
         if (--allowedCharsLength == 0) {
@@ -60,19 +60,19 @@ class Generator {
         } else {
           int currMin = numChars[key]!;
           remainingMin -= currMin;
-          print("currMin: $currMin");
-          print("remainingMin: $remainingMin");
+          //print("currMin: $currMin");
+          //print("remainingMin: $remainingMin");
 
           newval =
               rnd.nextInt((remaining - remainingMin) - currMin + 1) + currMin;
-          print("newval: $newval");
+          //print("newval: $newval");
           remaining -= newval;
-          print("remaining: $remaining");
+          //print("remaining: $remaining");
         }
         numCharsTmp[key] = newval;
       }
     }
-    print(numCharsTmp);
+    //print(numCharsTmp);
     return numCharsTmp;
   }
 

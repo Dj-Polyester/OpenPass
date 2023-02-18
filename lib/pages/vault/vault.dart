@@ -80,7 +80,7 @@ class Vault extends CustomPage {
         ],
       );
 
-  static Widget _bodyBuilder(BuildContext context) => VaultBody();
+  static Widget _bodyBuilder(BuildContext context) => const VaultBody();
 
   static Widget _fabBuilder(BuildContext context) => FloatingActionButton(
         onPressed: () async {

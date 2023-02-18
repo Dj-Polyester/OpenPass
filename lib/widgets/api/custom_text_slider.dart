@@ -36,7 +36,7 @@ class CustomTextSliderWithProvider extends StatelessWidget {
 }
 
 class CustomTextSlider extends StatelessWidget {
-  CustomTextSlider({
+  const CustomTextSlider({
     Key? key,
     this.min = 0,
     this.max = 99,

@@ -1,4 +1,3 @@
-import 'package:polipass/utils/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:polipass/widgets/api/custom_slider.dart';
@@ -36,7 +35,7 @@ class CustomTextDigitModel extends ChangeNotifier {
 }
 
 class CustomTextDigit extends StatelessWidget {
-  CustomTextDigit({
+  const CustomTextDigit({
     Key? key,
     this.max = 99,
     required this.label,
