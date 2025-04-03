@@ -1,6 +1,6 @@
 # OpenPass
 
-A password manager applications that does not use cloud, thus more secure then counterparts using cloud.
+A password manager application that does not use cloud, thus more secure then counterparts using cloud.
 
 <img src="/readme_imgs/vault.png" width="200" />
 
